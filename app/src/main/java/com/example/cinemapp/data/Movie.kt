@@ -1,6 +1,7 @@
 package com.example.cinemapp.data
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class Movie (
     @SerializedName("adult"             ) var adult            : Boolean?       = null,
@@ -12,7 +13,7 @@ data class Movie (
     @SerializedName("overview"          ) var overview         : String?        = null,
     @SerializedName("popularity"        ) var popularity       : Double?        = null,
     @SerializedName("poster_path"       ) var posterPath       : String?        = null,
-    @SerializedName("release_date"      ) var releaseDate      : String?        = null,
+    @SerializedName("release_date"      ) var releaseDate      : Date?        = null,
     @SerializedName("title"             ) var title            : String?        = null,
     @SerializedName("video"             ) var video            : Boolean?       = null,
     @SerializedName("vote_average"      ) var voteAverage      : Double?        = null,

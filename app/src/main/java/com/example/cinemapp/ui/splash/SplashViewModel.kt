@@ -1,8 +1,15 @@
 package com.example.cinemapp.ui.splash
 
-class SplashViewModel {
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.cinemapp.data.MovieRepository
+import kotlinx.coroutines.launch
 
-    fun getMovies() {
+class SplashViewModel : ViewModel(){
 
+    fun getUpcoming() {
+        viewModelScope.launch {
+            MovieRepository.getUpcoming()
+        }
     }
 }

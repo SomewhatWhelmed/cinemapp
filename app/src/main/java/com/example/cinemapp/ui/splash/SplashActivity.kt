@@ -1,26 +1,39 @@
 package com.example.cinemapp.ui.splash
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
-import com.example.cinemapp.BuildConfig
-import com.example.cinemapp.R
-import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.databinding.ActivitySplashBinding
+import com.example.cinemapp.ui.main.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class SplashActivity : AppCompatActivity() {
+
+    private val viewModel: SplashViewModel by viewModels()
+    private lateinit var binding: ActivitySplashBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        lifecycleScope.launch {
-            val repo = MovieRepository()
-            val temp = repo.getUpcoming()
-            Log.i("RESULTS", temp.toString())
+        viewModel.getUpcoming()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        lifecycleScope.launch(Dispatchers.IO) {
+            delay(2000L)
+            finish()
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
         }
     }
 }
