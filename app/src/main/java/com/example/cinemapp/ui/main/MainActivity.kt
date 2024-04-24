@@ -9,20 +9,23 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.cinemapp.R
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.databinding.ActivityMainBinding
+import com.example.cinemapp.databinding.ActivitySplashBinding
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
+
+    private val movieRepository: MovieRepository by inject<MovieRepository>()
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         lifecycleScope.launch {
-            Log.i("RESULTS", MovieRepository.getUpcoming().toString())
+            Log.i("RESULTS", movieRepository.getUpcoming().toString())
         }
     }
 }

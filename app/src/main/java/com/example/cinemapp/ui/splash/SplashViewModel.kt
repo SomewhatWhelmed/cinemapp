@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import kotlinx.coroutines.launch
 
-class SplashViewModel : ViewModel(){
+class SplashViewModel (
+    private val movieRepository: MovieRepository
+) : ViewModel(){
 
     fun getUpcoming() {
         viewModelScope.launch {
-            MovieRepository.getUpcoming()
+            movieRepository.getUpcoming()
         }
     }
 }

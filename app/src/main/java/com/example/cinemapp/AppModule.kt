@@ -1,9 +1,12 @@
 package com.example.cinemapp
 
+import com.example.cinemapp.data.MovieLocalCache
 import com.example.cinemapp.data.MovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.ui.splash.SplashViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.core.qualifier.qualifier
 import org.koin.core.scope.get
@@ -14,6 +17,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 val appModule = module {
     single<String> (named("BASE_URL")) {
         "https://api.themoviedb.org/"
+    }
+    single {
+        MovieLocalCache()
     }
     single {
         OkHttpClient.Builder().apply {
@@ -34,5 +40,11 @@ val appModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MovieRemoteDataSource::class.java)
+    }
+    single {
+        MovieRepository(get(), get())
+    }
+    viewModel {
+        SplashViewModel(get())
     }
 }
