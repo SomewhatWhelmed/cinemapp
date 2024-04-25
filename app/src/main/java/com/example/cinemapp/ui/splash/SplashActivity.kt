@@ -10,9 +10,7 @@ import com.example.cinemapp.ui.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.scope.activityScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.scope.Scope
 
 class SplashActivity : AppCompatActivity() {
 
@@ -25,15 +23,20 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.getUpcoming()
+        viewModel.handleInitialData()
     }
 
     override fun onStart() {
         super.onStart()
-        lifecycleScope.launch(Dispatchers.IO) {
-            delay(2000L)
-            finish()
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        observeGoToMainScreenEvent()
+    }
+
+    private fun observeGoToMainScreenEvent() {
+        lifecycleScope.launch {
+            viewModel.gotoMainScreen.collect {
+                finish()
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            }
         }
     }
 }

@@ -3,19 +3,19 @@ package com.example.cinemapp.data
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class Movie (
-    @SerializedName("adult"             ) var adult            : Boolean?       = null,
-    @SerializedName("backdrop_path"     ) var backdropPath     : String?        = null,
-    @SerializedName("genre_ids"         ) var genreIds         : ArrayList<Int> = arrayListOf(),
-    @SerializedName("id"                ) var id               : Int?           = null,
-    @SerializedName("original_language" ) var originalLanguage : String?        = null,
-    @SerializedName("original_title"    ) var originalTitle    : String?        = null,
-    @SerializedName("overview"          ) var overview         : String?        = null,
-    @SerializedName("popularity"        ) var popularity       : Double?        = null,
-    @SerializedName("poster_path"       ) var posterPath       : String?        = null,
-    @SerializedName("release_date"      ) var releaseDate      : Date?        = null,
-    @SerializedName("title"             ) var title            : String?        = null,
-    @SerializedName("video"             ) var video            : Boolean?       = null,
-    @SerializedName("vote_average"      ) var voteAverage      : Double?        = null,
-    @SerializedName("vote_count"        ) var voteCount        : Int?           = null
+data class Movie(
+    @SerializedName("adult") val adult: Boolean? = null,
+    @SerializedName("backdrop_path") val backdropPath: String? = null,
+    @SerializedName("genre_ids") val genreIds: ArrayList<Int> = arrayListOf(),
+    @SerializedName("id") val id: Int? = null,
+    @SerializedName("original_language") val originalLanguage: String? = null,
+    @SerializedName("original_title") val originalTitle: String? = null,
+    @SerializedName("overview") val overview: String? = null,
+    @SerializedName("popularity") val popularity: Double? = null,
+    @SerializedName("poster_path") val posterPath: String? = null,
+    @SerializedName("release_date") val releaseDate: Date? = null,
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("video") val video: Boolean? = null,
+    @SerializedName("vote_average") val voteAverage: Double? = null,
+    @SerializedName("vote_count") val voteCount: Int? = null
 )

@@ -12,24 +12,25 @@ class MovieRepository(
     private val remoteDataSource: MovieRemoteDataSource
 ) {
 
-    private val TAG = "MOVIE_API"
-
-    suspend fun getUpcoming(page: Int = 1): ArrayList<Movie> {
+    suspend fun getUpcoming(page: Int = 1): List<Movie>? {
         return localCache.getUpcoming(page) ?: try {
             val response = remoteDataSource.getUpcoming()
             if (response.isSuccessful) {
-                response.body()?.let{ response ->
-                    localCache.insertUpcoming(page, response.results)
-                    response.results
-                } ?: arrayListOf()
+                response.body()?.let { movieResponse ->
+                    localCache.insertUpcoming(page, movieResponse.results)
+                    movieResponse.results
+                }
             } else {
                 Log.e(TAG, response.message())
-                arrayListOf()
+                null
             }
         } catch (e: Exception) {
             Log.e(TAG, e.message ?: "Unknown error")
-            arrayListOf()
+            null
         }
     }
 
+    companion object {
+        private const val TAG = "MOVIE_API"
+    }
 }

@@ -15,12 +15,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
-    single<String> (named("BASE_URL")) {
+    single<String>(named("BASE_URL")) {
         "https://api.themoviedb.org/"
     }
-    single {
-        MovieLocalCache()
-    }
+    single { MovieLocalCache() }
     single {
         OkHttpClient.Builder().apply {
             addInterceptor(
