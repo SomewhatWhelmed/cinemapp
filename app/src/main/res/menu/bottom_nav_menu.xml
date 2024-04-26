@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/niUpcoming"
+        android:title="Upcoming"
+        android:enabled="true"
+        android:icon="@drawable/vic_upcoming"/>
+    <item
+        android:id="@+id/Search"
+        android:title="Search"
+        android:enabled="true"
+        android:icon="@drawable/vic_search"/>
+    <item
+        android:id="@+id/Profile"
+        android:title="Profile"
+        android:enabled="true"
+        android:icon="@drawable/vic_profile"/>
+    <item
+        android:id="@+id/Settings"
+        android:title="Settings"
+        android:enabled="true"
+        android:icon="@drawable/vic_settings"/>
+
+</menu>
