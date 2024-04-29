@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.material)
 
@@ -67,7 +68,8 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.navigation)
+    implementation(libs.navigation.ui)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
