@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.data.Movie
 import com.example.cinemapp.databinding.CardMovieBinding
 
@@ -34,10 +36,17 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(private val binding: CardMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(post: Movie) {
+        fun bind(movie: Movie) {
             with(binding) {
-
+                tvTitle.text = movie.title
+                Glide.with(binding.root.context)
+                    .load(BuildConfig.URL_BASE_IMAGE + "w500/" + movie.posterPath)
+                    .into(binding.ivPoster)
             }
         }
+    }
+
+    companion object {
+        const val IMAGE_URL_BASE = "https://image.tmdb.org/t/p/"
     }
 }
