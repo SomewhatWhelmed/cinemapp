@@ -1,6 +1,7 @@
 package com.example.cinemapp.ui.main
 
 import android.annotation.SuppressLint
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.data.Movie
 import com.example.cinemapp.databinding.CardMovieBinding
+import java.util.Calendar
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -39,6 +41,12 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         fun bind(movie: Movie) {
             with(binding) {
                 tvTitle.text = movie.title
+                tvTitle.setText(Html.fromHtml("<b>${movie.title}</b> (${movie.releaseDate?.let {
+                    val cal = Calendar.getInstance()
+                    cal.setTime(it)
+                    cal.get(Calendar.YEAR)
+                }})", 0))
+                tvCardRating.text = "%.1f".format(movie.voteAverage)
                 Glide.with(binding.root.context)
                     .load(BuildConfig.URL_BASE_IMAGE + "w500/" + movie.posterPath)
                     .into(binding.ivPoster)
