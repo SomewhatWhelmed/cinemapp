@@ -5,11 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cinemapp.databinding.FragmentHomeBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,6 +24,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        viewModel.getUpcoming()
         setupAdapter()
         return binding.root
     }
@@ -35,14 +33,14 @@ class HomeFragment : Fragment() {
         super.onStart()
 
         lifecycleScope.launch {
-            viewModel.movieList.collect {
-                adapter.setMovies(it)
+            viewModel.state.collect {
+                adapter.setMovies(it.movies)
             }
         }
     }
 
     private fun setupAdapter() {
-        _binding?.rvMovieList?.adapter = adapter
-        _binding?.rvMovieList?.layoutManager = GridLayoutManager(context, 2)
+        binding.rvMovieList.adapter = adapter
+        binding.rvMovieList.layoutManager = GridLayoutManager(context, 2)
     }
 }
