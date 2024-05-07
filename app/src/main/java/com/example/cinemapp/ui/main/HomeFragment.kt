@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cinemapp.databinding.FragmentHomeBinding
+import com.example.cinemapp.util.observeFlowSafely
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,10 +34,8 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        lifecycleScope.launch {
-            viewModel.state.collect {
-                adapter.setMovies(it.movies)
-            }
+        observeFlowSafely(viewModel.state) {
+            adapter.setMovies(it.movies)
         }
     }
 

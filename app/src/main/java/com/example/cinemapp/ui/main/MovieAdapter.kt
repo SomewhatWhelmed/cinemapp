@@ -8,16 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.data.Movie
+import com.example.cinemapp.data.MovieCard
 import com.example.cinemapp.databinding.CardMovieBinding
 import java.util.Calendar
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private var movies: List<Movie> = emptyList()
+    private var movies: List<MovieCard> = emptyList()
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setMovies(movies: List<Movie>){
+    fun setMovies(movies: List<MovieCard>){
         this.movies = movies
         notifyDataSetChanged()
     }
@@ -38,23 +39,19 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     inner class MovieViewHolder(private val binding: CardMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: Movie) {
+        fun bind(movie: MovieCard) {
             with(binding) {
                 tvTitle.text = movie.title
-                tvTitle.setText(Html.fromHtml("<b>${movie.title}</b> (${movie.releaseDate?.let {
+                tvTitle.text = Html.fromHtml("<b>${movie.title}</b> (${movie.releaseDate?.let {
                     val cal = Calendar.getInstance()
                     cal.setTime(it)
                     cal.get(Calendar.YEAR)
-                }})", 0))
+                }})", 0)
                 tvCardRating.text = "%.1f".format(movie.voteAverage)
                 Glide.with(binding.root.context)
                     .load(BuildConfig.URL_BASE_IMAGE + "w500/" + movie.posterPath)
                     .into(binding.ivPoster)
             }
         }
-    }
-
-    companion object {
-        const val IMAGE_URL_BASE = "https://image.tmdb.org/t/p/"
     }
 }

@@ -2,8 +2,9 @@ package com.example.cinemapp.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cinemapp.data.Movie
+import com.example.cinemapp.data.MovieCard
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.util.MovieMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -14,7 +15,7 @@ class HomeViewModel(
 ) : ViewModel() {
 
     data class State(
-        val movies: List<Movie> = emptyList(),
+        val movies: List<MovieCard> = emptyList(),
         val search: String = "",
     )
 
@@ -23,7 +24,8 @@ class HomeViewModel(
 
     fun getUpcoming() {
         viewModelScope.launch {
-            _state.update { it.copy(movies = movieRepository.getUpcoming() ?: emptyList()) }
+            _state.update { it.copy(movies = movieRepository.getUpcoming()
+                ?.let { list -> MovieMapper.map(list) } ?: emptyList()) }
         }
     }
 }
