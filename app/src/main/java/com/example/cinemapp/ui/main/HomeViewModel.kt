@@ -17,12 +17,13 @@ class HomeViewModel(
     data class State(
         val movies: List<MovieCard> = emptyList(),
         val search: String = "",
-        val isTimeToPaginate: Boolean = false,
+        val shouldPaginate: Boolean = false,
         val pagesLoaded: Int = 0,
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
+    val shouldPaginate: Boolean = state.value.shouldPaginate
 
     fun getUpcoming() {
         viewModelScope.launch {
@@ -38,7 +39,6 @@ class HomeViewModel(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    isTimeToPaginate = false,
                     pagesLoaded = it.pagesLoaded + 1,
                     movies = it.movies.plus(movieRepository.getUpcoming(it.pagesLoaded + 1)
                         ?.let { list -> MovieUtil.map(list) } ?: emptyList()))
@@ -46,9 +46,9 @@ class HomeViewModel(
         }
     }
 
-    private fun setTimeToPaginate(isTime: Boolean) {
+    fun setTimeToPaginate(isTime: Boolean) {
         _state.update {
-            it.copy(isTimeToPaginate = isTime)
+            it.copy(shouldPaginate = isTime)
         }
     }
 }

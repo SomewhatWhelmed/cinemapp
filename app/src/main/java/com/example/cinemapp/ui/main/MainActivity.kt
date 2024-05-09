@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-//        Doesn't work when called from onCreate
-//        navController = findNavController(binding.navHostFragment.id)
         val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
         navController.graph = navController.createGraph(startDestination = NavRoutes.HOME) {
@@ -54,8 +52,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
-        return super.getOnBackInvokedDispatcher()
-    }
 
 }

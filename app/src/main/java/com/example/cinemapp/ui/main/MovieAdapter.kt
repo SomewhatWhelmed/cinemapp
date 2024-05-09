@@ -42,11 +42,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         fun bind(movie: MovieCard) {
             with(binding) {
                 tvTitle.text = movie.title
-                tvTitle.text = Html.fromHtml("<b>${movie.title}</b> (${movie.releaseDate?.let {
-                    val cal = Calendar.getInstance()
-                    cal.setTime(it)
-                    cal.get(Calendar.YEAR)
-                }})", 0)
                 tvCardRating.text = "%.1f".format(movie.voteAverage)
                 Glide.with(binding.root.context)
                     .load(BuildConfig.URL_BASE_IMAGE + "w500/" + movie.posterPath)

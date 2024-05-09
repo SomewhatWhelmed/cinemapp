@@ -1,7 +1,6 @@
 package com.example.cinemapp.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,21 +36,21 @@ class HomeFragment : Fragment() {
 
         observeFlowSafely(viewModel.state) {
             adapter.setMovies(it.movies)
+            viewModel.setTimeToPaginate(false)
         }
-
         binding.rvMovieList.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     ifFalseToTrueThen(
-                        viewModel.state.value.isTimeToPaginate,
+                        viewModel.shouldPaginate,
                         binding.rvMovieList.isEndOfScroll()
                     ) { viewModel.getUpcomingNextPage() }
                 }
             }
         )
     }
-    
+
 
     private fun setupAdapter() {
         binding.rvMovieList.adapter = adapter
