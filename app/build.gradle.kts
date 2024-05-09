@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.material)
+    implementation(libs.paging)
 
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
