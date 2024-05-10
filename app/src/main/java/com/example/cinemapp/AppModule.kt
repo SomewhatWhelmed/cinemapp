@@ -3,6 +3,7 @@ package com.example.cinemapp
 import com.example.cinemapp.data.MovieLocalCache
 import com.example.cinemapp.data.MovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.ui.main.HomeViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -16,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
     single<String>(named("BASE_URL")) {
-        "https://api.themoviedb.org/"
+        BuildConfig.URL_BASE
     }
     single { MovieLocalCache() }
     single {
@@ -44,5 +45,9 @@ val appModule = module {
     }
     viewModel {
         SplashViewModel(get())
+    }
+
+    viewModel {
+        HomeViewModel(get())
     }
 }

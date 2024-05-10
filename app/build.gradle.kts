@@ -21,17 +21,19 @@ android {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
         val apiKey = properties.getProperty("TMDB_API_KEY") ?: ""
+        val urlBase = properties.getProperty("URL_BASE") ?: ""
+        val urlBaseImage = properties.getProperty("URL_BASE_IMAGE") ?: ""
 
         buildFeatures{
             buildConfig = true
             viewBinding = true
         }
 
-        buildConfigField(
-            type = "String",
-            name = "TMDB_API_KEY",
-            value = apiKey
-        )
+        buildConfigField(type = "String", name = "TMDB_API_KEY", value = apiKey)
+        buildConfigField(type = "String", name = "URL_BASE", value = urlBase)
+        buildConfigField(type = "String", name = "URL_BASE_IMAGE", value = urlBaseImage)
+
+
     }
 
     buildTypes {
@@ -60,14 +62,18 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.material)
+    implementation(libs.paging)
 
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.navigation)
+    implementation(libs.navigation.ui)
+    implementation(libs.glide)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)

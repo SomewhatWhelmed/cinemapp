@@ -14,7 +14,7 @@ class MovieRepository(
 
     suspend fun getUpcoming(page: Int = 1): List<Movie>? {
         return localCache.getUpcoming(page) ?: try {
-            val response = remoteDataSource.getUpcoming()
+            val response = remoteDataSource.getUpcoming(page = page)
             if (response.isSuccessful) {
                 response.body()?.let { movieResponse ->
                     localCache.insertUpcoming(page, movieResponse.results)
