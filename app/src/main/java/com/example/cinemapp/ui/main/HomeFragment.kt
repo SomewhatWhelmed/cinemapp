@@ -36,16 +36,15 @@ class HomeFragment : Fragment() {
 
         observeFlowSafely(viewModel.state) {
             adapter.setMovies(it.movies)
-            viewModel.setTimeToPaginate(false)
+            viewModel.togglePagingRunning()
         }
         binding.rvMovieList.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    ifFalseToTrueThen(
-                        viewModel.shouldPaginate,
-                        binding.rvMovieList.isEndOfScroll()
-                    ) { viewModel.getUpcomingNextPage() }
+                    if (binding.rvMovieList.isEndOfScroll()) {
+                        viewModel.getUpcomingNextPage()
+                    }
                 }
             }
         )
