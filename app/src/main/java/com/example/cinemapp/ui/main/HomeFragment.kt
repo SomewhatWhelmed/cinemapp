@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.databinding.FragmentHomeBinding
-import com.example.cinemapp.util.ifFalseToTrueThen
 import com.example.cinemapp.util.isEndOfScroll
 import com.example.cinemapp.util.observeFlowSafely
 import org.koin.androidx.viewmodel.ext.android.viewModel
