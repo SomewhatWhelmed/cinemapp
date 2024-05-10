@@ -2,7 +2,6 @@ package com.example.cinemapp.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cinemapp.data.MovieCard
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.util.MovieUtil
 import kotlinx.coroutines.flow.MutableStateFlow

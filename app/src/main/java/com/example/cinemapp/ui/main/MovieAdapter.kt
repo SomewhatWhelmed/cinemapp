@@ -1,16 +1,12 @@
 package com.example.cinemapp.ui.main
 
 import android.annotation.SuppressLint
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cinemapp.BuildConfig
-import com.example.cinemapp.data.Movie
-import com.example.cinemapp.data.MovieCard
 import com.example.cinemapp.databinding.CardMovieBinding
-import java.util.Calendar
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 

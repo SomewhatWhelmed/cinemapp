@@ -1,4 +1,4 @@
-package com.example.cinemapp.data
+package com.example.cinemapp.ui.main
 
 import com.google.gson.annotations.SerializedName
 import java.util.Date

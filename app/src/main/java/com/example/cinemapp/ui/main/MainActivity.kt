@@ -35,12 +35,6 @@ class MainActivity : AppCompatActivity() {
             fragment<SearchFragment>(NavRoutes.SEARCH) {
                 label = NavRoutes.SEARCH_LABEL
             }
-//            fragment<PlantDetailFragment>("${nav_routes.plant_detail}/{${nav_arguments.plant_id}}") {
-//                label = resources.getString(R.string.plant_detail_title)
-//                argument(nav_arguments.plant_id) {
-//                    type = NavType.StringType
-//                }
-//            }
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener {

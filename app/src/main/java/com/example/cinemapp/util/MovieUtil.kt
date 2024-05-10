@@ -1,7 +1,7 @@
 package com.example.cinemapp.util
 
 import com.example.cinemapp.data.Movie
-import com.example.cinemapp.data.MovieCard
+import com.example.cinemapp.ui.main.MovieCard
 
 object MovieUtil {
     fun map(movie: Movie): MovieCard {
