@@ -14,6 +14,5 @@ class MovieLocalCache {
     fun insertUpcoming(page: Int = 1, movies: ArrayList<Movie>) {
         Log.i("CACHE", "Inserting into Cache")
         upcomingCache[page] = movies
-        Log.i("CACHE", page.toString())
     }
 }

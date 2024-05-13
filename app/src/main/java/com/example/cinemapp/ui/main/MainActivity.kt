@@ -7,6 +7,8 @@ import androidx.navigation.NavController
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
+import androidx.navigation.navArgs
+import androidx.navigation.navigation
 import com.example.cinemapp.R
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.databinding.ActivityMainBinding
@@ -26,7 +28,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val navHostFragment = supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
         navController.graph = navController.createGraph(startDestination = NavRoutes.HOME) {
             fragment<HomeFragment>(NavRoutes.HOME) {
@@ -34,6 +37,9 @@ class MainActivity : AppCompatActivity() {
             }
             fragment<SearchFragment>(NavRoutes.SEARCH) {
                 label = NavRoutes.SEARCH_LABEL
+            }
+            fragment<DetailsFragment>(NavRoutes.DETAILS) {
+                label = NavRoutes.DETAILS_LABEL
             }
         }
 

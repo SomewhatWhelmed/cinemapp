@@ -5,4 +5,6 @@ object NavRoutes {
     const val HOME_LABEL = "Home"
     const val SEARCH = "search"
     const val SEARCH_LABEL = "Search"
+    const val DETAILS = "details"
+    const val DETAILS_LABEL = "Details"
 }
