@@ -24,7 +24,8 @@ class DetailsViewModel(
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
             _state.update {
-                movieRepository.getMovieDetails(movieId)?.let { it1 -> State(MovieUtil.map(it1)) }
+                movieRepository.getMovieDetails(movieId)
+                    ?.let { movieDetails -> State(MovieUtil.map(movieDetails, 500)) }
                     ?: State()
             }
         }

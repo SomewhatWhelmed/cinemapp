@@ -1,5 +1,6 @@
 package com.example.cinemapp.util
 
+import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.data.GenreDTO
 import com.example.cinemapp.data.Movie
 import com.example.cinemapp.data.MovieDetailsDTO
@@ -11,7 +12,7 @@ object MovieUtil {
     fun map(movie: Movie): MovieCard {
         return MovieCard(
             movie.id,
-            movie.posterPath,
+            movie.posterPath?.let { mapImageURL(it, 500) },
             movie.releaseDate,
             movie.title,
             movie.voteAverage
@@ -22,21 +23,28 @@ object MovieUtil {
 
     fun mapGenre(genre: GenreDTO): Genre {
         return Genre(
-            genre.id,
-            genre.name
+            genre.id ?: -1,
+            genre.name ?: ""
         )
     }
 
-    fun mapGenre(genreList: List<GenreDTO>): List<Genre> = genreList.map { genre -> mapGenre(genre) }
+    fun mapGenre(genreList: List<GenreDTO>): List<Genre> =
+        genreList.map { genre -> mapGenre(genre) }
 
-    fun map(movieDetails: MovieDetailsDTO): MovieDetails {
+    fun map(movieDetails: MovieDetailsDTO, backdropResolution: Int? = null): MovieDetails {
         return MovieDetails(
-            movieDetails.id,
-            movieDetails.backdropPath,
-            movieDetails.genres?.let { mapGenre(it) },
-            movieDetails.overview,
-            movieDetails.runtime,
-            movieDetails.title
+            movieDetails.id ?: -1,
+            movieDetails.backdropPath?.let { mapImageURL(it, backdropResolution) } ?: "",
+            movieDetails.genres?.let { mapGenre(it) } ?: emptyList(),
+            movieDetails.overview ?: "",
+            movieDetails.runtime ?: 0,
+            movieDetails.title ?: ""
         )
+    }
+
+    private fun mapImageURL(imagePath: String, resolution: Int? = null): String {
+        return "${BuildConfig.URL_BASE_IMAGE}${
+            (resolution?.let { "w${resolution}" } ?: "original")
+        }$imagePath/"
     }
 }
