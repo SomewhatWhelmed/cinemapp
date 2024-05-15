@@ -1,16 +1,25 @@
 package com.example.cinemapp.data
 
 import android.util.Log
-import com.example.cinemapp.BuildConfig
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MovieRepository(
     private val localCache: MovieLocalCache,
     private val remoteDataSource: MovieRemoteDataSource
 ) {
+    suspend fun getMovieDetails(movieId: Int): MovieDetailsDTO? {
+        return try {
+            val response = remoteDataSource.getMovieDetails(movieId = movieId)
+            if (response.isSuccessful) {
+                response.body()
+            } else {
+                Log.e(TAG, response.message())
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Unknown error")
+            null
+        }
+    }
 
     suspend fun getUpcoming(page: Int = 1): List<Movie>? {
         return localCache.getUpcoming(page) ?: try {

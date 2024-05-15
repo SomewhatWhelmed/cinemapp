@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/niHome"
+        android:id="@+id/homeFragment"
         android:title="Home"
         android:enabled="true"
         android:icon="@drawable/vic_home"/>
     <item
-        android:id="@+id/niSearch"
+        android:id="@+id/searchFragment"
         android:title="Search"
         android:enabled="true"
         android:icon="@drawable/vic_search"/>
     <item
-        android:id="@+id/niProfile"
+        android:id="@+id/profileFragment"
         android:title="Profile"
         android:enabled="true"
         android:icon="@drawable/vic_profile"/>
     <item
-        android:id="@+id/niSettings"
+        android:id="@+id/settingsFragment"
         android:title="Settings"
         android:enabled="true"
         android:icon="@drawable/vic_settings"/>

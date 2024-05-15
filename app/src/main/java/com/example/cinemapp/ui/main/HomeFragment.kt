@@ -7,14 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.get
-import androidx.navigation.navOptions
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentHomeBinding
-import com.example.cinemapp.util.NavRoutes
 import com.example.cinemapp.util.isEndOfScroll
 import com.example.cinemapp.util.observeFlowSafely
+import com.example.cinemapp.util.safeNavigateWithArgs
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
@@ -64,14 +63,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun onMovieCardClick(movie: MovieCard) {
-        findNavController().navigate(
-            findNavController().graph[NavRoutes.DETAILS].id,
-            bundleOf("movie_id" to movie.id.toString()),
-            navOptions {
-                anim {
-                    enter = android.R.animator.fade_in
-                }
-            }
+        findNavController().safeNavigateWithArgs(
+            HomeFragmentDirections.toDetailsFragment(movieId = movie.id ?: -1)
         )
     }
 }
