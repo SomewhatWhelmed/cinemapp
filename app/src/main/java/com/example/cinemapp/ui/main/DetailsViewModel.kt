@@ -16,7 +16,8 @@ class DetailsViewModel(
 
     data class State(
         val details: MovieDetails? = null,
-        val cast: List<CastMember> = emptyList()
+        val cast: List<CastMember> = emptyList(),
+        val media: List<Media> = emptyList()
     )
 
     private val _state = MutableStateFlow(State())
@@ -31,6 +32,9 @@ class DetailsViewModel(
                     },
                     cast = movieRepository.getCredits(movieId)
                         ?.let { MovieUtil.map(it, 500).cast }
+                        ?: emptyList(),
+                    media = movieRepository.getImages(movieId)
+                        ?.let { MovieUtil.mapMedia(it, 500) }
                         ?: emptyList()
                 )
             }

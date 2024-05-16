@@ -1,7 +1,5 @@
 package com.example.cinemapp.ui.main
 
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
@@ -17,7 +15,6 @@ import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
 import com.example.cinemapp.util.observeFlowSafely
@@ -30,7 +27,9 @@ class DetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: DetailsFragmentArgs by navArgs()
     private val viewModel by viewModel<DetailsViewModel>()
-    private val adapter = CastAdapter()
+    private val castAdapter = CastAdapter()
+    private val mediaAdapter = MediaAdapter()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +47,8 @@ class DetailsFragment : Fragment() {
             it.details?.let { details ->
                 setupView(details)
             }
-            adapter.setCast(it.cast)
+            castAdapter.setCast(it.cast)
+            mediaAdapter.setMedia(it.media)
         }
     }
 
@@ -79,10 +79,17 @@ class DetailsFragment : Fragment() {
     }
 
     private fun setupAdapter() {
-        binding.rvCast.adapter = adapter
-        binding.rvCast.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        observeFlowSafely(adapter.onCardClick) {
+        with(binding){
+            rvCast.adapter = castAdapter
+            rvCast.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+            rvMedia.adapter = mediaAdapter
+            rvMedia.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        observeFlowSafely(castAdapter.onCardClick) {
 
         }
     }

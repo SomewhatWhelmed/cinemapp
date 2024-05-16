@@ -54,6 +54,21 @@ class MovieRepository(
         }
     }
 
+    suspend fun getImages(movieId: Int): List<ImageDTO>? {
+        return try {
+            val response = remoteDataSource.getMovieImages(movieId = movieId)
+            if (response.isSuccessful) {
+                response.body()?.backdrops
+            } else {
+                Log.e(TAG, response.message())
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Unknown error")
+            null
+        }
+    }
+
     companion object {
         private const val TAG = "MOVIE_API"
     }

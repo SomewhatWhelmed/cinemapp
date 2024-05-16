@@ -18,4 +18,10 @@ interface MovieRemoteDataSource {
 
     @GET("3/movie/{movieId}/credits")
     suspend fun getMovieCredits(@Path("movieId") movieId: Int): Response<MovieCreditsDTO>
+
+    @GET("3/movie/{movieId}/images")
+    suspend fun getMovieImages(
+        @Path("movieId") movieId: Int,
+        @Query("language") language: String = "en"
+    ): Response<ImagesResponseDTO>
 }

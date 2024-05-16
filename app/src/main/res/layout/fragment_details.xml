@@ -33,6 +33,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tbTop" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMedia"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivBackdrop" />
+
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
@@ -48,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivBackdrop" />
+            app:layout_constraintTop_toBottomOf="@id/rvMedia" />
 
         <TextView
             android:id="@+id/tvGenres"
@@ -109,7 +119,6 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCast"
             android:layout_width="match_parent"
-
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

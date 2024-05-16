@@ -3,11 +3,14 @@ package com.example.cinemapp.util
 import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.data.CastMemberDTO
 import com.example.cinemapp.data.GenreDTO
+import com.example.cinemapp.data.ImageDTO
+import com.example.cinemapp.data.ImagesResponseDTO
 import com.example.cinemapp.data.MovieCreditsDTO
 import com.example.cinemapp.data.MovieDTO
 import com.example.cinemapp.data.MovieDetailsDTO
 import com.example.cinemapp.ui.main.CastMember
 import com.example.cinemapp.ui.main.Genre
+import com.example.cinemapp.ui.main.Media
 import com.example.cinemapp.ui.main.MovieCard
 import com.example.cinemapp.ui.main.MovieCredits
 import com.example.cinemapp.ui.main.MovieDetails
@@ -16,7 +19,7 @@ object MovieUtil {
     fun map(movie: MovieDTO): MovieCard {
         return MovieCard(
             movie.id,
-            movie.posterPath?.let { mapImageURL(it, 500) },
+            mapImageURL(movie.posterPath, 500),
             movie.releaseDate,
             movie.title,
             movie.voteAverage
@@ -38,7 +41,7 @@ object MovieUtil {
     fun map(movieDetails: MovieDetailsDTO, backdropResolution: Int? = null): MovieDetails {
         return MovieDetails(
             movieDetails.id ?: -1,
-            movieDetails.backdropPath?.let { mapImageURL(it, backdropResolution) } ?: "",
+            mapImageURL(movieDetails.backdropPath, backdropResolution),
             movieDetails.genres?.let { mapGenre(it) } ?: emptyList(),
             movieDetails.overview ?: "",
             movieDetails.runtime ?: 0,
@@ -46,17 +49,19 @@ object MovieUtil {
         )
     }
 
-    private fun mapImageURL(imagePath: String, resolution: Int? = null): String {
-        return "${BuildConfig.URL_BASE_IMAGE}${
-            (resolution?.let { "w${resolution}" } ?: "original")
-        }$imagePath/"
+    private fun mapImageURL(imagePath: String?, resolution: Int? = null): String {
+        return imagePath?.let {
+            "${BuildConfig.URL_BASE_IMAGE}${
+                (resolution?.let { "w${resolution}" } ?: "original")
+            }$imagePath/"
+        } ?: ""
     }
 
     fun mapCast(castMember: CastMemberDTO, resolution: Int? = null): CastMember {
         return CastMember(
             castMember.id ?: -1,
             castMember.name ?: "",
-            castMember.profilePath?.let { mapImageURL(it, resolution) } ?: "",
+            mapImageURL(castMember.profilePath, resolution),
             castMember.character ?: ""
         )
     }
@@ -70,4 +75,12 @@ object MovieUtil {
             creditsResponse.cast?.let { mapCast(creditsResponse.cast, resolution) } ?: emptyList()
         )
     }
+
+    fun mapMedia(image: ImageDTO, resolution: Int? = null): Media.Image {
+        return Media.Image(mapImageURL(image.filePath, resolution))
+    }
+
+    fun mapMedia(images: List<ImageDTO>, resolution: Int? = null): List<Media.Image> =
+        images.map { image -> mapMedia(image, resolution) }
+
 }
