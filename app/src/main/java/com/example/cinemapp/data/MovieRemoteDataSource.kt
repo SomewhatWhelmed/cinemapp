@@ -11,8 +11,11 @@ interface MovieRemoteDataSource {
     suspend fun getUpcoming(
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
-    ): Response<MovieResponse>
+    ): Response<MovieResponseDTO>
 
     @GET("3/movie/{movieId}")
     suspend fun getMovieDetails(@Path("movieId") movieId: Int): Response<MovieDetailsDTO>
+
+    @GET("3/movie/{movieId}/credits")
+    suspend fun getMovieCredits(@Path("movieId") movieId: Int): Response<MovieCreditsDTO>
 }

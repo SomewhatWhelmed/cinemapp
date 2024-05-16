@@ -21,7 +21,7 @@ class MovieRepository(
         }
     }
 
-    suspend fun getUpcoming(page: Int = 1): List<Movie>? {
+    suspend fun getUpcoming(page: Int = 1): List<MovieDTO>? {
         return localCache.getUpcoming(page) ?: try {
             val response = remoteDataSource.getUpcoming(page = page)
             if (response.isSuccessful) {
@@ -29,6 +29,21 @@ class MovieRepository(
                     localCache.insertUpcoming(page, movieResponse.results)
                     movieResponse.results
                 }
+            } else {
+                Log.e(TAG, response.message())
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Unknown error")
+            null
+        }
+    }
+
+    suspend fun getCredits(movieId: Int): MovieCreditsDTO? {
+        return try {
+            val response = remoteDataSource.getMovieCredits(movieId = movieId)
+            if (response.isSuccessful) {
+                response.body()
             } else {
                 Log.e(TAG, response.message())
                 null

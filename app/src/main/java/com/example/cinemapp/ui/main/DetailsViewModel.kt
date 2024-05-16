@@ -15,7 +15,8 @@ class DetailsViewModel(
 ) : ViewModel() {
 
     data class State(
-        val details: MovieDetails = MovieDetails()
+        val details: MovieDetails? = null,
+        val cast: List<CastMember> = emptyList()
     )
 
     private val _state = MutableStateFlow(State())
@@ -23,10 +24,15 @@ class DetailsViewModel(
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
-            _state.update {
-                movieRepository.getMovieDetails(movieId)
-                    ?.let { movieDetails -> State(MovieUtil.map(movieDetails, 500)) }
-                    ?: State()
+            _state.update { it ->
+                it.copy(
+                    details = movieRepository.getMovieDetails(movieId)?.let { details ->
+                        MovieUtil.map(details, 500)
+                    },
+                    cast = movieRepository.getCredits(movieId)
+                        ?.let { MovieUtil.map(it, 500).cast }
+                        ?: emptyList()
+                )
             }
         }
     }

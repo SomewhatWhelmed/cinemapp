@@ -3,7 +3,7 @@ package com.example.cinemapp.ui.main
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetails(
-    val id: Int = -1,
+    val id: Int,
     val backdropPath: String = "",
     val genres: List<Genre> = emptyList(),
     val overview: String = "",

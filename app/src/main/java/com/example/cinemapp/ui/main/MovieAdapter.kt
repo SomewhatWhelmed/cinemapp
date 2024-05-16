@@ -53,7 +53,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tvTitle.text = movie.title
                 tvCardRating.text = "%.1f".format(movie.voteAverage)
                 Glide.with(binding.root.context)
-                    .load(BuildConfig.URL_BASE_IMAGE + "w500/" + movie.posterPath)
+                    .load(movie.posterPath)
                     .into(binding.ivPoster)
             }
         }
