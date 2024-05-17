@@ -22,16 +22,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIconTint="@color/md_theme_onPrimary" />
 
-        <ImageView
-            android:id="@+id/ivBackdrop"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:contentDescription="Backdrop Image"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tbTop" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMedia"
@@ -40,8 +30,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivBackdrop" />
+            app:layout_constraintTop_toBottomOf="@+id/tbTop" />
 
+        <ImageView
+            android:id="@+id/ivArrowLeft"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:src="@drawable/vic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="@id/rvMedia"
+            app:layout_constraintStart_toStartOf="@id/rvMedia"
+            app:layout_constraintTop_toTopOf="@id/rvMedia"
+            app:tint="@color/md_theme_secondary"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/ivArrowRight"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
+            android:rotation="180"
+            android:src="@drawable/vic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="@id/rvMedia"
+            app:layout_constraintEnd_toEndOf="@id/rvMedia"
+            app:layout_constraintTop_toTopOf="@id/rvMedia"
+            app:tint="@color/md_theme_secondary"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tvTitle"

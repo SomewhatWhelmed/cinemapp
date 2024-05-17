@@ -7,14 +7,18 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.math.MathUtils
+import androidx.core.view.size
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
 import com.example.cinemapp.util.observeFlowSafely
@@ -54,7 +58,7 @@ class DetailsFragment : Fragment() {
 
     private fun setupView(details: MovieDetails) {
         with(binding) {
-            tbTop.setNavigationIcon(R.drawable.ic_arrow_back)
+            tbTop.setNavigationIcon(R.drawable.vic_arrow_back)
             tbTop.setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
@@ -64,9 +68,6 @@ class DetailsFragment : Fragment() {
             val runtime =
                 "${(details.runtime / 60)}h ${details.runtime % 60}min"
             tvRuntime.text = runtime
-            Glide.with(root.context)
-                .load(details.backdropPath)
-                .into(binding.ivBackdrop)
 
             if (details.overview.length > OVERVIEW_MAX_CHARACTERS) {
                 val spannableString = makeOverview(details.overview) {
@@ -75,22 +76,47 @@ class DetailsFragment : Fragment() {
                 tvOverview.movementMethod = LinkMovementMethod.getInstance()
                 tvOverview.setText(spannableString, TextView.BufferType.SPANNABLE)
             } else tvOverview.text = details.overview
+
+            ivArrowLeft.setOnClickListener {
+                moveRecyclerView(-1)
+            }
+            ivArrowRight.setOnClickListener {
+                moveRecyclerView(1)
+            }
         }
     }
 
     private fun setupAdapter() {
-        with(binding){
+        with(binding) {
             rvCast.adapter = castAdapter
             rvCast.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
             rvMedia.adapter = mediaAdapter
-            rvMedia.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            rvMedia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            PagerSnapHelper().attachToRecyclerView(rvMedia)
         }
 
         observeFlowSafely(castAdapter.onCardClick) {
 
+        }
+    }
+
+    private fun moveRecyclerView(delta: Int) {
+        with(binding) {
+            val lm = rvMedia.layoutManager as LinearLayoutManager
+            val smoothScroller = object : LinearSmoothScroller(context) {
+                override fun getHorizontalSnapPreference(): Int {
+                    return SNAP_TO_START
+                }
+            }
+            smoothScroller.targetPosition = MathUtils.clamp(
+                lm.findFirstCompletelyVisibleItemPosition() + delta,
+                0,
+                lm.itemCount - 1
+            )
+
+            lm.startSmoothScroll(smoothScroller)
         }
     }
 

@@ -25,18 +25,31 @@ class DetailsViewModel(
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
-            _state.update { it ->
+
+            var newDetails: MovieDetails? = null
+            var newCredits: List<CastMember> = emptyList()
+            var newMedia: List<Media> = emptyList()
+
+            viewModelScope.launch {
+                newDetails = movieRepository.getMovieDetails(movieId)?.let { details ->
+                    MovieUtil.map(details, 500)
+                }
+                newCredits = movieRepository.getCredits(movieId)
+                    ?.let { MovieUtil.map(it, 500).cast }
+                    ?: emptyList()
+
+                newMedia = movieRepository.getImages(movieId)
+                    ?.let { MovieUtil.mapMedia(it, 500) }
+                    ?: emptyList()
+            }.join()
+
+            _state.update {
                 it.copy(
-                    details = movieRepository.getMovieDetails(movieId)?.let { details ->
-                        MovieUtil.map(details, 500)
-                    },
-                    cast = movieRepository.getCredits(movieId)
-                        ?.let { MovieUtil.map(it, 500).cast }
-                        ?: emptyList(),
-                    media = movieRepository.getImages(movieId)
-                        ?.let { MovieUtil.mapMedia(it, 500) }
-                        ?: emptyList()
+                    details = newDetails,
+                    cast = newCredits,
+                    media = listOf(Media.Image(newDetails?.backdropPath ?: "")) + newMedia
                 )
+
             }
         }
     }
