@@ -24,4 +24,11 @@ interface MovieRemoteDataSource {
         @Path("movieId") movieId: Int,
         @Query("language") language: String = "en"
     ): Response<ImagesResponseDTO>
+
+    @GET("3/movie/{movieId}/videos")
+    suspend fun getMovieVideos(
+        @Path("movieId") movieId: Int,
+        @Query("language") language: String = "en"
+    ): Response<VideoResponseDTO>
+
 }

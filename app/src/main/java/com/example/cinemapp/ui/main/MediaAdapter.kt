@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
+import com.example.cinemapp.databinding.CardEmbeddedVideoBinding
 import com.example.cinemapp.databinding.CardImageBinding
 import java.lang.IllegalArgumentException
 
@@ -25,7 +26,11 @@ class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
                     .inflate(LayoutInflater.from(parent.context), parent, false)
                 return MediaViewHolder.ImageViewHolder(binding)
             }
-
+            R.layout.card_embedded_video -> {
+                val binding = CardEmbeddedVideoBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+                return MediaViewHolder.VideoViewHolder(binding)
+            }
             else -> throw IllegalArgumentException("Invalid Media view type.")
         }
     }
@@ -33,6 +38,7 @@ class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         when (holder) {
             is MediaViewHolder.ImageViewHolder -> holder.bind(media[position] as Media.Image)
+            is MediaViewHolder.VideoViewHolder -> holder.bind(media[position] as Media.Video)
         }
 
     }
@@ -40,6 +46,7 @@ class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         return when (media[position]) {
             is Media.Image -> R.layout.card_image
+            is Media.Video -> R.layout.card_embedded_video
         }
     }
 

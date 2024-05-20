@@ -69,6 +69,21 @@ class MovieRepository(
         }
     }
 
+    suspend fun getVideos(movieId: Int): List<VideoDTO>? {
+        return try {
+            val response = remoteDataSource.getMovieVideos(movieId = movieId)
+            if (response.isSuccessful) {
+                response.body()?.results
+            } else {
+                Log.e(TAG, response.message())
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Unknown error")
+            null
+        }
+    }
+
     companion object {
         private const val TAG = "MOVIE_API"
     }

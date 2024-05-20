@@ -40,6 +40,7 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        binding.clContent.visibility = View.INVISIBLE
         viewModel.getMovieDetails(args.movieId)
         setupAdapter()
         return binding.root
@@ -50,6 +51,8 @@ class DetailsFragment : Fragment() {
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
                 setupView(details)
+                binding.clContent.visibility = View.VISIBLE
+                binding.cpiLoading.visibility = View.GONE
             }
             castAdapter.setCast(it.cast)
             mediaAdapter.setMedia(it.media)
@@ -95,10 +98,6 @@ class DetailsFragment : Fragment() {
             rvMedia.adapter = mediaAdapter
             rvMedia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             PagerSnapHelper().attachToRecyclerView(rvMedia)
-        }
-
-        observeFlowSafely(castAdapter.onCardClick) {
-
         }
     }
 

@@ -8,6 +8,7 @@ import com.example.cinemapp.data.ImagesResponseDTO
 import com.example.cinemapp.data.MovieCreditsDTO
 import com.example.cinemapp.data.MovieDTO
 import com.example.cinemapp.data.MovieDetailsDTO
+import com.example.cinemapp.data.VideoDTO
 import com.example.cinemapp.ui.main.CastMember
 import com.example.cinemapp.ui.main.Genre
 import com.example.cinemapp.ui.main.Media
@@ -57,6 +58,16 @@ object MovieUtil {
         } ?: ""
     }
 
+    private fun mapYoutubeVideoURL(videoId: String?): String {
+        return "<iframe " +
+                "width=\"100%\" height=\"100%\" " +
+                "src=\"https://www.youtube.com/embed/$videoId?si=lGrXTtU-7EZF6VLE\" " +
+                "title=\"YouTube video player\" frameborder=\"0\" " +
+                "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" " +
+                "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen>" +
+                "</iframe>"
+    }
+
     fun mapCast(castMember: CastMemberDTO, resolution: Int? = null): CastMember {
         return CastMember(
             castMember.id ?: -1,
@@ -82,5 +93,17 @@ object MovieUtil {
 
     fun mapMedia(images: List<ImageDTO>, resolution: Int? = null): List<Media.Image> =
         images.map { image -> mapMedia(image, resolution) }
+
+
+    fun mapMedia(video: VideoDTO): Media.Video {
+        return Media.Video(
+            html = mapYoutubeVideoURL(video.key),
+            site = video.site ?: "",
+            type = video.type ?: "",
+            official = video.official ?: false
+        )
+    }
+
+    fun mapMedia(videos: List<VideoDTO>): List<Media.Video> = videos.map {video -> mapMedia(video) }
 
 }

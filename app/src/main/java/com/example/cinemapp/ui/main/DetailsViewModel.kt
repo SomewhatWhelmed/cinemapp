@@ -29,6 +29,7 @@ class DetailsViewModel(
             var newDetails: MovieDetails? = null
             var newCredits: List<CastMember> = emptyList()
             var newMedia: List<Media> = emptyList()
+            var newTrailer: Media.Video? = null
 
             viewModelScope.launch {
                 newDetails = movieRepository.getMovieDetails(movieId)?.let { details ->
@@ -41,16 +42,28 @@ class DetailsViewModel(
                 newMedia = movieRepository.getImages(movieId)
                     ?.let { MovieUtil.mapMedia(it, 500) }
                     ?: emptyList()
+
+                newTrailer = movieRepository.getVideos(movieId)
+                    ?.let { chooseTrailer(MovieUtil.mapMedia(it)) }
             }.join()
+
 
             _state.update {
                 it.copy(
                     details = newDetails,
                     cast = newCredits,
-                    media = listOf(Media.Image(newDetails?.backdropPath ?: "")) + newMedia
+                    media = listOf(Media.Image(newDetails?.backdropPath ?: "")) +
+                            listOfNotNull(newTrailer) +
+                            newMedia
                 )
 
             }
+        }
+    }
+
+    private fun chooseTrailer(videos: List<Media.Video>): Media.Video? {
+        return videos.find {
+            video -> video.type == "Trailer" && video.official && video.site == "YouTube"
         }
     }
 }
