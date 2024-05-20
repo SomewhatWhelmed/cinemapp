@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/md_theme_onPrimary"
+        android:background="@color/md_theme_surface"
         tools:ignore="ScrollViewSize">
 
 
@@ -100,7 +100,7 @@
                 android:paddingBottom="5dp"
                 android:text="@string/hello_blank_fragment"
                 android:textAlignment="center"
-                android:textColor="@color/md_theme_primary"
+                android:textColor="@color/md_theme_onPrimary"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
