@@ -3,7 +3,11 @@ package com.example.cinemapp.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.Media
+import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.MovieUtil
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,27 +30,30 @@ class DetailsViewModel(
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
 
-            var newDetails: MovieDetails? = null
-            var newCredits: List<CastMember> = emptyList()
-            var newMedia: List<Media> = emptyList()
-            var newTrailer: Media.Video? = null
-
-            viewModelScope.launch {
-                newDetails = movieRepository.getMovieDetails(movieId)?.let { details ->
+            val detailsCall = async {
+                movieRepository.getMovieDetails(movieId)?.let { details ->
                     MovieUtil.map(details, 500)
                 }
-                newCredits = movieRepository.getCredits(movieId)
+            }
+            val creditsCall = async {
+                movieRepository.getCredits(movieId)
                     ?.let { MovieUtil.map(it, 500).cast }
                     ?: emptyList()
-
-                newMedia = movieRepository.getImages(movieId)
+            }
+            val mediaCall = async {
+                movieRepository.getImages(movieId)
                     ?.let { MovieUtil.mapMedia(it, 500) }
                     ?: emptyList()
-
-                newTrailer = movieRepository.getVideos(movieId)
+            }
+            val trailerCall = async {
+                movieRepository.getVideos(movieId)
                     ?.let { chooseTrailer(MovieUtil.mapMedia(it)) }
-            }.join()
+            }
 
+            val newDetails: MovieDetails? = detailsCall.await()
+            val newCredits: List<CastMember> = creditsCall.await()
+            val newMedia: List<Media> = mediaCall.await()
+            val newTrailer: Media.Video? = trailerCall.await()
 
             _state.update {
                 it.copy(

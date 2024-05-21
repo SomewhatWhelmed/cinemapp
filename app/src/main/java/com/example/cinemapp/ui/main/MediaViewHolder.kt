@@ -7,6 +7,7 @@ import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.example.cinemapp.databinding.CardEmbeddedVideoBinding
 import com.example.cinemapp.databinding.CardImageBinding
+import com.example.cinemapp.ui.main.model.Media
 
 sealed class MediaViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 

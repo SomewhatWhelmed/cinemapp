@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui.main
+package com.example.cinemapp.ui.main.model
 
 sealed class Media {
 

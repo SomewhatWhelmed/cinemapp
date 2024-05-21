@@ -54,8 +54,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-//   java.sourceSets.create("build/generated/source/navigation-args/debug/com/example/navanddata/ui")
 }
 
 dependencies {

@@ -7,20 +7,20 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.math.MathUtils
-import androidx.core.view.size
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
+import com.example.cinemapp.ui.main.model.MovieDetails
+import com.example.cinemapp.util.makeExpandableText
 import com.example.cinemapp.util.observeFlowSafely
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -61,8 +61,8 @@ class DetailsFragment : Fragment() {
 
     private fun setupView(details: MovieDetails) {
         with(binding) {
-            tbTop.setNavigationIcon(R.drawable.vic_arrow_back)
-            tbTop.setNavigationOnClickListener {
+            toolbar.setNavigationIcon(R.drawable.vic_arrow_back)
+            toolbar.setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
 
@@ -73,7 +73,11 @@ class DetailsFragment : Fragment() {
             tvRuntime.text = runtime
 
             if (details.overview.length > OVERVIEW_MAX_CHARACTERS) {
-                val spannableString = makeOverview(details.overview) {
+                val spannableString = makeExpandableText(
+                    text = details.overview,
+                    phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
+                    maxChars = OVERVIEW_MAX_CHARACTERS
+                ) {
                     tvOverview.text = details.overview
                 }
                 tvOverview.movementMethod = LinkMovementMethod.getInstance()
@@ -117,40 +121,6 @@ class DetailsFragment : Fragment() {
 
             lm.startSmoothScroll(smoothScroller)
         }
-    }
-
-    private fun makeOverview(
-        text: String,
-        phrase: String = "More",
-        phraseColor: Int = requireContext().getColor(R.color.md_theme_tertiary),
-        maxChars: Int = OVERVIEW_MAX_CHARACTERS,
-        onClickEvent: () -> Unit
-    ): SpannableString {
-
-        val shortText = "${text.substring(0, maxChars - 1)}... $phrase"
-        val spannableString = SpannableString(shortText)
-
-        val clickableSpan = object : ClickableSpan() {
-            override fun updateDrawState(ds: TextPaint) {
-                ds.color = phraseColor
-                ds.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
-                ds.isUnderlineText = false
-            }
-
-            override fun onClick(widget: View) {
-                onClickEvent()
-            }
-        }
-        val start = shortText.length - phrase.length
-        val end = shortText.length
-        spannableString.setSpan(
-            clickableSpan,
-            start,
-            end,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        return spannableString
     }
 
     companion object {

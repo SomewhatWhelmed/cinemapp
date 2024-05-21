@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardEmbeddedVideoBinding
 import com.example.cinemapp.databinding.CardImageBinding
+import com.example.cinemapp.ui.main.model.Media
 import java.lang.IllegalArgumentException
 
 class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {

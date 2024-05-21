@@ -1,6 +1,4 @@
-package com.example.cinemapp.ui.main
-
-import com.google.gson.annotations.SerializedName
+package com.example.cinemapp.ui.main.model
 
 data class MovieDetails(
     val id: Int,

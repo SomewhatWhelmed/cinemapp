@@ -4,17 +4,16 @@ import com.example.cinemapp.BuildConfig
 import com.example.cinemapp.data.CastMemberDTO
 import com.example.cinemapp.data.GenreDTO
 import com.example.cinemapp.data.ImageDTO
-import com.example.cinemapp.data.ImagesResponseDTO
 import com.example.cinemapp.data.MovieCreditsDTO
 import com.example.cinemapp.data.MovieDTO
 import com.example.cinemapp.data.MovieDetailsDTO
 import com.example.cinemapp.data.VideoDTO
-import com.example.cinemapp.ui.main.CastMember
-import com.example.cinemapp.ui.main.Genre
-import com.example.cinemapp.ui.main.Media
-import com.example.cinemapp.ui.main.MovieCard
-import com.example.cinemapp.ui.main.MovieCredits
-import com.example.cinemapp.ui.main.MovieDetails
+import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.Genre
+import com.example.cinemapp.ui.main.model.Media
+import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.ui.main.model.MovieCredits
+import com.example.cinemapp.ui.main.model.MovieDetails
 
 object MovieUtil {
     fun map(movie: MovieDTO): MovieCard {
@@ -104,6 +103,6 @@ object MovieUtil {
         )
     }
 
-    fun mapMedia(videos: List<VideoDTO>): List<Media.Video> = videos.map {video -> mapMedia(video) }
+    fun mapMedia(videos: List<VideoDTO>): List<Media.Video> = videos.map { video -> mapMedia(video) }
 
 }
