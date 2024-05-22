@@ -20,9 +20,9 @@ class HomeViewModel(
         val pagesLoaded: Int = 0,
     )
 
-    private val _isPagingRunning = MutableStateFlow(false)
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
+    private var isPaging = false
 
     fun getUpcoming() {
         viewModelScope.launch {
@@ -34,7 +34,7 @@ class HomeViewModel(
     }
 
     fun getUpcomingNextPage() {
-        if (!_isPagingRunning.value) {
+        if(!isPaging){
             togglePagingRunning()
             viewModelScope.launch {
                 _state.update {
@@ -48,8 +48,6 @@ class HomeViewModel(
     }
 
     fun togglePagingRunning() {
-        _isPagingRunning.update {
-            it.not()
-        }
+        isPaging = isPaging.not()
     }
 }

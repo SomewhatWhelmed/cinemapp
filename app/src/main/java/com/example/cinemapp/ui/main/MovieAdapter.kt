@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.cinemapp.databinding.CardMovieBinding
 import com.example.cinemapp.ui.main.model.MovieCard
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +55,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tvCardRating.text = "%.1f".format(movie.voteAverage)
                 Glide.with(binding.root.context)
                     .load(movie.posterPath)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(binding.ivPoster)
             }
         }

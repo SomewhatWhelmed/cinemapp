@@ -5,6 +5,7 @@ import android.webkit.WebChromeClient
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.cinemapp.databinding.CardEmbeddedVideoBinding
 import com.example.cinemapp.databinding.CardImageBinding
 import com.example.cinemapp.ui.main.model.Media
@@ -14,7 +15,10 @@ sealed class MediaViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bin
     class ImageViewHolder(private val binding: CardImageBinding) : MediaViewHolder(binding) {
         fun bind(image: Media.Image) {
             with(binding) {
-                Glide.with(root.context).load(image.filePath).into(binding.ivImage)
+                Glide.with(root.context)
+                    .load(image.filePath)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .into(binding.ivImage)
             }
         }
     }

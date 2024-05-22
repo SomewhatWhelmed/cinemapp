@@ -19,7 +19,7 @@ object MovieUtil {
     fun map(movie: MovieDTO): MovieCard {
         return MovieCard(
             movie.id,
-            mapImageURL(movie.posterPath, 500),
+            mapImageURL(movie.posterPath, 400),
             movie.releaseDate,
             movie.title,
             movie.voteAverage
