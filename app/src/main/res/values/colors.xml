@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="md_theme_primary">#28638A</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primary">#FFFFFF</color>
+    <color name="md_theme_onPrimary">#28638A</color>
     <color name="md_theme_primaryContainer">#CAE6FF</color>
     <color name="md_theme_onPrimaryContainer">#001E30</color>
     <color name="md_theme_secondary">#50606E</color>

@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -24,7 +25,7 @@ android {
         val urlBase = properties.getProperty("URL_BASE") ?: ""
         val urlBaseImage = properties.getProperty("URL_BASE_IMAGE") ?: ""
 
-        buildFeatures{
+        buildFeatures {
             buildConfig = true
             viewBinding = true
         }

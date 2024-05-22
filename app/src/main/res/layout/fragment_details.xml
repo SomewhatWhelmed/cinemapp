@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.main.DetailsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/md_theme_surface"
+        tools:ignore="ScrollViewSize">
+
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/md_theme_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIconTint="@color/md_theme_onPrimary" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMedia"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivArrowLeftBackground"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:alpha="0.5"
+                android:padding="5dp"
+                android:src="@drawable/vic_circle"
+                app:layout_constraintBottom_toBottomOf="@id/rvMedia"
+                app:layout_constraintStart_toStartOf="@id/rvMedia"
+                app:layout_constraintTop_toTopOf="@id/rvMedia"
+                app:tint="@color/md_theme_secondary"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivArrowRightBackground"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:alpha="0.5"
+                android:padding="5dp"
+                android:src="@drawable/vic_circle"
+                app:layout_constraintBottom_toBottomOf="@id/rvMedia"
+                app:layout_constraintEnd_toEndOf="@id/rvMedia"
+                app:layout_constraintTop_toTopOf="@id/rvMedia"
+                app:tint="@color/md_theme_secondary"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivArrowLeft"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:src="@drawable/vic_arrow_left"
+                app:layout_constraintBottom_toBottomOf="@id/rvMedia"
+                app:layout_constraintStart_toStartOf="@id/rvMedia"
+                app:layout_constraintTop_toTopOf="@id/rvMedia"
+                app:tint="@color/md_theme_onSecondary"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/ivArrowRight"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:rotation="180"
+                android:src="@drawable/vic_arrow_left"
+                app:layout_constraintBottom_toBottomOf="@id/rvMedia"
+                app:layout_constraintEnd_toEndOf="@id/rvMedia"
+                app:layout_constraintTop_toTopOf="@id/rvMedia"
+                app:tint="@color/md_theme_onSecondary"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp"
+                android:text="@string/hello_blank_fragment"
+                android:textAlignment="center"
+                android:textColor="@color/md_theme_onPrimary"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvMedia" />
+
+            <TextView
+                android:id="@+id/tvGenres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:text="@string/hello_blank_fragment"
+                android:textAlignment="center"
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+            <TextView
+                android:id="@+id/tvRuntime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:text="@string/hello_blank_fragment"
+                android:textAlignment="center"
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvGenres" />
+
+            <TextView
+                android:id="@+id/tvOverview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/hello_blank_fragment"
+                android:textAlignment="viewStart"
+                android:textColor="@color/md_theme_secondary"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRuntime" />
+
+            <TextView
+                android:id="@+id/tvCast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:text="Cast"
+                android:textColor="@color/md_theme_primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvOverview" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCast"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCast" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpiLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintVertical_bias="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
