@@ -40,7 +40,7 @@ class DetailsViewModel(
                     ?.let { MovieUtil.map(it, 500).cast }
                     ?: emptyList()
             }
-            val mediaCall = async {
+            val imageCall = async {
                 movieRepository.getImages(movieId)
                     ?.let { MovieUtil.mapMedia(it, 500) }
                     ?: emptyList()
@@ -52,18 +52,18 @@ class DetailsViewModel(
 
             val newDetails: MovieDetails? = detailsCall.await()
             val newCredits: List<CastMember> = creditsCall.await()
-            val newMedia: List<Media> = mediaCall.await()
+            val newImages: List<Media.Image> = imageCall.await()
             val newTrailer: Media.Video? = trailerCall.await()
 
             _state.update {
                 it.copy(
                     details = newDetails,
                     cast = newCredits,
-                    media = listOf(Media.Image(newDetails?.backdropPath ?: "")) +
-                            listOfNotNull(newTrailer) +
-                            newMedia
+                    media = (newDetails
+                        ?.let { details -> listOf(Media.Image(details.backdropPath)) }
+                        ?.plus(listOfNotNull(newTrailer)))
+                        ?.plus(newImages.filter { media -> media.filePath != "" }) ?: emptyList()
                 )
-
             }
         }
     }

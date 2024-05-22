@@ -1,7 +1,7 @@
 package com.example.cinemapp.ui.main.model
 
 data class MovieDetails(
-    val id: Int,
+    val id: Int = -1,
     val backdropPath: String = "",
     val genres: List<Genre> = emptyList(),
     val overview: String = "",

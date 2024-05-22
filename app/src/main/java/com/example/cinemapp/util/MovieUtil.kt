@@ -60,8 +60,9 @@ object MovieUtil {
     private fun mapYoutubeVideoURL(videoId: String?): String {
         return "<iframe " +
                 "width=\"100%\" height=\"100%\" " +
+                "style=\"top:0; left: 0; position: absolute;\"" +
                 "src=\"https://www.youtube.com/embed/$videoId?si=lGrXTtU-7EZF6VLE\" " +
-                "title=\"YouTube video player\" frameborder=\"0\" " +
+                "title=\"YouTube video player\" frameborder =\"0\" " +
                 "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" " +
                 "referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen>" +
                 "</iframe>"
