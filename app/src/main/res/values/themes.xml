@@ -50,4 +50,13 @@
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
     </style>
 
+    <style name="Chip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:textColor">@color/chip_text_state_list</item>
+        <item name="chipBackgroundColor">@color/chip_background_state_list</item>
+        <item name="rippleColor">@color/md_theme_onPrimary</item>
+        <item name="chipStrokeColor">@color/chip_text_state_list</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="color">@color/md_theme_tertiary</item>
+    </style>
+
 </resources>

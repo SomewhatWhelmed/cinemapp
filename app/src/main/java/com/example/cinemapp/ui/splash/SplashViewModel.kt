@@ -18,7 +18,7 @@ class SplashViewModel(
 
     fun handleInitialData() {
         viewModelScope.launch {
-            movieRepository.getUpcoming()
+            movieRepository.getList(MovieRepository.ListType.UPCOMING)
             delay(2000)
             _gotoMainScreen.emit(Unit)
         }

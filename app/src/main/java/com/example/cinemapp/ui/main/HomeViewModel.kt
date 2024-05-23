@@ -18,30 +18,40 @@ class HomeViewModel(
         val movies: List<MovieCard> = emptyList(),
         val search: String = "",
         val pagesLoaded: Int = 0,
+        val listType: MovieRepository.ListType = MovieRepository.ListType.UPCOMING
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
     private var isPaging = false
 
-    fun getUpcoming() {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(movies = movieRepository.getUpcoming()
-                    ?.let { list -> MovieUtil.map(list) } ?: emptyList())
-            }
-        }
-    }
 
     fun getUpcomingNextPage() {
-        if(!isPaging){
+        getNextPage(MovieRepository.ListType.UPCOMING)
+    }
+
+    fun getPopularNextPage() {
+        getNextPage(MovieRepository.ListType.POPULAR)
+    }
+
+    fun getTopRatedNextPage() {
+        getNextPage(MovieRepository.ListType.TOP_RATED)
+    }
+
+    fun getNextPage(listType: MovieRepository.ListType) {
+        if (!isPaging) {
             togglePagingRunning()
             viewModelScope.launch {
                 _state.update {
                     it.copy(
-                        pagesLoaded = it.pagesLoaded + 1,
-                        movies = it.movies.plus(movieRepository.getUpcoming(it.pagesLoaded + 1)
-                            ?.let { list -> MovieUtil.map(list) } ?: emptyList()))
+                        pagesLoaded = if (listType == it.listType) it.pagesLoaded + 1 else 1,
+                        listType = listType,
+                        movies = (if (listType == it.listType) it.movies else emptyList()).plus(
+                            movieRepository.getList(
+                                listType,
+                                if (listType == it.listType) it.pagesLoaded + 1 else 1
+                            )
+                                ?.let { list -> MovieUtil.map(list) } ?: emptyList()))
                 }
             }
         }

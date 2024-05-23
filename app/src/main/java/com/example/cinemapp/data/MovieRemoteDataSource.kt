@@ -13,6 +13,18 @@ interface MovieRemoteDataSource {
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
+    @GET("3/movie/popular")
+    suspend fun getPopular(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): Response<MovieResponseDTO>
+
+    @GET("3/movie/top_rated")
+    suspend fun getTopRated(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1
+    ): Response<MovieResponseDTO>
+
     @GET("3/movie/{movieId}")
     suspend fun getMovieDetails(@Path("movieId") movieId: Int): Response<MovieDetailsDTO>
 
