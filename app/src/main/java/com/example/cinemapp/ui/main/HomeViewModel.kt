@@ -40,7 +40,7 @@ class HomeViewModel(
 
     fun getNextPage(listType: MovieRepository.ListType) {
         if (!isPaging) {
-            togglePagingRunning()
+            setPagingRunning(true)
             viewModelScope.launch {
                 _state.update {
                     it.copy(
@@ -57,7 +57,7 @@ class HomeViewModel(
         }
     }
 
-    fun togglePagingRunning() {
-        isPaging = isPaging.not()
+    fun setPagingRunning(newVal: Boolean) {
+        isPaging = newVal
     }
 }

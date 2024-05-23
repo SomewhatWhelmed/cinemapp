@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentHomeBinding
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.util.isEndOfScroll
@@ -41,7 +40,7 @@ class HomeFragment : Fragment() {
 
         observeFlowSafely(viewModel.state) {
             adapter.setMovies(it.movies)
-            viewModel.togglePagingRunning()
+            viewModel.setPagingRunning(false)
         }
         binding.rvMovieList.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
@@ -56,6 +55,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViews() {
+        binding.cUpcoming.isChecked = true
         binding.cgMovieLists.setOnCheckedStateChangeListener { _, checkedId ->
             onChipChanged(checkedId[0])
         }
