@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.cinemapp.databinding.CardCastBinding
 import com.example.cinemapp.ui.main.model.CastMember
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +55,7 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
                 tvCharacter.text = castMember.character
                 Glide.with(binding.root.context)
                     .load(castMember.profilePath)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(binding.ivPicture)
             }
         }

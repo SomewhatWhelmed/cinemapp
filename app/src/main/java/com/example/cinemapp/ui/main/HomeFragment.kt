@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.databinding.FragmentHomeBinding
 import com.example.cinemapp.ui.main.model.MovieCard
@@ -35,29 +36,53 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        setupViews()
 
         observeFlowSafely(viewModel.state) {
             adapter.setMovies(it.movies)
-            viewModel.togglePagingRunning()
+            viewModel.setPagingRunning(false)
         }
         binding.rvMovieList.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (binding.rvMovieList.isEndOfScroll()) {
-                        viewModel.getUpcomingNextPage()
+                        viewModel.getNextPage()
                     }
                 }
             }
         )
     }
 
+    private fun setupViews() {
+        binding.chipUpcoming.isChecked = true
+        binding.cgMovieLists.setOnCheckedStateChangeListener { _, checkedId ->
+            onChipChanged(checkedId[0])
+        }
+    }
 
     private fun setupAdapter() {
         binding.rvMovieList.adapter = adapter
         binding.rvMovieList.layoutManager = GridLayoutManager(context, 2)
         observeFlowSafely(adapter.onMovieCardClick) {
             onMovieCardClick(it)
+        }
+    }
+
+    private fun onChipChanged(checked: Int) {
+        with(binding){
+            when(checked) {
+                chipUpcoming.id -> viewModel.getUpcomingNextPage()
+                chipPopular.id -> viewModel.getPopularNextPage()
+                chipTopRated.id -> viewModel.getTopRatedNextPage()
+            }
+            val smoothScroller = object : LinearSmoothScroller(context) {
+                override fun getVerticalSnapPreference(): Int {
+                    return SNAP_TO_START
+                }
+            }
+            smoothScroller.targetPosition = 0
+            rvMovieList.layoutManager?.startSmoothScroll(smoothScroller)
         }
     }
 

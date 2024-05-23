@@ -30,12 +30,16 @@ class MovieRepository(
         return getBodyFromResponse(remoteDataSource.getMovieDetails(movieId = movieId))
     }
 
-    suspend fun getUpcoming(page: Int = 1): List<MovieDTO>? {
-        return localCache.getUpcoming(page) ?: try {
-            val response = remoteDataSource.getUpcoming(page = page)
+    suspend fun getList(listType: ListType, page: Int = 1): List<MovieDTO>? {
+        return localCache.get(listType, page) ?: try {
+            val response = when(listType) {
+                ListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
+                ListType.POPULAR -> remoteDataSource.getPopular(page = page)
+                ListType.TOP_RATED -> remoteDataSource.getTopRated(page = page)
+            }
             if (response.isSuccessful) {
                 response.body()?.let { movieResponse ->
-                    localCache.insertUpcoming(page, movieResponse.results)
+                    localCache.insert(listType, page, movieResponse.results)
                     movieResponse.results
                 }
             } else {
@@ -47,6 +51,7 @@ class MovieRepository(
             null
         }
     }
+
 
     suspend fun getImages(movieId: Int): List<ImageDTO>? {
         return try {
@@ -80,5 +85,9 @@ class MovieRepository(
 
     companion object {
         private const val TAG = "MOVIE_API"
+    }
+
+    enum class ListType {
+        UPCOMING, POPULAR, TOP_RATED
     }
 }
