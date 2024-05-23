@@ -7,40 +7,43 @@ import retrofit2.http.Query
 
 interface MovieRemoteDataSource {
 
-    @GET("3/movie/upcoming")
+    @GET("$API_VERSION/movie/upcoming")
     suspend fun getUpcoming(
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
-    @GET("3/movie/popular")
+    @GET("$API_VERSION/movie/popular")
     suspend fun getPopular(
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
-    @GET("3/movie/top_rated")
+    @GET("$API_VERSION/movie/top_rated")
     suspend fun getTopRated(
         @Query("language") language: String = "en-US",
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
-    @GET("3/movie/{movieId}")
+    @GET("$API_VERSION/movie/{movieId}")
     suspend fun getMovieDetails(@Path("movieId") movieId: Int): Response<MovieDetailsDTO>
 
-    @GET("3/movie/{movieId}/credits")
+    @GET("$API_VERSION/movie/{movieId}/credits")
     suspend fun getMovieCredits(@Path("movieId") movieId: Int): Response<MovieCreditsDTO>
 
-    @GET("3/movie/{movieId}/images")
+    @GET("$API_VERSION/movie/{movieId}/images")
     suspend fun getMovieImages(
         @Path("movieId") movieId: Int,
         @Query("language") language: String = "en"
     ): Response<ImagesResponseDTO>
 
-    @GET("3/movie/{movieId}/videos")
+    @GET("$API_VERSION/movie/{movieId}/videos")
     suspend fun getMovieVideos(
         @Path("movieId") movieId: Int,
         @Query("language") language: String = "en"
     ): Response<VideoResponseDTO>
 
+    companion object {
+        const val API_VERSION = 3
+    }
 }

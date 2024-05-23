@@ -38,7 +38,7 @@ class HomeViewModel(
         getNextPage(MovieRepository.ListType.TOP_RATED)
     }
 
-    fun getNextPage(listType: MovieRepository.ListType) {
+    fun getNextPage(listType: MovieRepository.ListType = state.value.listType) {
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
@@ -57,7 +57,7 @@ class HomeViewModel(
         }
     }
 
-    fun setPagingRunning(newVal: Boolean) {
-        isPaging = newVal
+    fun setPagingRunning(isRunning: Boolean) {
+        isPaging = isRunning
     }
 }

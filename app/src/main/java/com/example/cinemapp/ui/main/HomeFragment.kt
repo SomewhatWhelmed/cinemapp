@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (binding.rvMovieList.isEndOfScroll()) {
-                        viewModel.getNextPage(viewModel.state.value.listType)
+                        viewModel.getNextPage()
                     }
                 }
             }
@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViews() {
-        binding.cUpcoming.isChecked = true
+        binding.chipUpcoming.isChecked = true
         binding.cgMovieLists.setOnCheckedStateChangeListener { _, checkedId ->
             onChipChanged(checkedId[0])
         }
@@ -72,9 +72,9 @@ class HomeFragment : Fragment() {
     private fun onChipChanged(checked: Int) {
         with(binding){
             when(checked) {
-                cUpcoming.id -> viewModel.getUpcomingNextPage()
-                cPopular.id -> viewModel.getPopularNextPage()
-                cTopRated.id -> viewModel.getTopRatedNextPage()
+                chipUpcoming.id -> viewModel.getUpcomingNextPage()
+                chipPopular.id -> viewModel.getPopularNextPage()
+                chipTopRated.id -> viewModel.getTopRatedNextPage()
             }
             val smoothScroller = object : LinearSmoothScroller(context) {
                 override fun getVerticalSnapPreference(): Int {
