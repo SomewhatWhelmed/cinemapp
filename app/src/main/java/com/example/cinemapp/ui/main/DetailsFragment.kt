@@ -13,15 +13,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.math.MathUtils
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
+import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.makeExpandableText
 import com.example.cinemapp.util.observeFlowSafely
+import com.example.cinemapp.util.safeNavigateWithArgs
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -99,6 +102,10 @@ class DetailsFragment : Fragment() {
             rvCast.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+            observeFlowSafely(castAdapter.onCardClick) {
+                onCastClick(it)
+            }
+
             rvMedia.adapter = mediaAdapter
             rvMedia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             PagerSnapHelper().attachToRecyclerView(rvMedia)
@@ -121,6 +128,12 @@ class DetailsFragment : Fragment() {
 
             lm.startSmoothScroll(smoothScroller)
         }
+    }
+
+    fun onCastClick(castMember: CastMember){
+        findNavController().safeNavigateWithArgs(
+            DetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
+        )
     }
 
     companion object {

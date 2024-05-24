@@ -31,6 +31,9 @@ interface MovieRemoteDataSource {
     @GET("$API_VERSION/movie/{movieId}/credits")
     suspend fun getMovieCredits(@Path("movieId") movieId: Int): Response<MovieCreditsDTO>
 
+    @GET("$API_VERSION/person/{person_id}")
+    suspend fun getPersonDetails(@Path("person_id") personId: Int): Response<PersonDetailsDTO>
+
     @GET("$API_VERSION/movie/{movieId}/images")
     suspend fun getMovieImages(
         @Path("movieId") movieId: Int,

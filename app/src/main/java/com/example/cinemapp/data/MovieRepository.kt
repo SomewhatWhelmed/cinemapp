@@ -83,6 +83,10 @@ class MovieRepository(
         }
     }
 
+    suspend fun getPersonDetails(personId: Int): PersonDetailsDTO? {
+        return getBodyFromResponse(remoteDataSource.getPersonDetails(personId = personId))
+    }
+
     companion object {
         private const val TAG = "MOVIE_API"
     }

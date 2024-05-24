@@ -28,11 +28,25 @@
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <action
+            android:id="@+id/toActorDetailsFragment"
+            app:destination="@id/actorDetailsFragment"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.cinemapp.ui.main.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/actorDetailsFragment"
+        android:name="com.example.cinemapp.ui.main.ActorDetailsFragment"
+        android:label="fragment_actor_details"
+        tools:layout="@layout/fragment_actor_details" >
+        <argument
+            android:name="personId"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

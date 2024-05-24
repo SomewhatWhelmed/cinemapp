@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardCastBinding
 import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.util.loadImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,10 +55,12 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
                 }
                 tvName.text = castMember.name
                 tvCharacter.text = castMember.character
-                Glide.with(binding.root.context)
-                    .load(castMember.profilePath)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .into(binding.ivPicture)
+                loadImage(
+                    castMember.profilePath,
+                    ivPicture,
+                    root.context,
+                    R.drawable.ic_placeholder_person
+                )
             }
         }
     }
