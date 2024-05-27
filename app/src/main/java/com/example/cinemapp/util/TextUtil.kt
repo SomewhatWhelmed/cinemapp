@@ -4,14 +4,39 @@ import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
+import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.TextView
+import com.example.cinemapp.R
+import com.example.cinemapp.ui.main.DetailsFragment
+
+fun setExpandableTextView(
+    text: String,
+    phrase: String = "More",
+    phraseColor: Int,
+    maxChars: Int,
+    textView: TextView,
+    onClickEvent: () -> Unit
+) {
+    if (text.length > maxChars) {
+        val spannableString = makeExpandableText(
+            text = text,
+            phrase = phrase,
+            phraseColor = phraseColor,
+            maxChars = maxChars,
+            onClickEvent = onClickEvent
+        )
+        textView.movementMethod = LinkMovementMethod.getInstance()
+        textView.setText(spannableString, TextView.BufferType.SPANNABLE)
+    } else textView.text = text
+}
 
 fun makeExpandableText(
     text: String,
     phrase: String = "More",
     phraseColor: Int,
-    maxChars: Int ,
+    maxChars: Int,
     onClickEvent: () -> Unit
 ): SpannableString {
 

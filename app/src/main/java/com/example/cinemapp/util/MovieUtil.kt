@@ -1,8 +1,6 @@
 package com.example.cinemapp.util
 
-import androidx.constraintlayout.helper.widget.MotionPlaceholder
 import com.example.cinemapp.BuildConfig
-import com.example.cinemapp.R
 import com.example.cinemapp.data.CastMemberDTO
 import com.example.cinemapp.data.GenreDTO
 import com.example.cinemapp.data.ImageDTO
@@ -10,8 +8,10 @@ import com.example.cinemapp.data.MovieCreditsDTO
 import com.example.cinemapp.data.MovieDTO
 import com.example.cinemapp.data.MovieDetailsDTO
 import com.example.cinemapp.data.PersonDetailsDTO
+import com.example.cinemapp.data.CastMovieCreditDTO
 import com.example.cinemapp.data.VideoDTO
 import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.Genre
 import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieCard
@@ -19,7 +19,6 @@ import com.example.cinemapp.ui.main.model.MovieCredits
 import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.ui.main.model.PersonDetails
 import java.time.LocalDate
-import java.util.Date
 
 object MovieUtil {
     fun map(movie: MovieDTO): MovieCard {
@@ -139,4 +138,27 @@ object MovieUtil {
     fun mapListVideos(videos: List<VideoDTO>): List<Media.Video> =
         videos.map { video -> map(video) }
 
+
+    fun mapListYears(dates: List<String?>?): List<Int?> {
+        return dates?.map { date ->
+            if (date.isNullOrEmpty()) null
+            else date.substring(0, 4).toInt()
+        }?.distinct()?.sortedByDescending { year -> year ?: 0 } ?: emptyList()
+    }
+
+    fun mapCastMovieCredit(credit: CastMovieCreditDTO, resolution: Int? = null): CastMovieCredit {
+        return CastMovieCredit(
+            id = credit.id ?: -1,
+            title = credit.title ?: "",
+            posterPath = mapImageURL(credit.posterPath),
+            character = credit.character ?: ""
+        )
+    }
+
+    fun mapListCastMovieCredits(
+        credits: List<CastMovieCreditDTO>,
+        resolution: Int? = null
+    ): List<CastMovieCredit> {
+        return credits.map { mapCastMovieCredit(it, resolution) }
+    }
 }

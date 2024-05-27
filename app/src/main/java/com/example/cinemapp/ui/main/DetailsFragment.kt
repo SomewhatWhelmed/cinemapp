@@ -25,6 +25,7 @@ import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.makeExpandableText
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
+import com.example.cinemapp.util.setExpandableTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -75,17 +76,15 @@ class DetailsFragment : Fragment() {
                 "${(details.runtime / 60)}h ${details.runtime % 60}min"
             tvRuntime.text = runtime
 
-            if (details.overview.length > OVERVIEW_MAX_CHARACTERS) {
-                val spannableString = makeExpandableText(
-                    text = details.overview,
-                    phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
-                    maxChars = OVERVIEW_MAX_CHARACTERS
-                ) {
-                    tvOverview.text = details.overview
-                }
-                tvOverview.movementMethod = LinkMovementMethod.getInstance()
-                tvOverview.setText(spannableString, TextView.BufferType.SPANNABLE)
-            } else tvOverview.text = details.overview
+
+            setExpandableTextView(
+                text = details.overview,
+                phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
+                maxChars = OVERVIEW_MAX_CHARACTERS,
+                textView = tvOverview
+            ) {
+                tvOverview.text = details.overview
+            }
 
             ivArrowLeft.setOnClickListener {
                 moveRecyclerView(-1)

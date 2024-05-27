@@ -36,7 +36,7 @@ class DetailsViewModel(
                 }
             }
             val creditsCall = async {
-                movieRepository.getCredits(movieId)
+                movieRepository.getMovieCredits(movieId)
                     ?.let { MovieUtil.map(it, 500).cast }
                     ?: emptyList()
             }

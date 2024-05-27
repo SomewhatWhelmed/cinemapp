@@ -22,7 +22,7 @@ class MovieRepository(
         }
     }
 
-    suspend fun getCredits(movieId: Int): MovieCreditsDTO? {
+    suspend fun getMovieCredits(movieId: Int): MovieCreditsDTO? {
         return getBodyFromResponse(remoteDataSource.getMovieCredits(movieId = movieId))
     }
 
@@ -31,8 +31,8 @@ class MovieRepository(
     }
 
     suspend fun getList(listType: ListType, page: Int = 1): List<MovieDTO>? {
-        return localCache.get(listType, page) ?: try {
-            val response = when(listType) {
+        return localCache.getMovieList(listType, page) ?: try {
+            val response = when (listType) {
                 ListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
                 ListType.POPULAR -> remoteDataSource.getPopular(page = page)
                 ListType.TOP_RATED -> remoteDataSource.getTopRated(page = page)
@@ -85,6 +85,47 @@ class MovieRepository(
 
     suspend fun getPersonDetails(personId: Int): PersonDetailsDTO? {
         return getBodyFromResponse(remoteDataSource.getPersonDetails(personId = personId))
+    }
+
+    suspend fun getPersonMovieCreditsYears(personId: Int): List<String?>? {
+        return localCache.getPersonMovieCreditsYears(personId)
+            ?: try {
+                val response = remoteDataSource.getPersonMovieCredits(personId)
+                if (response.isSuccessful) {
+                    response.body()?.let { creditsResponse ->
+                        localCache.insert(creditsResponse)
+                        creditsResponse.cast?.map { credit -> credit.releaseDate } ?: emptyList()
+                    }
+                } else {
+                    Log.e(TAG, response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, e.message ?: "Unknown error")
+                null
+            }
+    }
+
+    suspend fun getPersonMovieCredits(personId: Int, year: Int?): List<CastMovieCreditDTO>? {
+        return localCache.getPersonMovieCredits(personId, year)
+            ?: try {
+                val response = remoteDataSource.getPersonMovieCredits(personId)
+                if (response.isSuccessful) {
+                    response.body()?.let { creditsResponse ->
+                        localCache.insert(creditsResponse)
+                        creditsResponse.cast?.filter { credit ->
+                            year?.let { credit.releaseDate?.startsWith(year.toString()) ?: false }
+                                ?: credit.releaseDate.isNullOrEmpty()
+                        }
+                    }
+                } else {
+                    Log.e(TAG, response.message())
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, e.message ?: "Unknown error")
+                null
+            }
     }
 
     companion object {

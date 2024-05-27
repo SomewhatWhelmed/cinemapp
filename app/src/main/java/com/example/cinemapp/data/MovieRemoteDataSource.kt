@@ -46,6 +46,11 @@ interface MovieRemoteDataSource {
         @Query("language") language: String = "en"
     ): Response<VideoResponseDTO>
 
+    @GET("$API_VERSION/person/{personId}/movie_credits")
+    suspend fun getPersonMovieCredits(
+        @Path("personId") personId: Int
+    ): Response<PersonMovieCreditsResponseDTO>
+
     companion object {
         const val API_VERSION = 3
     }

@@ -1,24 +1,22 @@
 package com.example.cinemapp.ui.main
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentActorDetailsBinding
 import com.example.cinemapp.ui.main.model.PersonDetails
 import com.example.cinemapp.util.ageAndRangeUntil
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
-import com.example.cinemapp.util.setPattern
+import com.example.cinemapp.util.setExpandableTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.time.LocalDate
 
 class ActorDetailsFragment : Fragment() {
 
@@ -26,6 +24,7 @@ class ActorDetailsFragment : Fragment() {
     private var _binding: FragmentActorDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: ActorDetailsFragmentArgs by navArgs()
+    private val creditAdapter = CreditsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +37,7 @@ class ActorDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentActorDetailsBinding.inflate(inflater, container, false)
         binding.clContent.visibility = View.INVISIBLE
+        setupAdapter()
         return binding.root
     }
 
@@ -50,6 +50,15 @@ class ActorDetailsFragment : Fragment() {
                 binding.clContent.visibility = View.VISIBLE
                 binding.cpiLoading.visibility = View.GONE
             }
+            val adapter = ArrayAdapter(
+                binding.root.context,
+                org.koin.android.R.layout.support_simple_spinner_dropdown_item,
+                viewModel.state.value.creditYears.map { year -> year?.toString() ?: "Unannounced" }
+            )
+            binding.spinnerYear.adapter = adapter
+        }
+        observeFlowSafely(viewModel.stateCredits) {
+            creditAdapter.setCredits(it.credits)
         }
     }
 
@@ -63,6 +72,15 @@ class ActorDetailsFragment : Fragment() {
             val ageDisplay = details.birthday.ageAndRangeUntil(details.deathday)
             tvAge.text = ageDisplay
             tvGender.text = details.gender
+
+            setExpandableTextView(
+                text = details.biography,
+                phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
+                maxChars = BIOGRAPHY_MAX_CHARACTERS,
+                textView = tvBiography
+            ) {
+                tvBiography.text = details.biography
+            }
             loadImage(
                 details.profilePath,
                 ivPicture,
@@ -70,5 +88,44 @@ class ActorDetailsFragment : Fragment() {
                 R.drawable.ic_placeholder_person
             )
         }
+    }
+
+    private fun setupAdapter() {
+        with(binding) {
+            val adapter = ArrayAdapter(
+                root.context,
+                org.koin.android.R.layout.support_simple_spinner_dropdown_item,
+                viewModel.state.value.creditYears.map { year -> year?.toString() ?: "Unannounced" })
+
+            spinnerYear.adapter = adapter
+            spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.getCreditsFromYear(
+                        args.personId,
+                        viewModel.state.value.creditYears[position]
+                    )
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            }
+            rvCredits.adapter = creditAdapter
+            rvCredits.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            observeFlowSafely(creditAdapter.onCardClick) {
+
+            }
+        }
+    }
+
+    companion object {
+        private const val BIOGRAPHY_MAX_CHARACTERS = 200
     }
 }
