@@ -76,13 +76,4 @@ class ActorDetailsViewModel(
         }
     }
 
-//    fun getCreditsYears(personId: Int): List<Int?> {
-//        viewModelScope.launch {
-//
-//             movieRepository.getPersonMovieCreditsYears(personId)?.let {
-//                MovieUtil.mapListYears(it)
-//            } ?: emptyList()
-//        }
-//    }
-
 }

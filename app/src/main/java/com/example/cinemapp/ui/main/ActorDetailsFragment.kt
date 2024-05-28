@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentActorDetailsBinding
+import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import com.example.cinemapp.util.ageAndRangeUntil
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
+import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -120,9 +123,15 @@ class ActorDetailsFragment : Fragment() {
             rvCredits.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             observeFlowSafely(creditAdapter.onCardClick) {
-
+                onCreditClick(it)
             }
         }
+    }
+
+    private fun onCreditClick(castMovieCredit: CastMovieCredit) {
+        findNavController().safeNavigateWithArgs(
+            ActorDetailsFragmentDirections.toDetailsFragment(movieId = castMovieCredit.id)
+        )
     }
 
     companion object {

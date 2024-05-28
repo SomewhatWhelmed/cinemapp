@@ -47,6 +47,9 @@
         <argument
             android:name="personId"
             app:argType="integer" />
+        <action
+            android:id="@+id/toDetailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
 </navigation>

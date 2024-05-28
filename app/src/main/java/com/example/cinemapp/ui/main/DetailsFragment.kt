@@ -129,7 +129,7 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    fun onCastClick(castMember: CastMember){
+    private fun onCastClick(castMember: CastMember){
         findNavController().safeNavigateWithArgs(
             DetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
         )
