@@ -3,6 +3,7 @@ package com.example.cinemapp
 import com.example.cinemapp.data.MovieLocalCache
 import com.example.cinemapp.data.MovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.ui.main.ActorDetailsViewModel
 import com.example.cinemapp.ui.main.DetailsViewModel
 import com.example.cinemapp.ui.main.HomeViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
@@ -52,5 +53,8 @@ val appModule = module {
     }
     viewModel {
         DetailsViewModel(get())
+    }
+    viewModel {
+        ActorDetailsViewModel(get())
     }
 }
