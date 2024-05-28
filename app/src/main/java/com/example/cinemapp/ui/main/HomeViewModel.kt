@@ -51,7 +51,7 @@ class HomeViewModel(
                                 listType,
                                 if (listType == it.listType) it.pagesLoaded + 1 else 1
                             )
-                                ?.let { list -> MovieUtil.map(list) } ?: emptyList()))
+                                ?.let { list -> MovieUtil.mapListMovie(list) } ?: emptyList()))
                 }
             }
         }

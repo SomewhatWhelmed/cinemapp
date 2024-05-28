@@ -4,11 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardCastBinding
-import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.util.loadImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,50 +14,50 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
+class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
 
-    private var cast: List<CastMember> = emptyList()
+    private var credits: List<CastMovieCredit> = emptyList()
 
-    private val _onCardClick: MutableSharedFlow<CastMember> = MutableSharedFlow()
+    private val _onCardClick: MutableSharedFlow<CastMovieCredit> = MutableSharedFlow()
     val onCardClick = _onCardClick.asSharedFlow()
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setCast(cast: List<CastMember>) {
-        this.cast = cast
+    fun setCredits(credits: List<CastMovieCredit>) {
+        this.credits = credits
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditViewHolder {
         val binding = CardCastBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return CastViewHolder(binding)
+        return CreditViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
-        holder.bind(cast[position])
+    override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
+        holder.bind(credits[position])
     }
 
     override fun getItemCount(): Int {
-        return cast.size
+        return credits.size
     }
 
-    inner class CastViewHolder(private val binding: CardCastBinding) :
+    inner class CreditViewHolder(private val binding: CardCastBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(castMember: CastMember) {
+        fun bind(movieCredit: CastMovieCredit) {
             with(binding) {
                 root.setOnClickListener {
                     CoroutineScope(Dispatchers.Main).launch {
-                        _onCardClick.emit(castMember)
+                        _onCardClick.emit(movieCredit)
                     }
                 }
-                tvName.text = castMember.name
-                tvCharacter.text = castMember.character
+                tvName.text = movieCredit.title
+                tvCharacter.text = movieCredit.character
                 loadImage(
-                    castMember.profilePath,
+                    movieCredit.posterPath,
                     ivPicture,
                     root.context,
-                    R.drawable.ic_placeholder_person
+                    R.drawable.ic_placeholder_movie
                 )
             }
         }

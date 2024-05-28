@@ -13,15 +13,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.math.MathUtils
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
+import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.makeExpandableText
 import com.example.cinemapp.util.observeFlowSafely
+import com.example.cinemapp.util.safeNavigateWithArgs
+import com.example.cinemapp.util.setExpandableTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -72,17 +76,15 @@ class DetailsFragment : Fragment() {
                 "${(details.runtime / 60)}h ${details.runtime % 60}min"
             tvRuntime.text = runtime
 
-            if (details.overview.length > OVERVIEW_MAX_CHARACTERS) {
-                val spannableString = makeExpandableText(
-                    text = details.overview,
-                    phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
-                    maxChars = OVERVIEW_MAX_CHARACTERS
-                ) {
-                    tvOverview.text = details.overview
-                }
-                tvOverview.movementMethod = LinkMovementMethod.getInstance()
-                tvOverview.setText(spannableString, TextView.BufferType.SPANNABLE)
-            } else tvOverview.text = details.overview
+
+            setExpandableTextView(
+                text = details.overview,
+                phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
+                maxChars = OVERVIEW_MAX_CHARACTERS,
+                textView = tvOverview
+            ) {
+                tvOverview.text = details.overview
+            }
 
             ivArrowLeft.setOnClickListener {
                 moveRecyclerView(-1)
@@ -98,6 +100,10 @@ class DetailsFragment : Fragment() {
             rvCast.adapter = castAdapter
             rvCast.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+            observeFlowSafely(castAdapter.onCardClick) {
+                onCastClick(it)
+            }
 
             rvMedia.adapter = mediaAdapter
             rvMedia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -121,6 +127,12 @@ class DetailsFragment : Fragment() {
 
             lm.startSmoothScroll(smoothScroller)
         }
+    }
+
+    private fun onCastClick(castMember: CastMember){
+        findNavController().safeNavigateWithArgs(
+            DetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
+        )
     }
 
     companion object {
