@@ -36,18 +36,18 @@ class DetailsViewModel(
                 }
             }
             val creditsCall = async {
-                movieRepository.getMovieCredits(movieId)
+                movieRepository.getCredits(movieId)
                     ?.let { MovieUtil.map(it, 500).cast }
                     ?: emptyList()
             }
             val imageCall = async {
                 movieRepository.getImages(movieId)
-                    ?.let { MovieUtil.mapListImages(it, 500) }
+                    ?.let { MovieUtil.mapMedia(it, 500) }
                     ?: emptyList()
             }
             val trailerCall = async {
                 movieRepository.getVideos(movieId)
-                    ?.let { chooseTrailer(MovieUtil.mapListVideos(it)) }
+                    ?.let { chooseTrailer(MovieUtil.mapMedia(it)) }
             }
 
             val newDetails: MovieDetails? = detailsCall.await()

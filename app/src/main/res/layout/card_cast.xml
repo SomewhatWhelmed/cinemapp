@@ -30,7 +30,6 @@
                 android:layout_height="0dp"
                 android:contentDescription="MoviePoster"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_placeholder_person"
                 app:layout_constraintBottom_toTopOf="@+id/llCardVertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,24 +42,22 @@
                 android:orientation="vertical"
                 android:padding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivPicture">
+                app:layout_constraintTop_toBottomOf="@+id/ivPoster">
 
                 <TextView
                     android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textStyle="bold"
                     android:textColor="@color/md_theme_secondary"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/tvCharacter"
+                    android:textColor="@color/md_theme_tertiary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/md_theme_tertiary"
-                    android:textSize="12sp" />
+                    android:text="" />
 
             </LinearLayout>
 
