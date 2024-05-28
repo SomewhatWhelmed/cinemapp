@@ -14,7 +14,7 @@ import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentActorDetailsBinding
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
-import com.example.cinemapp.util.ageAndRangeUntil
+import com.example.cinemapp.util.ageAndLifespanFormat
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
@@ -41,6 +41,7 @@ class ActorDetailsFragment : Fragment() {
         _binding = FragmentActorDetailsBinding.inflate(inflater, container, false)
         binding.clContent.visibility = View.INVISIBLE
         setupAdapter()
+        observeOnClickEvents()
         return binding.root
     }
 
@@ -53,14 +54,10 @@ class ActorDetailsFragment : Fragment() {
                 binding.clContent.visibility = View.VISIBLE
                 binding.cpiLoading.visibility = View.GONE
             }
-            val adapter = ArrayAdapter(
-                binding.root.context,
-                org.koin.android.R.layout.support_simple_spinner_dropdown_item,
-                viewModel.state.value.creditYears.map { year -> year?.toString() ?: "Unannounced" }
-            )
-            binding.spinnerYear.adapter = adapter
-        }
-        observeFlowSafely(viewModel.stateCredits) {
+            val adapter = binding.spinnerYear.adapter as ArrayAdapter<String>
+            adapter.clear()
+            adapter.addAll(it.creditYears.map { year -> year?.toString() ?: "Unannounced" })
+
             creditAdapter.setCredits(it.credits)
         }
     }
@@ -72,7 +69,7 @@ class ActorDetailsFragment : Fragment() {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
             tvName.text = details.name
-            val ageDisplay = details.birthday.ageAndRangeUntil(details.deathday)
+            val ageDisplay = details.birthday.ageAndLifespanFormat(details.deathday)
             tvAge.text = ageDisplay
             tvGender.text = details.gender
 
@@ -113,18 +110,17 @@ class ActorDetailsFragment : Fragment() {
                         viewModel.state.value.creditYears[position]
                     )
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             rvCredits.adapter = creditAdapter
             rvCredits.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            observeFlowSafely(creditAdapter.onCardClick) {
-                onCreditClick(it)
-            }
+        }
+    }
+
+    private fun observeOnClickEvents() {
+        observeFlowSafely(creditAdapter.onCardClick) {
+            onCreditClick(it)
         }
     }
 

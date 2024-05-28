@@ -19,40 +19,28 @@ class ActorDetailsViewModel(
 
     data class State(
         val details: PersonDetails? = null,
-        val creditYears: List<Int?> = emptyList()
-    )
-
-    data class StateCredits(
+        val creditYears: List<Int?> = emptyList(),
         val credits: List<CastMovieCredit> = emptyList()
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val _stateCredits = MutableStateFlow(StateCredits())
-    val stateCredits: StateFlow<StateCredits> = _stateCredits.asStateFlow()
-
 
     fun getPersonDetails(personId: Int) {
         viewModelScope.launch {
 
-            val newCreditsYears = async {
-                movieRepository.getPersonMovieCreditsYears(personId)?.let {
-                    MovieUtil.mapListYears(it)
-                } ?: emptyList()
-            }.await()
+            val newCreditsYears = movieRepository.getPersonMovieCreditsYears(personId)?.let {
+                MovieUtil.mapListYears(it)
+            } ?: emptyList()
 
 
             _state.update {
                 it.copy(
                     details = movieRepository.getPersonDetails(personId = personId)
                         ?.let { details -> MovieUtil.map(details, 500) },
-                    creditYears = newCreditsYears
-                )
-            }
-            _stateCredits.update {
-                StateCredits(
-                    if (newCreditsYears.isNotEmpty())
+                    creditYears = newCreditsYears,
+                    credits = if (newCreditsYears.isNotEmpty())
                         movieRepository.getPersonMovieCredits(personId, newCreditsYears[0])
                             ?.let { credits ->
                                 MovieUtil.mapListCastMovieCredits(credits)
@@ -65,9 +53,9 @@ class ActorDetailsViewModel(
 
     fun getCreditsFromYear(personId: Int, year: Int?) {
         viewModelScope.launch {
-            _stateCredits.update {
-                StateCredits(
-                    movieRepository.getPersonMovieCredits(personId, year)
+            _state.update {
+                it.copy(
+                    credits = movieRepository.getPersonMovieCredits(personId, year)
                         ?.let { credits ->
                             MovieUtil.mapListCastMovieCredits(credits)
                         } ?: emptyList()
