@@ -64,27 +64,27 @@
 
 
     <TextView
+        android:id="@+id/tvNoResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:scaleY="2"
         android:scaleX="2"
-        android:visibility="invisible"
+        android:scaleY="2"
         android:text="No results"
         android:textAlignment="center"
-        android:id="@+id/tvNoResults"
         android:textColor="@color/md_theme_onPrimary"
         android:textSize="12sp"
         android:textStyle="bold"
+        android:visibility="invisible"
+        app:drawableTint="@color/md_theme_onPrimary"
+        app:drawableTopCompat="@drawable/vic_search_failed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        tools:ignore="HardcodedText"
-        app:drawableTopCompat="@drawable/vic_search_failed"
-        app:drawableTint="@color/md_theme_onPrimary" />
+        tools:ignore="HardcodedText" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/cpiLoading"

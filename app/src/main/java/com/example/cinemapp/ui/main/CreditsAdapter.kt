@@ -36,13 +36,15 @@ class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
 
     override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
         holder.bind(credits[position])
+        if (position == 0)
+            (holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams).marginStart += 10
     }
 
     override fun getItemCount(): Int {
         return credits.size
     }
 
-    inner class CreditViewHolder(private val binding: CardPersonBinding) :
+    inner class CreditViewHolder(val binding: CardPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movieCredit: CastMovieCredit) {
             with(binding) {

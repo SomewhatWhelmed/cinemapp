@@ -3,6 +3,7 @@ package com.example.cinemapp.ui.main
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.marginLeft
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -38,13 +39,16 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
         holder.bind(cast[position])
+        if (position == 0)
+                (holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams).marginStart += 10
+
     }
 
     override fun getItemCount(): Int {
         return cast.size
     }
 
-    inner class CastViewHolder(private val binding: CardPersonBinding) :
+    inner class CastViewHolder(val binding: CardPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(castMember: CastMember) {
             with(binding) {
