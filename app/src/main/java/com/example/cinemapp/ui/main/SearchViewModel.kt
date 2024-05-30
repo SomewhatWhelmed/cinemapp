@@ -28,11 +28,11 @@ class SearchViewModel(
     private var isPaging = false
 
 
-    fun getMoviesNextPage(query: String) {
+    fun getMoviesNextPage(query: String = state.value.search) {
         getNextPage(SearchType.MOVIE, query)
     }
 
-    fun getActorsNextPage(query: String) {
+    fun getActorsNextPage(query: String = state.value.search) {
         getNextPage(SearchType.ACTOR, query)
     }
 
@@ -52,7 +52,7 @@ class SearchViewModel(
                         pagesLoaded = newPage,
                         searchType = searchType,
                         search = query,
-                        list = (if (searchType == it.searchType) it.list else emptyList()).plus(
+                        list = (if (newPage != 1) it.list else emptyList()).plus(
                             when (searchType) {
                                 SearchType.MOVIE -> movieRepository.getSearchMovieList(
                                     query, newPage

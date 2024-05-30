@@ -21,17 +21,19 @@ class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
-        when (viewType) {
+        return when (viewType) {
             R.layout.card_image -> {
                 val binding = CardImageBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-                return MediaViewHolder.ImageViewHolder(binding)
+                MediaViewHolder.ImageViewHolder(binding)
             }
+
             R.layout.card_embedded_video -> {
                 val binding = CardEmbeddedVideoBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-                return MediaViewHolder.VideoViewHolder(binding)
+                MediaViewHolder.VideoViewHolder(binding)
             }
+
             else -> throw IllegalArgumentException("Invalid Media view type.")
         }
     }

@@ -72,6 +72,7 @@
         android:visibility="invisible"
         android:text="No results"
         android:textAlignment="center"
+        android:id="@+id/tvNoResults"
         android:textColor="@color/md_theme_onPrimary"
         android:textSize="12sp"
         android:textStyle="bold"
@@ -84,5 +85,19 @@
         tools:ignore="HardcodedText"
         app:drawableTopCompat="@drawable/vic_search_failed"
         app:drawableTint="@color/md_theme_onPrimary" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/cpiLoading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:indicatorColor="@color/md_theme_onPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

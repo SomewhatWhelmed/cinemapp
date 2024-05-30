@@ -24,7 +24,7 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setMovies(results: List<SearchCard>) {
+    fun setResults(results: List<SearchCard>) {
         this.results = results
         notifyDataSetChanged()
     }
