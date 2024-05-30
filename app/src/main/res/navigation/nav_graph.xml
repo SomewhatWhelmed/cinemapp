@@ -38,7 +38,14 @@
         android:id="@+id/searchFragment"
         android:name="com.example.cinemapp.ui.main.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/toActorDetailsFragment"
+            app:destination="@id/actorDetailsFragment" />
+        <action
+            android:id="@+id/toDetailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/actorDetailsFragment"
         android:name="com.example.cinemapp.ui.main.ActorDetailsFragment"

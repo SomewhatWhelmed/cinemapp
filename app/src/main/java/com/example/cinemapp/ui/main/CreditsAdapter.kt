@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
-import com.example.cinemapp.databinding.CardCastBinding
+import com.example.cinemapp.databinding.CardPersonBinding
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.util.loadImage
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +29,7 @@ class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditViewHolder {
-        val binding = CardCastBinding
+        val binding = CardPersonBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CreditViewHolder(binding)
     }
@@ -42,7 +42,7 @@ class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
         return credits.size
     }
 
-    inner class CreditViewHolder(private val binding: CardCastBinding) :
+    inner class CreditViewHolder(private val binding: CardPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movieCredit: CastMovieCredit) {
             with(binding) {

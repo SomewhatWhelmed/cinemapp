@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardMovieBinding
 import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.util.loadImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,10 +53,12 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 }
                 tvTitle.text = movie.title
                 tvCardRating.text = "%.1f".format(movie.voteAverage)
-                Glide.with(binding.root.context)
-                    .load(movie.posterPath)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .into(binding.ivPoster)
+                loadImage(
+                    movie.posterPath,
+                    ivPoster,
+                    root.context,
+                    R.drawable.ic_placeholder_movie
+                )
             }
         }
     }

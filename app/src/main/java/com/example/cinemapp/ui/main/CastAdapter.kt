@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.cinemapp.R
-import com.example.cinemapp.databinding.CardCastBinding
+import com.example.cinemapp.databinding.CardPersonBinding
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.util.loadImage
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +31,7 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastViewHolder {
-        val binding = CardCastBinding
+        val binding = CardPersonBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CastViewHolder(binding)
     }
@@ -44,7 +44,7 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
         return cast.size
     }
 
-    inner class CastViewHolder(private val binding: CardCastBinding) :
+    inner class CastViewHolder(private val binding: CardPersonBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(castMember: CastMember) {
             with(binding) {
