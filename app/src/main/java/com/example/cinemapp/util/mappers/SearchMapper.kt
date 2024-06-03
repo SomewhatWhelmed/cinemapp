@@ -5,11 +5,13 @@ import com.example.cinemapp.data.PersonDTO
 import com.example.cinemapp.ui.main.model.SearchCard
 import com.example.cinemapp.ui.main.model.SearchType
 
-object SearchMapper {
+class SearchMapper(
+    private val urlMapper: URLMapper
+) {
     private fun mapMovieDTOToCard(movieDTO: MovieDTO, imageResolution: Int? = null): SearchCard {
         return SearchCard(
             movieDTO.id ?: -1,
-            URLMapper.mapImageIdToBaseURL(movieDTO.posterPath, imageResolution),
+            urlMapper.mapImageIdToBaseURL(movieDTO.posterPath, imageResolution),
             movieDTO.title ?: "",
             SearchType.MOVIE
         )
@@ -18,7 +20,7 @@ object SearchMapper {
     private fun mapPersonDTOToCard(personDTO: PersonDTO, imageResolution: Int? = null): SearchCard {
         return SearchCard(
             personDTO.id ?: -1,
-            URLMapper.mapImageIdToBaseURL(personDTO.profilePath, imageResolution),
+            urlMapper.mapImageIdToBaseURL(personDTO.profilePath, imageResolution),
             personDTO.name ?: "",
             SearchType.ACTOR
         )
