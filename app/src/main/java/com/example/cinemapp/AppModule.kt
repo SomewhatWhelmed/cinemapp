@@ -8,6 +8,7 @@ import com.example.cinemapp.ui.main.DetailsViewModel
 import com.example.cinemapp.ui.main.HomeViewModel
 import com.example.cinemapp.ui.main.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
+import com.example.cinemapp.util.mappers.ActorDetailsMapper
 import com.example.cinemapp.util.mappers.DetailsMapper
 import com.example.cinemapp.util.mappers.HomeMapper
 import com.example.cinemapp.util.mappers.SearchMapper
@@ -54,6 +55,7 @@ val appModule = module {
     single { SearchMapper(get()) }
     single { HomeMapper(get()) }
     single { DetailsMapper(get()) }
+    single { ActorDetailsMapper(get()) }
     viewModel {
         SplashViewModel(get())
     }
@@ -64,7 +66,7 @@ val appModule = module {
         DetailsViewModel(get(), get())
     }
     viewModel {
-        ActorDetailsViewModel(get())
+        ActorDetailsViewModel(get(), get())
     }
     viewModel {
         SearchViewModel(get(), get())

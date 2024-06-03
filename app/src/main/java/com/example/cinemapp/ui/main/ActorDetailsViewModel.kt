@@ -5,8 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
-import com.example.cinemapp.util.MovieUtil
-import kotlinx.coroutines.async
+import com.example.cinemapp.util.mappers.ActorDetailsMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +13,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ActorDetailsViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val actorDetailsMapper: ActorDetailsMapper
 ) : ViewModel() {
 
     data class State(
@@ -31,19 +31,26 @@ class ActorDetailsViewModel(
         viewModelScope.launch {
 
             val newCreditsYears = movieRepository.getPersonMovieCreditsYears(personId)?.let {
-                MovieUtil.mapListYears(it)
+                actorDetailsMapper.mapDateStringListToDescendingYearsList(it)
             } ?: emptyList()
 
 
             _state.update {
                 it.copy(
                     details = movieRepository.getPersonDetails(personId = personId)
-                        ?.let { details -> MovieUtil.map(details, 500) },
+                        ?.let { details ->
+                            actorDetailsMapper.mapPersonDetailsDTOToPersonDetails(
+                                details,
+                                500
+                            )
+                        },
                     creditYears = newCreditsYears,
                     credits = if (newCreditsYears.isNotEmpty())
                         movieRepository.getPersonMovieCredits(personId, newCreditsYears[0])
                             ?.let { credits ->
-                                MovieUtil.mapListCastMovieCredits(credits)
+                                actorDetailsMapper.mapCastMovieCreditDTOListToCastMovieCreditList(
+                                    credits
+                                )
                             } ?: emptyList()
                     else emptyList()
                 )
@@ -57,7 +64,9 @@ class ActorDetailsViewModel(
                 it.copy(
                     credits = movieRepository.getPersonMovieCredits(personId, year)
                         ?.let { credits ->
-                            MovieUtil.mapListCastMovieCredits(credits)
+                            actorDetailsMapper.mapCastMovieCreditDTOListToCastMovieCreditList(
+                                credits
+                            )
                         } ?: emptyList()
                 )
             }
