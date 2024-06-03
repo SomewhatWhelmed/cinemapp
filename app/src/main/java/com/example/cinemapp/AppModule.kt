@@ -6,6 +6,7 @@ import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.ActorDetailsViewModel
 import com.example.cinemapp.ui.main.DetailsViewModel
 import com.example.cinemapp.ui.main.HomeViewModel
+import com.example.cinemapp.ui.main.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -56,5 +57,8 @@ val appModule = module {
     }
     viewModel {
         ActorDetailsViewModel(get())
+    }
+    viewModel {
+        SearchViewModel(get())
     }
 }

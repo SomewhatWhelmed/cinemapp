@@ -51,6 +51,18 @@ interface MovieRemoteDataSource {
         @Path("personId") personId: Int
     ): Response<PersonMovieCreditsResponseDTO>
 
+    @GET("$API_VERSION/search/person")
+    suspend fun getSearchPersonResults(
+        @Query("query") query: String,
+        @Query("page") page:Int = 1
+    ): Response<SearchPersonResponseDTO>
+
+    @GET("$API_VERSION/search/movie")
+    suspend fun getSearchMovieResults(
+        @Query("query") query: String,
+        @Query("page") page:Int = 1
+    ): Response<MovieResponseDTO>
+
     companion object {
         const val API_VERSION = 3
     }

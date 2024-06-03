@@ -18,7 +18,7 @@ class HomeViewModel(
         val movies: List<MovieCard> = emptyList(),
         val search: String = "",
         val pagesLoaded: Int = 0,
-        val listType: MovieRepository.ListType = MovieRepository.ListType.UPCOMING
+        val movieListType: MovieRepository.MovieListType = MovieRepository.MovieListType.UPCOMING
     )
 
     private val _state = MutableStateFlow(State())
@@ -27,29 +27,29 @@ class HomeViewModel(
 
 
     fun getUpcomingNextPage() {
-        getNextPage(MovieRepository.ListType.UPCOMING)
+        getNextPage(MovieRepository.MovieListType.UPCOMING)
     }
 
     fun getPopularNextPage() {
-        getNextPage(MovieRepository.ListType.POPULAR)
+        getNextPage(MovieRepository.MovieListType.POPULAR)
     }
 
     fun getTopRatedNextPage() {
-        getNextPage(MovieRepository.ListType.TOP_RATED)
+        getNextPage(MovieRepository.MovieListType.TOP_RATED)
     }
 
-    fun getNextPage(listType: MovieRepository.ListType = state.value.listType) {
+    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
                 _state.update {
                     it.copy(
-                        pagesLoaded = if (listType == it.listType) it.pagesLoaded + 1 else 1,
-                        listType = listType,
-                        movies = (if (listType == it.listType) it.movies else emptyList()).plus(
-                            movieRepository.getList(
-                                listType,
-                                if (listType == it.listType) it.pagesLoaded + 1 else 1
+                        pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                        movieListType = movieListType,
+                        movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
+                            movieRepository.getMovieList(
+                                movieListType,
+                                if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1
                             )
                                 ?.let { list -> MovieUtil.mapListMovie(list) } ?: emptyList()))
                 }

@@ -23,11 +23,11 @@ import java.time.LocalDate
 object MovieUtil {
     fun map(movie: MovieDTO): MovieCard {
         return MovieCard(
-            movie.id,
+            movie.id ?: -1,
             mapImageURL(movie.posterPath, 400),
-            movie.releaseDate,
-            movie.title,
-            movie.voteAverage
+            movie.releaseDate?.let { LocalDate.parse(it) },
+            movie.title ?: "",
+            movie.voteAverage ?: 0f
         )
     }
 
