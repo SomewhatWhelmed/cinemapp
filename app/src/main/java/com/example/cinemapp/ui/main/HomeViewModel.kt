@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.model.MovieCard
-import com.example.cinemapp.util.MovieUtil
 import com.example.cinemapp.util.mappers.HomeMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
