@@ -8,6 +8,10 @@ import com.example.cinemapp.ui.main.DetailsViewModel
 import com.example.cinemapp.ui.main.HomeViewModel
 import com.example.cinemapp.ui.main.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
+import com.example.cinemapp.util.mappers.DetailsMapper
+import com.example.cinemapp.util.mappers.HomeMapper
+import com.example.cinemapp.util.mappers.SearchMapper
+import com.example.cinemapp.util.mappers.URLMapper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -46,19 +50,23 @@ val appModule = module {
     single {
         MovieRepository(get(), get())
     }
+    single { URLMapper() }
+    single { SearchMapper(get()) }
+    single { HomeMapper(get()) }
+    single { DetailsMapper(get()) }
     viewModel {
         SplashViewModel(get())
     }
     viewModel {
-        HomeViewModel(get())
+        HomeViewModel(get(), get())
     }
     viewModel {
-        DetailsViewModel(get())
+        DetailsViewModel(get(), get())
     }
     viewModel {
         ActorDetailsViewModel(get())
     }
     viewModel {
-        SearchViewModel(get())
+        SearchViewModel(get(), get())
     }
 }

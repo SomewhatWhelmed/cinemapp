@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val searchMapper: SearchMapper
 ) : ViewModel() {
 
     data class State(
@@ -57,13 +58,13 @@ class SearchViewModel(
                                 SearchType.MOVIE -> movieRepository.getSearchMovieList(
                                     query, newPage
                                 )?.let { list ->
-                                    SearchMapper.mapMovieDTOListToCardList(list, 500)
+                                    searchMapper.mapMovieDTOListToCardList(list, 500)
                                 }
 
                                 SearchType.ACTOR -> movieRepository.getSearchPersonList(
                                     query, newPage
                                 )?.let { list ->
-                                    SearchMapper.mapPersonDTOListToCardList(list, 500)
+                                    searchMapper.mapPersonDTOListToCardList(list, 500)
                                 }
                             } ?: emptyList())
                     )
