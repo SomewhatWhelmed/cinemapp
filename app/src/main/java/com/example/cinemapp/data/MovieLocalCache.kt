@@ -10,21 +10,21 @@ class MovieLocalCache {
 
     private var personCredits: PersonMovieCreditsResponseDTO? = null
 
-    fun getMovieList(listType: MovieRepository.ListType, page: Int = 1): ArrayList<MovieDTO>? {
+    fun getMovieList(movieListType: MovieRepository.MovieListType, page: Int = 1): ArrayList<MovieDTO>? {
         Log.i("CACHE", "Searching Cache...")
-        return when (listType) {
-            MovieRepository.ListType.UPCOMING -> upcomingCache[page]
-            MovieRepository.ListType.POPULAR -> popularCache[page]
-            MovieRepository.ListType.TOP_RATED -> topRatedCache[page]
+        return when (movieListType) {
+            MovieRepository.MovieListType.UPCOMING -> upcomingCache[page]
+            MovieRepository.MovieListType.POPULAR -> popularCache[page]
+            MovieRepository.MovieListType.TOP_RATED -> topRatedCache[page]
         }
     }
 
-    fun insert(listType: MovieRepository.ListType, page: Int = 1, movies: ArrayList<MovieDTO>) {
+    fun insert(movieListType: MovieRepository.MovieListType, page: Int = 1, movies: ArrayList<MovieDTO>) {
         Log.i("CACHE", "Inserting into Cache")
-        when (listType) {
-            MovieRepository.ListType.UPCOMING -> upcomingCache[page] = movies
-            MovieRepository.ListType.POPULAR -> popularCache[page] = movies
-            MovieRepository.ListType.TOP_RATED -> topRatedCache[page] = movies
+        when (movieListType) {
+            MovieRepository.MovieListType.UPCOMING -> upcomingCache[page] = movies
+            MovieRepository.MovieListType.POPULAR -> popularCache[page] = movies
+            MovieRepository.MovieListType.TOP_RATED -> topRatedCache[page] = movies
         }
     }
 
