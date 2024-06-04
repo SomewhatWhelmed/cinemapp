@@ -6,7 +6,7 @@ import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieDetails
-import com.example.cinemapp.util.MovieUtil
+import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetailsViewModel(
-    private val movieRepository: MovieRepository
+class MovieDetailsViewModel(
+    private val movieRepository: MovieRepository,
+    private val movieDetailsMapper: MovieDetailsMapper
 ) : ViewModel() {
 
     data class State(
@@ -32,22 +33,22 @@ class DetailsViewModel(
 
             val detailsCall = async {
                 movieRepository.getMovieDetails(movieId)?.let { details ->
-                    MovieUtil.map(details, 500)
+                    movieDetailsMapper.mapToMovieDetails(details, 500)
                 }
             }
             val creditsCall = async {
                 movieRepository.getMovieCredits(movieId)
-                    ?.let { MovieUtil.map(it, 500).cast }
+                    ?.let { movieDetailsMapper.mapToMovieCredits(it, 500).cast }
                     ?: emptyList()
             }
             val imageCall = async {
                 movieRepository.getImages(movieId)
-                    ?.let { MovieUtil.mapListImages(it, 500) }
+                    ?.let { movieDetailsMapper.mapToImageList(it, 500) }
                     ?: emptyList()
             }
             val trailerCall = async {
                 movieRepository.getVideos(movieId)
-                    ?.let { chooseTrailer(MovieUtil.mapListVideos(it)) }
+                    ?.let { chooseTrailer(movieDetailsMapper.mapToVideoList(it)) }
             }
 
             val newDetails: MovieDetails? = detailsCall.await()

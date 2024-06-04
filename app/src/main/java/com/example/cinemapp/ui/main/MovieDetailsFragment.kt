@@ -1,17 +1,10 @@
 package com.example.cinemapp.ui.main
 
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.math.MathUtils
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,19 +15,18 @@ import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.MovieDetails
-import com.example.cinemapp.util.makeExpandableText
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class DetailsFragment : Fragment() {
+class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
-    private val args: DetailsFragmentArgs by navArgs()
-    private val viewModel by viewModel<DetailsViewModel>()
+    private val args: MovieDetailsFragmentArgs by navArgs()
+    private val viewModel by viewModel<MovieDetailsViewModel>()
     private val castAdapter = CastAdapter()
     private val mediaAdapter = MediaAdapter()
 
@@ -131,7 +123,7 @@ class DetailsFragment : Fragment() {
 
     private fun onCastClick(castMember: CastMember){
         findNavController().safeNavigateWithArgs(
-            DetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
+            MovieDetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
         )
     }
 

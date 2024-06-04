@@ -5,28 +5,30 @@ import com.example.cinemapp.data.PersonDTO
 import com.example.cinemapp.ui.main.model.SearchCard
 import com.example.cinemapp.ui.main.model.SearchType
 
-object SearchMapper {
-    private fun mapMovieDTOToCard(movieDTO: MovieDTO, imageResolution: Int? = null): SearchCard {
+class SearchMapper(
+    private val mediaUrlMapper: MediaUrlMapper
+) {
+    private fun mapToMovieCard(movieDTO: MovieDTO, imageResolution: Int? = null): SearchCard {
         return SearchCard(
             movieDTO.id ?: -1,
-            URLMapper.mapImageIdToBaseURL(movieDTO.posterPath, imageResolution),
+            mediaUrlMapper.mapImageIdToBaseURL(movieDTO.posterPath, imageResolution),
             movieDTO.title ?: "",
             SearchType.MOVIE
         )
     }
 
-    private fun mapPersonDTOToCard(personDTO: PersonDTO, imageResolution: Int? = null): SearchCard {
+    private fun mapToPersonCard(personDTO: PersonDTO, imageResolution: Int? = null): SearchCard {
         return SearchCard(
             personDTO.id ?: -1,
-            URLMapper.mapImageIdToBaseURL(personDTO.profilePath, imageResolution),
+            mediaUrlMapper.mapImageIdToBaseURL(personDTO.profilePath, imageResolution),
             personDTO.name ?: "",
             SearchType.ACTOR
         )
     }
 
-    fun mapMovieDTOListToCardList(list: List<MovieDTO>, imageResolution: Int? = null) =
-        list.map { mapMovieDTOToCard(it, imageResolution) }
+    fun mapToMovieCardList(list: List<MovieDTO>, imageResolution: Int? = null) =
+        list.map { mapToMovieCard(it, imageResolution) }
 
-    fun mapPersonDTOListToCardList(list: List<PersonDTO>, imageResolution: Int? = null) =
-        list.map { mapPersonDTOToCard(it, imageResolution) }
+    fun mapToPersonCardList(list: List<PersonDTO>, imageResolution: Int? = null) =
+        list.map { mapToPersonCard(it, imageResolution) }
 }

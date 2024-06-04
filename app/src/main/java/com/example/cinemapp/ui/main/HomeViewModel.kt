@@ -4,14 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.model.MovieCard
-import com.example.cinemapp.util.MovieUtil
+import com.example.cinemapp.util.mappers.HomeMapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val homeMapper: HomeMapper
 ) : ViewModel() {
 
     data class State(
@@ -51,7 +52,8 @@ class HomeViewModel(
                                 movieListType,
                                 if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1
                             )
-                                ?.let { list -> MovieUtil.mapListMovie(list) } ?: emptyList()))
+                                ?.let { list -> homeMapper.mapToCardList(list, 400) }
+                                ?: emptyList()))
                 }
             }
         }
