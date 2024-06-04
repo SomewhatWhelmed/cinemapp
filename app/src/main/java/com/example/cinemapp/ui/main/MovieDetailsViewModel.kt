@@ -33,22 +33,22 @@ class MovieDetailsViewModel(
 
             val detailsCall = async {
                 movieRepository.getMovieDetails(movieId)?.let { details ->
-                    movieDetailsMapper.mapMovieDetailsDTOToMovieDetails(details, 500)
+                    movieDetailsMapper.mapToMovieDetails(details, 500)
                 }
             }
             val creditsCall = async {
                 movieRepository.getMovieCredits(movieId)
-                    ?.let { movieDetailsMapper.mapMovieCreditsDTOToCastMemberList(it, 500).cast }
+                    ?.let { movieDetailsMapper.mapToMovieCredits(it, 500).cast }
                     ?: emptyList()
             }
             val imageCall = async {
                 movieRepository.getImages(movieId)
-                    ?.let { movieDetailsMapper.mapImageDTOListToImageList(it, 500) }
+                    ?.let { movieDetailsMapper.mapToImageList(it, 500) }
                     ?: emptyList()
             }
             val trailerCall = async {
                 movieRepository.getVideos(movieId)
-                    ?.let { chooseTrailer(movieDetailsMapper.mapVideoDTOListToVideoList(it)) }
+                    ?.let { chooseTrailer(movieDetailsMapper.mapToVideoList(it)) }
             }
 
             val newDetails: MovieDetails? = detailsCall.await()

@@ -39,7 +39,7 @@ class ActorDetailsViewModel(
                 it.copy(
                     details = movieRepository.getPersonDetails(personId = personId)
                         ?.let { details ->
-                            actorDetailsMapper.mapPersonDetailsDTOToPersonDetails(
+                            actorDetailsMapper.mapToPersonDetails(
                                 details,
                                 500
                             )
@@ -48,7 +48,7 @@ class ActorDetailsViewModel(
                     credits = if (newCreditsYears.isNotEmpty())
                         movieRepository.getPersonMovieCredits(personId, newCreditsYears[0])
                             ?.let { credits ->
-                                actorDetailsMapper.mapCastMovieCreditDTOListToCastMovieCreditList(
+                                actorDetailsMapper.mapToCastMovieCreditList(
                                     credits
                                 )
                             } ?: emptyList()
@@ -64,7 +64,7 @@ class ActorDetailsViewModel(
                 it.copy(
                     credits = movieRepository.getPersonMovieCredits(personId, year)
                         ?.let { credits ->
-                            actorDetailsMapper.mapCastMovieCreditDTOListToCastMovieCreditList(
+                            actorDetailsMapper.mapToCastMovieCreditList(
                                 credits
                             )
                         } ?: emptyList()

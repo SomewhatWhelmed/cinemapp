@@ -52,7 +52,7 @@ class HomeViewModel(
                                 movieListType,
                                 if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1
                             )
-                                ?.let { list -> homeMapper.mapMovieDTOListToCardList(list, 400) }
+                                ?.let { list -> homeMapper.mapToCardList(list, 400) }
                                 ?: emptyList()))
                 }
             }

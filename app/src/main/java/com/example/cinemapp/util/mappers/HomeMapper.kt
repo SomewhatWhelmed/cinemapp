@@ -5,18 +5,18 @@ import com.example.cinemapp.ui.main.model.MovieCard
 import java.time.LocalDate
 
 class HomeMapper(
-    private val urlMapper: UrlMapper
+    private val mediaUrlMapper: MediaUrlMapper
 ) {
-    private fun mapMovieDTOToCard(movieDTO: MovieDTO, imageResolution: Int? = null): MovieCard {
+    private fun mapToCard(movieDTO: MovieDTO, imageResolution: Int? = null): MovieCard {
         return MovieCard(
             movieDTO.id ?: -1,
-            urlMapper.mapImageIdToBaseURL(movieDTO.posterPath, imageResolution),
+            mediaUrlMapper.mapImageIdToBaseURL(movieDTO.posterPath, imageResolution),
             movieDTO.releaseDate?.let { LocalDate.parse(it) },
             movieDTO.title ?: "",
             movieDTO.voteAverage ?: 0f
         )
     }
 
-    fun mapMovieDTOListToCardList(list: List<MovieDTO>, imageResolution: Int? = null) =
-        list.map { mapMovieDTOToCard(it, imageResolution) }
+    fun mapToCardList(list: List<MovieDTO>, imageResolution: Int? = null) =
+        list.map { mapToCard(it, imageResolution) }
 }

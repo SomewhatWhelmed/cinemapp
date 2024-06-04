@@ -12,7 +12,7 @@ import com.example.cinemapp.util.mappers.ActorDetailsMapper
 import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import com.example.cinemapp.util.mappers.HomeMapper
 import com.example.cinemapp.util.mappers.SearchMapper
-import com.example.cinemapp.util.mappers.UrlMapper
+import com.example.cinemapp.util.mappers.MediaUrlMapper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -49,7 +49,7 @@ val appModule = module {
     single {
         MovieRepository(get(), get())
     }
-    single { UrlMapper() }
+    single { MediaUrlMapper() }
     single { SearchMapper(get()) }
     single { HomeMapper(get()) }
     single { MovieDetailsMapper(get()) }

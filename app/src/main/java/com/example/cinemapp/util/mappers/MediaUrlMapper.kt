@@ -2,7 +2,7 @@ package com.example.cinemapp.util.mappers
 
 import com.example.cinemapp.BuildConfig
 
-class UrlMapper {
+class MediaUrlMapper {
     fun mapImageIdToBaseURL(
         imagePath: String?,
         resolution: Int? = null

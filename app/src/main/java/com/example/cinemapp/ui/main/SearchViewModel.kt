@@ -3,7 +3,6 @@ package com.example.cinemapp.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
-import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.ui.main.model.SearchCard
 import com.example.cinemapp.ui.main.model.SearchType
 import com.example.cinemapp.util.mappers.SearchMapper
@@ -58,13 +57,13 @@ class SearchViewModel(
                                 SearchType.MOVIE -> movieRepository.getSearchMovieList(
                                     query, newPage
                                 )?.let { list ->
-                                    searchMapper.mapMovieDTOListToCardList(list, 500)
+                                    searchMapper.mapToMovieCardList(list, 500)
                                 }
 
                                 SearchType.ACTOR -> movieRepository.getSearchPersonList(
                                     query, newPage
                                 )?.let { list ->
-                                    searchMapper.mapPersonDTOListToCardList(list, 500)
+                                    searchMapper.mapToPersonCardList(list, 500)
                                 }
                             } ?: emptyList())
                     )

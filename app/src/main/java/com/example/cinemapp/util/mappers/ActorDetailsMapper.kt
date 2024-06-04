@@ -1,14 +1,13 @@
 package com.example.cinemapp.util.mappers
 
 import com.example.cinemapp.data.CastMovieCreditDTO
-import com.example.cinemapp.data.GenderDTO
 import com.example.cinemapp.data.PersonDetailsDTO
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import java.time.LocalDate
 
 class ActorDetailsMapper(
-    private val urlMapper: UrlMapper
+    private val mediaUrlMapper: MediaUrlMapper
 ) {
 
     fun mapToDescendingYears(dates: List<String?>?): List<Int?> {
@@ -27,7 +26,7 @@ class ActorDetailsMapper(
         }
     }
 
-    fun mapPersonDetailsDTOToPersonDetails(
+    fun mapToPersonDetails(
         person: PersonDetailsDTO,
         resolution: Int?
     ): PersonDetails {
@@ -38,26 +37,26 @@ class ActorDetailsMapper(
             person.deathday?.let { LocalDate.parse(it) },
             person.gender?.let { mapGenderIdToString(it) } ?: "",
             person.name ?: "",
-            urlMapper.mapImageIdToBaseURL(person.profilePath, resolution)
+            mediaUrlMapper.mapImageIdToBaseURL(person.profilePath, resolution)
         )
     }
 
-    private fun mapCastMovieCreditDTOToCastMovieCredit(
+    private fun mapToCastMovieCredit(
         credit: CastMovieCreditDTO,
         resolution: Int? = null
     ): CastMovieCredit {
         return CastMovieCredit(
             id = credit.id ?: -1,
             title = credit.title ?: "",
-            posterPath = urlMapper.mapImageIdToBaseURL(credit.posterPath, resolution),
+            posterPath = mediaUrlMapper.mapImageIdToBaseURL(credit.posterPath, resolution),
             character = credit.character ?: ""
         )
     }
 
-    fun mapCastMovieCreditDTOListToCastMovieCreditList(
+    fun mapToCastMovieCreditList(
         credits: List<CastMovieCreditDTO>,
         resolution: Int? = null
     ): List<CastMovieCredit> {
-        return credits.map { mapCastMovieCreditDTOToCastMovieCredit(it, resolution) }
+        return credits.map { mapToCastMovieCredit(it, resolution) }
     }
 }
