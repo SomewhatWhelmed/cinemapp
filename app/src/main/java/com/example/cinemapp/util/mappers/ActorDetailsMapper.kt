@@ -1,15 +1,17 @@
 package com.example.cinemapp.util.mappers
 
 import com.example.cinemapp.data.CastMovieCreditDTO
+import com.example.cinemapp.data.GenderDTO
 import com.example.cinemapp.data.PersonDetailsDTO
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import java.time.LocalDate
 
 class ActorDetailsMapper(
-    private val urlMapper: URLMapper
+    private val urlMapper: UrlMapper
 ) {
-    fun mapDateStringListToDescendingYearsList(dates: List<String?>?): List<Int?> {
+
+    fun mapToDescendingYears(dates: List<String?>?): List<Int?> {
         return dates?.map { date ->
             if (date.isNullOrEmpty()) null
             else date.substring(0, 4).toInt()

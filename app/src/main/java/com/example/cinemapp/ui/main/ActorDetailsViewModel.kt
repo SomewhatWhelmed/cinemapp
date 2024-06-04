@@ -31,7 +31,7 @@ class ActorDetailsViewModel(
         viewModelScope.launch {
 
             val newCreditsYears = movieRepository.getPersonMovieCreditsYears(personId)?.let {
-                actorDetailsMapper.mapDateStringListToDescendingYearsList(it)
+                actorDetailsMapper.mapToDescendingYears(it)
             } ?: emptyList()
 
 

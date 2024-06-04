@@ -6,7 +6,7 @@ import com.example.cinemapp.ui.main.model.SearchCard
 import com.example.cinemapp.ui.main.model.SearchType
 
 class SearchMapper(
-    private val urlMapper: URLMapper
+    private val urlMapper: UrlMapper
 ) {
     private fun mapMovieDTOToCard(movieDTO: MovieDTO, imageResolution: Int? = null): SearchCard {
         return SearchCard(

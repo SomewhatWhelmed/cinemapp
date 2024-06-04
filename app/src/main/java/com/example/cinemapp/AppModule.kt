@@ -4,21 +4,19 @@ import com.example.cinemapp.data.MovieLocalCache
 import com.example.cinemapp.data.MovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.ActorDetailsViewModel
-import com.example.cinemapp.ui.main.DetailsViewModel
+import com.example.cinemapp.ui.main.MovieDetailsViewModel
 import com.example.cinemapp.ui.main.HomeViewModel
 import com.example.cinemapp.ui.main.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import com.example.cinemapp.util.mappers.ActorDetailsMapper
-import com.example.cinemapp.util.mappers.DetailsMapper
+import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import com.example.cinemapp.util.mappers.HomeMapper
 import com.example.cinemapp.util.mappers.SearchMapper
-import com.example.cinemapp.util.mappers.URLMapper
+import com.example.cinemapp.util.mappers.UrlMapper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
-import org.koin.core.qualifier.qualifier
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -51,10 +49,10 @@ val appModule = module {
     single {
         MovieRepository(get(), get())
     }
-    single { URLMapper() }
+    single { UrlMapper() }
     single { SearchMapper(get()) }
     single { HomeMapper(get()) }
-    single { DetailsMapper(get()) }
+    single { MovieDetailsMapper(get()) }
     single { ActorDetailsMapper(get()) }
     viewModel {
         SplashViewModel(get())
@@ -63,7 +61,7 @@ val appModule = module {
         HomeViewModel(get(), get())
     }
     viewModel {
-        DetailsViewModel(get(), get())
+        MovieDetailsViewModel(get(), get())
     }
     viewModel {
         ActorDetailsViewModel(get(), get())

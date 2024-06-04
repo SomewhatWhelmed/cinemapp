@@ -5,7 +5,7 @@ import com.example.cinemapp.ui.main.model.MovieCard
 import java.time.LocalDate
 
 class HomeMapper(
-    private val urlMapper: URLMapper
+    private val urlMapper: UrlMapper
 ) {
     private fun mapMovieDTOToCard(movieDTO: MovieDTO, imageResolution: Int? = null): MovieCard {
         return MovieCard(

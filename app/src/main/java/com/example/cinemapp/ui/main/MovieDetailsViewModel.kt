@@ -6,7 +6,7 @@ import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieDetails
-import com.example.cinemapp.util.mappers.DetailsMapper
+import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetailsViewModel(
+class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
-    private val detailsMapper: DetailsMapper
+    private val movieDetailsMapper: MovieDetailsMapper
 ) : ViewModel() {
 
     data class State(
@@ -33,22 +33,22 @@ class DetailsViewModel(
 
             val detailsCall = async {
                 movieRepository.getMovieDetails(movieId)?.let { details ->
-                    detailsMapper.mapMovieDetailsDTOToMovieDetails(details, 500)
+                    movieDetailsMapper.mapMovieDetailsDTOToMovieDetails(details, 500)
                 }
             }
             val creditsCall = async {
                 movieRepository.getMovieCredits(movieId)
-                    ?.let { detailsMapper.mapMovieCreditsDTOToCastMemberList(it, 500).cast }
+                    ?.let { movieDetailsMapper.mapMovieCreditsDTOToCastMemberList(it, 500).cast }
                     ?: emptyList()
             }
             val imageCall = async {
                 movieRepository.getImages(movieId)
-                    ?.let { detailsMapper.mapImageDTOListToImageList(it, 500) }
+                    ?.let { movieDetailsMapper.mapImageDTOListToImageList(it, 500) }
                     ?: emptyList()
             }
             val trailerCall = async {
                 movieRepository.getVideos(movieId)
-                    ?.let { chooseTrailer(detailsMapper.mapVideoDTOListToVideoList(it)) }
+                    ?.let { chooseTrailer(movieDetailsMapper.mapVideoDTOListToVideoList(it)) }
             }
 
             val newDetails: MovieDetails? = detailsCall.await()

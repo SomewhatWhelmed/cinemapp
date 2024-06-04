@@ -12,8 +12,8 @@ import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieCredits
 import com.example.cinemapp.ui.main.model.MovieDetails
 
-class DetailsMapper(
-    private val urlMapper: URLMapper
+class MovieDetailsMapper(
+    private val urlMapper: UrlMapper
 ) {
     private fun mapGenreDTOtoGenre(genre: GenreDTO): Genre {
         return Genre(
