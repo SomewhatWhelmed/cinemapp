@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.cinemapp.databinding.ActivitySplashBinding
+import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -35,7 +36,8 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.gotoMainScreen.collect {
                 finish()
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+//                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this@SplashActivity, AuthenticationActivity::class.java))
             }
         }
     }
