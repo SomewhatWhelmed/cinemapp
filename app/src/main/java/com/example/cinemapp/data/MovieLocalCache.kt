@@ -1,6 +1,9 @@
 package com.example.cinemapp.data
 
 import android.util.Log
+import com.example.cinemapp.data.model.CastMovieCreditDTO
+import com.example.cinemapp.data.model.MovieDTO
+import com.example.cinemapp.data.model.PersonMovieCreditsResponseDTO
 
 class MovieLocalCache {
 

@@ -1,6 +1,6 @@
 package com.example.cinemapp.util.mappers
 
-import com.example.cinemapp.data.MovieDTO
+import com.example.cinemapp.data.model.MovieDTO
 import com.example.cinemapp.ui.main.model.MovieCard
 import java.time.LocalDate
 

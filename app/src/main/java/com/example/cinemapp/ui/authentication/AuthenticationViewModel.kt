@@ -1,21 +1,34 @@
 package com.example.cinemapp.ui.authentication
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.cinemapp.data.UserPreferences
+import com.example.cinemapp.util.mappers.AuthenticationMapper
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class AuthenticationViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val authenticationMapper: AuthenticationMapper,
+    private val userPrefs: UserPreferences
 ) : ViewModel() {
 
-    data class State(
-        val username: String? = null
-    )
-
-    private val _state = MutableStateFlow(State())
-    val state: StateFlow<State> = _state
+    private val _signInAttempt: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val signInAttempt = _signInAttempt.asSharedFlow()
 
 
+    fun attemptSignIn(username: String, password: String) {
+        viewModelScope.launch {
+            movieRepository.getSessionId(username, password)?.let { response ->
+                val sessionData = authenticationMapper.mapToSessionResponse(response)
+                if (sessionData.success) {
+                    _signInAttempt.emit(true)
+                    userPrefs.setSessionId(sessionData.sessionId)
+                } else _signInAttempt.emit(false)
+            }
+        }
+    }
 
 }

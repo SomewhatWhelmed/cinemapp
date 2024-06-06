@@ -1,6 +1,20 @@
 package com.example.cinemapp.data
 
 import android.util.Log
+import com.example.cinemapp.data.model.CastMovieCreditDTO
+import com.example.cinemapp.data.model.ImageDTO
+import com.example.cinemapp.data.model.MovieCreditsDTO
+import com.example.cinemapp.data.model.MovieDTO
+import com.example.cinemapp.data.model.MovieDetailsDTO
+import com.example.cinemapp.data.model.PersonDTO
+import com.example.cinemapp.data.model.PersonDetailsDTO
+import com.example.cinemapp.data.model.RequestTokenResponseDTO
+import com.example.cinemapp.data.model.SessionRequestDTO
+import com.example.cinemapp.data.model.SessionResponseDTO
+import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
+import com.example.cinemapp.data.model.VideoDTO
+import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
+import com.google.gson.JsonObject
 import retrofit2.Response
 
 class MovieRepository(
@@ -155,6 +169,60 @@ class MovieRepository(
                 Log.e(TAG, e.message ?: "Unknown error")
                 null
             }
+    }
+
+    suspend fun getSessionId(username: String, password: String): SessionResponseDTO? {
+        getRequestToken()?.let { firstRequestTokenResponse ->
+            firstRequestTokenResponse.success?.let { firstSuccess ->
+                if (firstSuccess) {
+                    firstRequestTokenResponse.requestToken?.let { firstRequestToken ->
+                        validateRequestTokenLogin(
+                            username,
+                            password,
+                            firstRequestToken
+                        )?.let { secondRequestTokenResponse ->
+                            secondRequestTokenResponse.success?.let { secondSuccess ->
+                                if (secondSuccess) {
+                                    secondRequestTokenResponse.requestToken?.let { secondRequestToken ->
+                                        return createSession(secondRequestToken)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return SessionResponseDTO(false, "")
+    }
+
+    suspend fun deleteSession(sessionId: String): SessionDeleteResponseDTO? {
+        val body = JsonObject().apply {
+            addProperty("session_id", sessionId)
+        }
+        return getBodyFromResponse(remoteDataSource.deleteSession(body))
+    }
+
+    private suspend fun getRequestToken(): RequestTokenResponseDTO? {
+        return getBodyFromResponse(remoteDataSource.getRequestToken())
+    }
+
+    private suspend fun validateRequestTokenLogin(
+        username: String,
+        password: String,
+        requestToken: String
+    ): RequestTokenResponseDTO? {
+        val body = ValidateWithLoginRequestDTO(
+            username,
+            password,
+            requestToken
+        )
+        return getBodyFromResponse(remoteDataSource.validateRequestTokenLogin(body))
+    }
+
+    private suspend fun createSession(requestToken: String): SessionResponseDTO? {
+        val body = SessionRequestDTO(requestToken)
+        return getBodyFromResponse(remoteDataSource.createSession(body))
     }
 
     companion object {

@@ -1,7 +1,7 @@
 package com.example.cinemapp.util.mappers
 
-import com.example.cinemapp.data.MovieDTO
-import com.example.cinemapp.data.PersonDTO
+import com.example.cinemapp.data.model.MovieDTO
+import com.example.cinemapp.data.model.PersonDTO
 import com.example.cinemapp.ui.main.model.SearchCard
 import com.example.cinemapp.ui.main.model.SearchType
 
