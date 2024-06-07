@@ -16,13 +16,13 @@ import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
 
-    private val viewModel: ProfileViewModel by viewModels()
+    private val viewModel by viewModel<ProfileViewModel>()
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val userPrefs: UserPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,24 +45,18 @@ class ProfileFragment : Fragment() {
     private fun setupViews() {
         with(binding) {
             btnSignOut.visibility = View.INVISIBLE
+            btnSignOut.setOnClickListener {
+                lifecycleScope.launch {
+                    viewModel.userPrefs.deleteSessionId()
+                    startActivity(Intent(context, AuthenticationActivity::class.java))
+                }
+            }
             lifecycleScope.launch(Dispatchers.Main) {
-                userPrefs.getSessionId().collect { sessionId ->
+                viewModel.session.collect { sessionId ->
                     tvUsername.text = sessionId ?: "Not signed in"
 
                     sessionId?.let {
                         btnSignOut.visibility = View.VISIBLE
-                        btnSignOut.setOnClickListener {
-                            lifecycleScope.launch {
-                                userPrefs.deleteSessionId()
-                                startActivity(
-                                    Intent(
-                                        context,
-                                        AuthenticationActivity::class.java
-                                    )
-                                )
-                            }
-                        }
-
                     }
                 }
             }

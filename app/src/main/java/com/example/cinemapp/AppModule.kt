@@ -8,6 +8,7 @@ import com.example.cinemapp.ui.authentication.AuthenticationViewModel
 import com.example.cinemapp.ui.main.ActorDetailsViewModel
 import com.example.cinemapp.ui.main.MovieDetailsViewModel
 import com.example.cinemapp.ui.main.HomeViewModel
+import com.example.cinemapp.ui.main.ProfileViewModel
 import com.example.cinemapp.ui.main.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import com.example.cinemapp.util.mappers.ActorDetailsMapper
@@ -61,7 +62,7 @@ val appModule = module {
     single { ActorDetailsMapper(get()) }
     single { AuthenticationMapper() }
     viewModel {
-        SplashViewModel(get())
+        SplashViewModel(get(), get())
     }
     viewModel {
         HomeViewModel(get(), get())
@@ -77,5 +78,8 @@ val appModule = module {
     }
     viewModel {
         AuthenticationViewModel(get(), get(), get())
+    }
+    viewModel {
+        ProfileViewModel(get(), get())
     }
 }

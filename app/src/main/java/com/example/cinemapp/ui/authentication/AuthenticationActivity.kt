@@ -3,10 +3,6 @@ package com.example.cinemapp.ui.authentication
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.databinding.ActivityAuthenticationBinding
 import com.example.cinemapp.ui.main.MainActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,10 +31,11 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        setupViews()
+        setOnClickListeners()
+        observeSignIn()
     }
 
-    private fun setupViews() {
+    private fun setOnClickListeners() {
         with(binding) {
             btnSignIn.setOnClickListener {
                 viewModel.attemptSignIn(
@@ -47,18 +43,19 @@ class AuthenticationActivity : AppCompatActivity() {
                     etPassword.text.toString()
                 )
             }
-
-            tvGuest.setOnClickListener{
+            tvGuest.setOnClickListener {
                 finish()
                 startActivity(Intent(this@AuthenticationActivity, MainActivity::class.java))
             }
-
-            tvSignUp.setOnClickListener{
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.themoviedb.org/signup")))
+            tvSignUp.setOnClickListener {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.themoviedb.org/signup")
+                    )
+                )
             }
         }
-
-        observeSignIn()
     }
 
     private fun observeSignIn() {
@@ -68,10 +65,12 @@ class AuthenticationActivity : AppCompatActivity() {
                     finish()
                     startActivity(Intent(this@AuthenticationActivity, MainActivity::class.java))
                 } else {
-                    viewModel.viewModelScope.launch(Dispatchers.Main) {
-                        val toast = Toast.makeText(this@AuthenticationActivity, ERROR_MESSAGE, Toast.LENGTH_LONG)
-                        toast.show()
-                    }
+                    val toast = Toast.makeText(
+                        this@AuthenticationActivity,
+                        ERROR_MESSAGE,
+                        Toast.LENGTH_LONG
+                    )
+                    toast.show()
                 }
             }
         }

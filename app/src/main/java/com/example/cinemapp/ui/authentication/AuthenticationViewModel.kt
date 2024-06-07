@@ -24,9 +24,9 @@ class AuthenticationViewModel(
             movieRepository.getSessionId(username, password)?.let { response ->
                 val sessionData = authenticationMapper.mapToSessionResponse(response)
                 if (sessionData.success) {
-                    _signInAttempt.emit(true)
                     userPrefs.setSessionId(sessionData.sessionId)
-                } else _signInAttempt.emit(false)
+                }
+                _signInAttempt.emit(sessionData.success)
             }
         }
     }

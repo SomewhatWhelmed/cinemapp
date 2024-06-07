@@ -17,7 +17,6 @@ class SplashActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<SplashViewModel>()
     private lateinit var binding: ActivitySplashBinding
-    private val userPrefs: UserPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.gotoMainScreen.collect {
                 finish()
-                userPrefs.getSessionId().collect { response ->
+                viewModel.session.collect { response ->
                     response?.let {
                         startActivity(
                             Intent(
