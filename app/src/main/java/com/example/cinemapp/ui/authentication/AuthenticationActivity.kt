@@ -1,6 +1,7 @@
 package com.example.cinemapp.ui.authentication
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -48,7 +49,12 @@ class AuthenticationActivity : AppCompatActivity() {
             }
 
             tvGuest.setOnClickListener{
+                finish()
                 startActivity(Intent(this@AuthenticationActivity, MainActivity::class.java))
+            }
+
+            tvSignUp.setOnClickListener{
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.themoviedb.org/signup")))
             }
         }
 
@@ -59,6 +65,7 @@ class AuthenticationActivity : AppCompatActivity() {
         lifecycleScope.launch() {
             viewModel.signInAttempt.collect { success ->
                 if (success) {
+                    finish()
                     startActivity(Intent(this@AuthenticationActivity, MainActivity::class.java))
                 } else {
                     viewModel.viewModelScope.launch(Dispatchers.Main) {

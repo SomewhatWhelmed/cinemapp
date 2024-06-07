@@ -95,15 +95,15 @@ interface MovieRemoteDataSource {
         @Body body: SessionRequestDTO
     ): Response<SessionResponseDTO>
 
-    @GET("$API_VERSION/account")
-    suspend fun getAccountDetails(
-        @Query("session_id") sessionId: String
-    ): Response<AccountDetailsDTO>
-
     @DELETE("$API_VERSION/authentication/session")
     suspend fun deleteSession(
         @Body raw: JsonObject
     ): Response<SessionDeleteResponseDTO>
+
+    @GET("$API_VERSION/account")
+    suspend fun getAccountDetails(
+        @Query("session_id") sessionId: String
+    ): Response<AccountDetailsDTO>
 
     companion object {
         const val API_VERSION = 3
