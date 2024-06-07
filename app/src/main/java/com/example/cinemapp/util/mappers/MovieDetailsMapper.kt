@@ -1,11 +1,11 @@
 package com.example.cinemapp.util.mappers
 
-import com.example.cinemapp.data.CastMemberDTO
-import com.example.cinemapp.data.GenreDTO
-import com.example.cinemapp.data.ImageDTO
-import com.example.cinemapp.data.MovieCreditsDTO
-import com.example.cinemapp.data.MovieDetailsDTO
-import com.example.cinemapp.data.VideoDTO
+import com.example.cinemapp.data.model.CastMemberDTO
+import com.example.cinemapp.data.model.GenreDTO
+import com.example.cinemapp.data.model.ImageDTO
+import com.example.cinemapp.data.model.MovieCreditsDTO
+import com.example.cinemapp.data.model.MovieDetailsDTO
+import com.example.cinemapp.data.model.VideoDTO
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.Genre
 import com.example.cinemapp.ui.main.model.Media

@@ -1,7 +1,25 @@
 package com.example.cinemapp.data
 
+import com.example.cinemapp.data.model.AccountDetailsDTO
+import com.example.cinemapp.data.model.ImagesResponseDTO
+import com.example.cinemapp.data.model.MovieCreditsDTO
+import com.example.cinemapp.data.model.MovieDetailsDTO
+import com.example.cinemapp.data.model.MovieResponseDTO
+import com.example.cinemapp.data.model.PersonDetailsDTO
+import com.example.cinemapp.data.model.PersonMovieCreditsResponseDTO
+import com.example.cinemapp.data.model.RequestTokenResponseDTO
+import com.example.cinemapp.data.model.SearchPersonResponseDTO
+import com.example.cinemapp.data.model.SessionRequestDTO
+import com.example.cinemapp.data.model.SessionResponseDTO
+import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
+import com.example.cinemapp.data.model.VideoResponseDTO
+import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
+import com.google.gson.JsonObject
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -62,6 +80,30 @@ interface MovieRemoteDataSource {
         @Query("query") query: String,
         @Query("page") page:Int = 1
     ): Response<MovieResponseDTO>
+
+    @GET("$API_VERSION/authentication/token/new")
+    suspend fun getRequestToken(): Response<RequestTokenResponseDTO>
+
+
+    @POST("$API_VERSION/authentication/token/validate_with_login")
+    suspend fun validateRequestTokenLogin(
+        @Body body: ValidateWithLoginRequestDTO
+    ): Response<RequestTokenResponseDTO>
+
+    @POST("$API_VERSION/authentication/session/new")
+    suspend fun createSession(
+        @Body body: SessionRequestDTO
+    ): Response<SessionResponseDTO>
+
+    @DELETE("$API_VERSION/authentication/session")
+    suspend fun deleteSession(
+        @Body raw: JsonObject
+    ): Response<SessionDeleteResponseDTO>
+
+    @GET("$API_VERSION/account")
+    suspend fun getAccountDetails(
+        @Query("session_id") sessionId: String
+    ): Response<AccountDetailsDTO>
 
     companion object {
         const val API_VERSION = 3

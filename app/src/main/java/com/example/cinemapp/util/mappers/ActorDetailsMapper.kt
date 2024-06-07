@@ -1,7 +1,7 @@
 package com.example.cinemapp.util.mappers
 
-import com.example.cinemapp.data.CastMovieCreditDTO
-import com.example.cinemapp.data.PersonDetailsDTO
+import com.example.cinemapp.data.model.CastMovieCreditDTO
+import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import java.time.LocalDate
