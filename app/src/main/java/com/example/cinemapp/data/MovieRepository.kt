@@ -1,6 +1,7 @@
 package com.example.cinemapp.data
 
 import android.util.Log
+import com.example.cinemapp.data.model.AccountDetailsDTO
 import com.example.cinemapp.data.model.CastMovieCreditDTO
 import com.example.cinemapp.data.model.ImageDTO
 import com.example.cinemapp.data.model.MovieCreditsDTO
@@ -9,6 +10,7 @@ import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.data.model.PersonDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
+import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
@@ -197,9 +199,7 @@ class MovieRepository(
     }
 
     suspend fun deleteSession(sessionId: String): SessionDeleteResponseDTO? {
-        val body = JsonObject().apply {
-            addProperty("session_id", sessionId)
-        }
+        val body = SessionDeleteBodyDTO(sessionId)
         return getBodyFromResponse(remoteDataSource.deleteSession(body))
     }
 
@@ -224,6 +224,11 @@ class MovieRepository(
         val body = SessionRequestDTO(requestToken)
         return getBodyFromResponse(remoteDataSource.createSession(body))
     }
+
+    suspend fun getAccountDetails(sessionId: String): AccountDetailsDTO? {
+        return getBodyFromResponse(remoteDataSource.getAccountDetails(sessionId))
+    }
+
 
     companion object {
         private const val TAG = "MOVIE_API"

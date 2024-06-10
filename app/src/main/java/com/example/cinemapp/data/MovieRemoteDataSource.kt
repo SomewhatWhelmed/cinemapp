@@ -9,16 +9,17 @@ import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.data.model.PersonMovieCreditsResponseDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
 import com.example.cinemapp.data.model.SearchPersonResponseDTO
+import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoResponseDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
-import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -95,9 +96,10 @@ interface MovieRemoteDataSource {
         @Body body: SessionRequestDTO
     ): Response<SessionResponseDTO>
 
-    @DELETE("$API_VERSION/authentication/session")
+//    @DELETE("$API_VERSION/authentication/session")
+    @HTTP(method = "DELETE", path = "$API_VERSION/authentication/session", hasBody = true)
     suspend fun deleteSession(
-        @Body raw: JsonObject
+        @Body body: SessionDeleteBodyDTO
     ): Response<SessionDeleteResponseDTO>
 
     @GET("$API_VERSION/account")

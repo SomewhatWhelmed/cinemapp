@@ -7,17 +7,40 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.HomeFragment">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/md_theme_primary"
+        android:padding="8dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:logo="@drawable/cinemapp_logo"
+        app:navigationIconTint="@color/md_theme_onPrimary"
+        app:titleTextColor="@color/md_theme_onPrimary">
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <View
+        android:id="@+id/vSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.3"
+        android:background="@color/md_theme_onPrimary"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cgMovieLists"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="10dp"
-        android:paddingTop="10dp"
         app:checkedChip="@id/chipUpcoming"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vSeparator"
         app:selectionRequired="true"
         app:singleSelection="true">
 

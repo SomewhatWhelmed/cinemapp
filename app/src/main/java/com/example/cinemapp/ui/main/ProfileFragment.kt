@@ -13,6 +13,9 @@ import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.databinding.FragmentProfileBinding
 import com.example.cinemapp.databinding.FragmentSearchBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
+import com.example.cinemapp.ui.main.model.AccountDetails
+import com.example.cinemapp.util.loadImage
+import com.example.cinemapp.util.observeFlowSafely
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -26,7 +29,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.getAccountDetails()
     }
 
     override fun onCreateView(
@@ -39,26 +42,55 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        setupViews()
+        setupVisibility()
+        setupOnClick()
+        observeSignOutEvent()
+
+        observeFlowSafely(viewModel.state) {
+            it.accountDetails?.let { accountDetails ->
+                setupViews(accountDetails)
+            }
+        }
     }
 
-    private fun setupViews() {
+    private fun setupViews(accountDetails: AccountDetails) {
         with(binding) {
-            btnSignOut.visibility = View.INVISIBLE
-            btnSignOut.setOnClickListener {
-                lifecycleScope.launch {
-                    viewModel.userPrefs.deleteSessionId()
-                    startActivity(Intent(context, AuthenticationActivity::class.java))
+            tvName.text = accountDetails.name
+            tvUsername.text = accountDetails.username
+            if (accountDetails.avatar.isEmpty()) {
+                tvInitial.text = accountDetails.name.substring(0, 1)
+            } else loadImage(
+                accountDetails.avatar,
+                ivProfilePicture,
+                root.context,
+                R.drawable.ic_placeholder_person
+            )
+        }
+    }
+
+    private fun setupOnClick() {
+//        binding.btnSignOut.visibility = View.INVISIBLE
+        binding.btnSignOut.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.signOut()
+            }
+        }
+    }
+
+    private fun setupVisibility() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.session.collect { sessionId ->
+                sessionId?.let {
+                    binding.btnSignOut.visibility = View.VISIBLE
                 }
             }
-            lifecycleScope.launch(Dispatchers.Main) {
-                viewModel.session.collect { sessionId ->
-                    tvUsername.text = sessionId ?: "Not signed in"
+        }
+    }
 
-                    sessionId?.let {
-                        btnSignOut.visibility = View.VISIBLE
-                    }
-                }
+    private fun observeSignOutEvent() {
+        lifecycleScope.launch {
+            viewModel.signOut.collect {
+                startActivity(Intent(context, AuthenticationActivity::class.java))
             }
         }
     }
