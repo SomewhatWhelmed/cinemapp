@@ -37,13 +37,14 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        setupVisibility()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        setupVisibility()
         setupOnClick()
+        observeSignedInEvent()
         observeSignOutEvent()
 
         observeFlowSafely(viewModel.state) {
@@ -65,15 +66,19 @@ class ProfileFragment : Fragment() {
                 root.context,
                 R.drawable.ic_placeholder_person
             )
+            cpiLoading.visibility = View.INVISIBLE
+            clContent.visibility = View.VISIBLE
         }
     }
 
     private fun setupOnClick() {
-//        binding.btnSignOut.visibility = View.INVISIBLE
         binding.btnSignOut.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.signOut()
             }
+        }
+        binding.btnSignIn.setOnClickListener {
+            startActivity(Intent(context, AuthenticationActivity::class.java))
         }
     }
 
@@ -81,7 +86,9 @@ class ProfileFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.session.collect { sessionId ->
                 sessionId?.let {
-                    binding.btnSignOut.visibility = View.VISIBLE
+                    binding.btnSignIn.visibility = View.INVISIBLE
+                    binding.clContent.visibility = View.INVISIBLE
+                    binding.cpiLoading.visibility = View.VISIBLE
                 }
             }
         }
@@ -91,6 +98,16 @@ class ProfileFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.signOut.collect {
                 startActivity(Intent(context, AuthenticationActivity::class.java))
+            }
+        }
+    }
+
+    private fun observeSignedInEvent() {
+        lifecycleScope.launch {
+            viewModel.notSignedIn.collect {
+                binding.clContent.visibility = View.INVISIBLE
+                binding.cpiLoading.visibility = View.INVISIBLE
+                binding.btnSignIn.visibility = View.VISIBLE
             }
         }
     }

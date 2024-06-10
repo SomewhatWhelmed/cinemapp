@@ -27,6 +27,8 @@ class ProfileViewModel(
     val state: StateFlow<State> = _state
     private val _signOut: MutableSharedFlow<Unit> = MutableSharedFlow()
     val signOut = _signOut.asSharedFlow()
+    private val _notSignedIn: MutableSharedFlow<Unit> = MutableSharedFlow()
+    val notSignedIn = _notSignedIn.asSharedFlow()
 
     val session = userPrefs.getSessionId()
 
@@ -54,7 +56,7 @@ class ProfileViewModel(
                             )
                         }
                     }
-                }
+                } ?: _notSignedIn.emit(Unit)
             }
         }
     }
