@@ -1,35 +1,39 @@
 package com.example.cinemapp.ui.main
 
 import android.content.Intent
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
-import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.databinding.FragmentProfileBinding
-import com.example.cinemapp.databinding.FragmentSearchBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.model.AccountDetails
+import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.util.isEndOfScroll
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
+import com.example.cinemapp.util.safeNavigateWithArgs
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
 
     private val viewModel by viewModel<ProfileViewModel>()
+    private val adapter = MovieAdapter()
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getAccountDetails()
     }
 
     override fun onCreateView(
@@ -37,7 +41,10 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        viewModel.getAccountDetails()
+        viewModel.getFavoriteNextPage()
         setupVisibility()
+        setupAdapter()
         return binding.root
     }
 
@@ -46,12 +53,26 @@ class ProfileFragment : Fragment() {
         setupOnClick()
         observeSignedInEvent()
         observeSignOutEvent()
+        setupTabs()
 
         observeFlowSafely(viewModel.state) {
             it.accountDetails?.let { accountDetails ->
                 setupViews(accountDetails)
             }
+            adapter.setMovies(it.movies)
+            viewModel.setPagingRunning(false)
         }
+
+        binding.rvMovieList.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (binding.rvMovieList.isEndOfScroll()) {
+                        viewModel.getNextPage()
+                    }
+                }
+            }
+        )
     }
 
     private fun setupViews(accountDetails: AccountDetails) {
@@ -84,14 +105,44 @@ class ProfileFragment : Fragment() {
 
     private fun setupVisibility() {
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.session.collect { sessionId ->
-                sessionId?.let {
-                    binding.btnSignIn.visibility = View.INVISIBLE
-                    binding.clContent.visibility = View.INVISIBLE
-                    binding.cpiLoading.visibility = View.VISIBLE
-                }
+            with(binding) {
+                btnSignIn.visibility = View.INVISIBLE
+                clContent.visibility = View.INVISIBLE
+                cpiLoading.visibility = View.VISIBLE
             }
         }
+
+    }
+
+
+    private fun setupTabs() {
+        with(binding){
+            tlMovieLists.selectTab(tlMovieLists.getTabAt(0))
+            tlMovieLists.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.position?.let { onTabChanged(it) }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            })
+        }
+    }
+
+    private fun onTabChanged(tabPosition: Int) {
+        when (tabPosition) {
+            Tabs.FAVORITES.ordinal -> viewModel.getFavoriteNextPage()
+            Tabs.WATCHLIST.ordinal -> viewModel.getWatchlistNextPage()
+            Tabs.RATED.ordinal -> viewModel.getRatedNextPage()
+        }
+        val smoothScroller = object : LinearSmoothScroller(context) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+        smoothScroller.targetPosition = 0
+        binding.rvMovieList.layoutManager?.startSmoothScroll(smoothScroller)
     }
 
     private fun observeSignOutEvent() {
@@ -110,5 +161,23 @@ class ProfileFragment : Fragment() {
                 binding.btnSignIn.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun setupAdapter() {
+        binding.rvMovieList.adapter = adapter
+        binding.rvMovieList.layoutManager = GridLayoutManager(context, 2)
+        observeFlowSafely(adapter.onMovieCardClick) {
+            onMovieCardClick(it)
+        }
+    }
+
+    private fun onMovieCardClick(movie: MovieCard) {
+        findNavController().safeNavigateWithArgs(
+            ProfileFragmentDirections.toDetailsFragment(movieId = movie.id)
+        )
+    }
+
+    enum class Tabs {
+        FAVORITES, WATCHLIST, RATED
     }
 }

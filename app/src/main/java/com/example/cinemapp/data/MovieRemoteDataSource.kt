@@ -107,6 +107,30 @@ interface MovieRemoteDataSource {
         @Query("session_id") sessionId: String
     ): Response<AccountDetailsDTO>
 
+    @GET("$API_VERSION/account/account_id/favorite/movies")
+    suspend fun getFavorite(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("session_id") sessionId: String,
+        @Query("sort_by") sortBy: String = "created_at.desc"
+    ): Response<MovieResponseDTO>
+
+    @GET("$API_VERSION/account/account_id/watchlist/movies")
+    suspend fun getWatchlist(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("session_id") sessionId: String,
+        @Query("sort_by") sortBy: String = "created_at.desc"
+    ): Response<MovieResponseDTO>
+
+    @GET("$API_VERSION/account/account_id/rated/movies")
+    suspend fun getRated(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("session_id") sessionId: String,
+        @Query("sort_by") sortBy: String = "created_at.desc"
+    ): Response<MovieResponseDTO>
+
     companion object {
         const val API_VERSION = 3
     }

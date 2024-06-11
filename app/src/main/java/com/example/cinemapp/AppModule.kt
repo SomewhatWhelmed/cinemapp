@@ -62,7 +62,7 @@ val appModule = module {
     single { MovieDetailsMapper(get()) }
     single { ActorDetailsMapper(get()) }
     single { AuthenticationMapper() }
-    single { ProfileMapper(get()) }
+    single { ProfileMapper(get(), get()) }
     viewModel {
         SplashViewModel(get(), get())
     }

@@ -32,14 +32,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vSeparator">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:padding="10dp"
             android:id="@+id/clHeader"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -142,20 +143,20 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tlMovieLists"
+            style="@style/TabItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            style="@style/TabItem"
             android:background="@color/md_theme_surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clHeader">
+            app:layout_constraintTop_toBottomOf="@id/clHeader"
+            app:tabMode="fixed">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Favourites" />
+                android:text="Favorites" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -168,6 +169,18 @@
                 android:text="Rated" />
 
         </com.google.android.material.tabs.TabLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMovieList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tlMovieLists"
+            app:layout_constraintVertical_bias="0.506" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
