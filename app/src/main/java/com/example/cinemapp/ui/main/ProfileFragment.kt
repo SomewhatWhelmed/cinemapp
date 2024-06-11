@@ -41,10 +41,10 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        viewModel.getAccountDetails()
-        viewModel.getFavoriteNextPage()
         setupVisibility()
         setupAdapter()
+        viewModel.getAccountDetails()
+        viewModel.getFavoriteNextPage()
         return binding.root
     }
 

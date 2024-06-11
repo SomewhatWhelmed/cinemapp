@@ -34,7 +34,7 @@ class ProfileViewModel(
     private val _notSignedIn: MutableSharedFlow<Unit> = MutableSharedFlow()
     val notSignedIn = _notSignedIn.asSharedFlow()
     private var isPaging = false
-    val session = userPrefs.getSessionId()
+    private val session = userPrefs.getSessionId()
 
 
     fun signOut() {
