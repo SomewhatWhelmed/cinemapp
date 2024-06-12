@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -31,10 +32,6 @@ class ProfileFragment : Fragment() {
     private val adapter = MovieAdapter()
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,12 +78,16 @@ class ProfileFragment : Fragment() {
             tvUsername.text = accountDetails.username
             if (accountDetails.avatar.isEmpty()) {
                 tvInitial.text = accountDetails.name.substring(0, 1)
-            } else loadImage(
-                accountDetails.avatar,
-                ivProfilePicture,
-                root.context,
-                R.drawable.ic_placeholder_person
-            )
+            } else {
+                    loadImage(
+                        accountDetails.avatar,
+                        ivAvatar,
+                        root.context,
+                        R.drawable.ic_placeholder_person
+                    )
+                    activity
+                    ivAvatar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.md_theme_surface))
+                }
             cpiLoading.visibility = View.INVISIBLE
             clContent.visibility = View.VISIBLE
         }

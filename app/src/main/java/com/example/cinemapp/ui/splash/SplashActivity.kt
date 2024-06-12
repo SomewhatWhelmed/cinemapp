@@ -36,8 +36,8 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.gotoMainScreen.collect {
                 finish()
-                viewModel.session.collect { response ->
-                    response?.let {
+                viewModel.session.collect { sessionId ->
+                    sessionId?.let {
                         startActivity(
                             Intent(
                                 this@SplashActivity,

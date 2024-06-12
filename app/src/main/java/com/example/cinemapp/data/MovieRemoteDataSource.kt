@@ -96,7 +96,6 @@ interface MovieRemoteDataSource {
         @Body body: SessionRequestDTO
     ): Response<SessionResponseDTO>
 
-//    @DELETE("$API_VERSION/authentication/session")
     @HTTP(method = "DELETE", path = "$API_VERSION/authentication/session", hasBody = true)
     suspend fun deleteSession(
         @Body body: SessionDeleteBodyDTO
