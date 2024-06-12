@@ -28,19 +28,19 @@ interface MovieRemoteDataSource {
 
     @GET("$API_VERSION/movie/upcoming")
     suspend fun getUpcoming(
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = DEFAULT_LANGUAGE,
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
     @GET("$API_VERSION/movie/popular")
     suspend fun getPopular(
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = DEFAULT_LANGUAGE,
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
     @GET("$API_VERSION/movie/top_rated")
     suspend fun getTopRated(
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = DEFAULT_LANGUAGE,
         @Query("page") page: Int = 1
     ): Response<MovieResponseDTO>
 
@@ -108,7 +108,7 @@ interface MovieRemoteDataSource {
 
     @GET("$API_VERSION/account/account_id/favorite/movies")
     suspend fun getFavorite(
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = DEFAULT_LANGUAGE,
         @Query("page") page: Int = 1,
         @Query("session_id") sessionId: String,
         @Query("sort_by") sortBy: String = "created_at.desc"
@@ -116,7 +116,7 @@ interface MovieRemoteDataSource {
 
     @GET("$API_VERSION/account/account_id/watchlist/movies")
     suspend fun getWatchlist(
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = DEFAULT_LANGUAGE,
         @Query("page") page: Int = 1,
         @Query("session_id") sessionId: String,
         @Query("sort_by") sortBy: String = "created_at.desc"
@@ -124,7 +124,7 @@ interface MovieRemoteDataSource {
 
     @GET("$API_VERSION/account/account_id/rated/movies")
     suspend fun getRated(
-        @Query("language") language: String = "en-US",
+        @Query("language") language: String = DEFAULT_LANGUAGE,
         @Query("page") page: Int = 1,
         @Query("session_id") sessionId: String,
         @Query("sort_by") sortBy: String = "created_at.desc"
@@ -132,5 +132,6 @@ interface MovieRemoteDataSource {
 
     companion object {
         const val API_VERSION = 3
+        const val DEFAULT_LANGUAGE = "en-US"
     }
 }

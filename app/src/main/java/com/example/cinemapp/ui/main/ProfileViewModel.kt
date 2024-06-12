@@ -1,5 +1,6 @@
 package com.example.cinemapp.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -29,39 +31,48 @@ class ProfileViewModel(
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
+
     private val _signOut: MutableSharedFlow<Unit> = MutableSharedFlow()
     val signOut = _signOut.asSharedFlow()
+
     private val _notSignedIn: MutableSharedFlow<Unit> = MutableSharedFlow()
     val notSignedIn = _notSignedIn.asSharedFlow()
+
     private var isPaging = false
-    private val session = userPrefs.getSessionId()
 
 
     fun signOut() {
         viewModelScope.launch {
-            session.collect { sessionId ->
-                sessionId?.let {
-                    movieRepository.deleteSession(it)
-                }
+            val sessionId = userPrefs.getSessionId().firstOrNull()
+            sessionId?.let {
+                movieRepository.deleteSession(it)
                 userPrefs.deleteSessionId()
-                _signOut.emit(Unit)
             }
+            _signOut.emit(Unit)
         }
     }
 
-    fun getAccountDetails() {
+    fun getInitialData() {
+        getAccountDetails()
+        getFavoriteNextPage()
+    }
+
+    private fun getAccountDetails() {
+        Log.i("TEST", "Entered getAccountDetails")
         viewModelScope.launch {
-            session.collect { sessionId ->
-                sessionId?.let {
-                    movieRepository.getAccountDetails(it)?.let { details ->
-                        _state.update { state ->
-                            state.copy(
-                                accountDetails = profileMapper.mapToAccountDetails(details)
-                            )
-                        }
+            Log.i("TEST", "Entered viewModelScope")
+            val sessionId = userPrefs.getSessionId().firstOrNull()
+            Log.i("TEST", "Entered session.collect")
+            sessionId?.let {
+                movieRepository.getAccountDetails(it)?.let { details ->
+                    _state.update { state ->
+                        state.copy(
+                            accountDetails = profileMapper.mapToAccountDetails(details)
+                        )
                     }
-                } ?: _notSignedIn.emit(Unit)
-            }
+                }
+            } ?: _notSignedIn.emit(Unit)
+
         }
     }
 
@@ -81,20 +92,19 @@ class ProfileViewModel(
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
-                userPrefs.getSessionId().collect { sessionId ->
-                    _state.update {
-                        it.copy(
-                            pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                            movieListType = movieListType,
-                            movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
-                                movieRepository.getMovieList(
-                                    movieListType,
-                                    if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                                    sessionId = sessionId
-                                )
-                                    ?.let { list -> profileMapper.mapToCardList(list, 400) }
-                                    ?: emptyList()))
-                    }
+                val sessionId = userPrefs.getSessionId().firstOrNull()
+                _state.update {
+                    it.copy(
+                        pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                        movieListType = movieListType,
+                        movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
+                            movieRepository.getMovieList(
+                                movieListType,
+                                if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                                sessionId = sessionId
+                            )
+                                ?.let { list -> profileMapper.mapToCardList(list, 400) }
+                                ?: emptyList()))
                 }
             }
         }
@@ -102,6 +112,14 @@ class ProfileViewModel(
 
     fun setPagingRunning(isRunning: Boolean) {
         isPaging = isRunning
+    }
+
+    fun loadPage(tabPosition: Int) {
+        when (tabPosition) {
+            ProfileFragmentTabs.FAVORITES.ordinal -> getFavoriteNextPage()
+            ProfileFragmentTabs.WATCHLIST.ordinal -> getWatchlistNextPage()
+            ProfileFragmentTabs.RATED.ordinal -> getRatedNextPage()
+        }
     }
 
 }

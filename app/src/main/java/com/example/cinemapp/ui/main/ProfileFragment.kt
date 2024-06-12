@@ -2,11 +2,11 @@ package com.example.cinemapp.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +17,7 @@ import com.example.cinemapp.databinding.FragmentProfileBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.util.finishThenStart
 import com.example.cinemapp.util.isEndOfScroll
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
@@ -40,8 +41,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         setupVisibility()
         setupAdapter()
-        viewModel.getAccountDetails()
-        viewModel.getFavoriteNextPage()
+        viewModel.getInitialData()
         return binding.root
     }
 
@@ -79,15 +79,19 @@ class ProfileFragment : Fragment() {
             if (accountDetails.avatar.isEmpty()) {
                 tvInitial.text = accountDetails.name.substring(0, 1)
             } else {
-                    loadImage(
-                        accountDetails.avatar,
-                        ivAvatar,
-                        root.context,
-                        R.drawable.ic_placeholder_person
+                loadImage(
+                    accountDetails.avatar,
+                    ivAvatar,
+                    root.context,
+                    R.drawable.ic_placeholder_person
+                )
+                ivAvatar.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.md_theme_surface
                     )
-                    activity
-                    ivAvatar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.md_theme_surface))
-                }
+                )
+            }
             cpiLoading.visibility = View.INVISIBLE
             clContent.visibility = View.VISIBLE
         }
@@ -117,7 +121,7 @@ class ProfileFragment : Fragment() {
 
 
     private fun setupTabs() {
-        with(binding){
+        with(binding) {
             tlMovieLists.selectTab(tlMovieLists.getTabAt(0))
             tlMovieLists.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -132,11 +136,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onTabChanged(tabPosition: Int) {
-        when (tabPosition) {
-            Tabs.FAVORITES.ordinal -> viewModel.getFavoriteNextPage()
-            Tabs.WATCHLIST.ordinal -> viewModel.getWatchlistNextPage()
-            Tabs.RATED.ordinal -> viewModel.getRatedNextPage()
-        }
+        viewModel.loadPage(tabPosition)
         val smoothScroller = object : LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference(): Int {
                 return SNAP_TO_START
@@ -149,7 +149,7 @@ class ProfileFragment : Fragment() {
     private fun observeSignOutEvent() {
         lifecycleScope.launch {
             viewModel.signOut.collect {
-                startActivity(Intent(context, AuthenticationActivity::class.java))
+                activity?.finishThenStart(context, AuthenticationActivity::class.java)
             }
         }
     }
@@ -178,7 +178,5 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    enum class Tabs {
-        FAVORITES, WATCHLIST, RATED
-    }
 }
+
