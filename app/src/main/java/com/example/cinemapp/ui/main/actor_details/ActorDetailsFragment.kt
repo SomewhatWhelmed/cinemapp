@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui.main
+package com.example.cinemapp.ui.main.actor_details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

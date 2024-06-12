@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_surface"
-    tools:context=".ui.main.ActorDetailsFragment">
+    tools:context=".ui.main.actor_details.ActorDetailsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"

@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui.main
+package com.example.cinemapp.ui.main.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentProfileBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
+import com.example.cinemapp.ui.main.shared.MovieAdapter
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.util.finishThenStart

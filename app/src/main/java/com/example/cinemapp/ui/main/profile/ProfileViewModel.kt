@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui.main
+package com.example.cinemapp.ui.main.profile
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
