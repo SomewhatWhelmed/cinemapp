@@ -59,4 +59,10 @@
         <item name="color">@color/md_theme_tertiary</item>
     </style>
 
+    <style name="TabItem" parent = "Widget.MaterialComponents.TabLayout.Colored">
+        <item name="tabTextColor">@color/tab_text_state_list</item>
+        <item name="tabRippleColor">@color/md_theme_onPrimary</item>
+        <item name="tabIndicatorColor">@color/md_theme_onPrimary</item>
+    </style>
+
 </resources>

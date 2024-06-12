@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val movieRepository: MovieRepository,
-    private val userPrefs: UserPreferences
+    userPrefs: UserPreferences
 ) : ViewModel() {
 
     private val _gotoMainScreen: MutableSharedFlow<Unit> = MutableSharedFlow()

@@ -17,6 +17,7 @@ import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import com.example.cinemapp.util.mappers.HomeMapper
 import com.example.cinemapp.util.mappers.SearchMapper
 import com.example.cinemapp.util.mappers.MediaUrlMapper
+import com.example.cinemapp.util.mappers.ProfileMapper
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -61,6 +62,7 @@ val appModule = module {
     single { MovieDetailsMapper(get()) }
     single { ActorDetailsMapper(get()) }
     single { AuthenticationMapper() }
+    single { ProfileMapper(get(), get()) }
     viewModel {
         SplashViewModel(get(), get())
     }
@@ -80,6 +82,6 @@ val appModule = module {
         AuthenticationViewModel(get(), get(), get())
     }
     viewModel {
-        ProfileViewModel(get(), get())
+        ProfileViewModel(get(), get(), get())
     }
 }

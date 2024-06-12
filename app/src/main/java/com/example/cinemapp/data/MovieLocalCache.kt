@@ -11,6 +11,10 @@ class MovieLocalCache {
     private val popularCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
     private val topRatedCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
 
+    private val favouriteCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
+    private val watchlistCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
+    private val ratedCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
+
     private var personCredits: PersonMovieCreditsResponseDTO? = null
 
     fun getMovieList(movieListType: MovieRepository.MovieListType, page: Int = 1): ArrayList<MovieDTO>? {
@@ -19,6 +23,9 @@ class MovieLocalCache {
             MovieRepository.MovieListType.UPCOMING -> upcomingCache[page]
             MovieRepository.MovieListType.POPULAR -> popularCache[page]
             MovieRepository.MovieListType.TOP_RATED -> topRatedCache[page]
+            MovieRepository.MovieListType.FAVORITE -> favouriteCache[page]
+            MovieRepository.MovieListType.WATCHLIST -> watchlistCache[page]
+            MovieRepository.MovieListType.RATED -> ratedCache[page]
         }
     }
 
@@ -28,6 +35,9 @@ class MovieLocalCache {
             MovieRepository.MovieListType.UPCOMING -> upcomingCache[page] = movies
             MovieRepository.MovieListType.POPULAR -> popularCache[page] = movies
             MovieRepository.MovieListType.TOP_RATED -> topRatedCache[page] = movies
+            MovieRepository.MovieListType.FAVORITE -> favouriteCache[page] = movies
+            MovieRepository.MovieListType.WATCHLIST -> watchlistCache[page] = movies
+            MovieRepository.MovieListType.RATED -> ratedCache[page] = movies
         }
     }
 

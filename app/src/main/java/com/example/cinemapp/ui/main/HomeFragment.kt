@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
 
     private fun onMovieCardClick(movie: MovieCard) {
         findNavController().safeNavigateWithArgs(
-            HomeFragmentDirections.toDetailsFragment(movieId = movie.id ?: -1)
+            HomeFragmentDirections.toDetailsFragment(movieId = movie.id)
         )
     }
 }

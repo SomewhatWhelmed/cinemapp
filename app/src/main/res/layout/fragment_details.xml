@@ -16,7 +16,18 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIconTint="@color/md_theme_onPrimary" />
+        app:navigationIcon="@drawable/vic_arrow_back"
+        app:navigationIconTint="@color/md_theme_onPrimary"
+        app:title="Movie Details"
+        app:titleTextColor="@color/md_theme_onPrimary" />
+
+    <View
+        android:id="@+id/vSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.3"
+        android:background="@color/md_theme_onPrimary"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/vSeparator">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clContent"

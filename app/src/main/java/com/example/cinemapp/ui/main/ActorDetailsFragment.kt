@@ -64,7 +64,6 @@ class ActorDetailsFragment : Fragment() {
 
     private fun setupView(details: PersonDetails) {
         with(binding) {
-            toolbar.setNavigationIcon(R.drawable.vic_arrow_back)
             toolbar.setNavigationOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }

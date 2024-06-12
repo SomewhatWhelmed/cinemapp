@@ -1,6 +1,7 @@
 package com.example.cinemapp.data
 
 import android.util.Log
+import com.example.cinemapp.data.model.AccountDetailsDTO
 import com.example.cinemapp.data.model.CastMovieCreditDTO
 import com.example.cinemapp.data.model.ImageDTO
 import com.example.cinemapp.data.model.MovieCreditsDTO
@@ -9,12 +10,12 @@ import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.data.model.PersonDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
+import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
-import com.google.gson.JsonObject
 import retrofit2.Response
 
 class MovieRepository(
@@ -44,21 +45,30 @@ class MovieRepository(
         return getBodyFromResponse(remoteDataSource.getMovieDetails(movieId = movieId))
     }
 
-    suspend fun getMovieList(movieListType: MovieListType, page: Int = 1): List<MovieDTO>? {
+    suspend fun getMovieList(
+        movieListType: MovieListType,
+        page: Int = 1,
+        sessionId: String? = null
+    ): List<MovieDTO>? {
         return localCache.getMovieList(movieListType, page) ?: try {
             val response = when (movieListType) {
                 MovieListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
                 MovieListType.POPULAR -> remoteDataSource.getPopular(page = page)
                 MovieListType.TOP_RATED -> remoteDataSource.getTopRated(page = page)
+                MovieListType.FAVORITE -> sessionId?.let { remoteDataSource.getFavorite(page = page, sessionId = it) }
+                MovieListType.WATCHLIST -> sessionId?.let { remoteDataSource.getWatchlist(page = page, sessionId = it) }
+                MovieListType.RATED -> sessionId?.let { remoteDataSource.getRated(page = page, sessionId = it) }
             }
-            if (response.isSuccessful) {
-                response.body()?.let { movieResponse ->
-                    localCache.insert(movieListType, page, movieResponse.results)
-                    movieResponse.results
+            response?.let {
+                if (response.isSuccessful) {
+                    response.body()?.let { movieResponse ->
+                        localCache.insert(movieListType, page, movieResponse.results)
+                        movieResponse.results
+                    }
+                } else {
+                    Log.e(TAG, response.message())
+                    null
                 }
-            } else {
-                Log.e(TAG, response.message())
-                null
             }
         } catch (e: Exception) {
             Log.e(TAG, e.message ?: "Unknown error")
@@ -197,9 +207,7 @@ class MovieRepository(
     }
 
     suspend fun deleteSession(sessionId: String): SessionDeleteResponseDTO? {
-        val body = JsonObject().apply {
-            addProperty("session_id", sessionId)
-        }
+        val body = SessionDeleteBodyDTO(sessionId)
         return getBodyFromResponse(remoteDataSource.deleteSession(body))
     }
 
@@ -225,12 +233,17 @@ class MovieRepository(
         return getBodyFromResponse(remoteDataSource.createSession(body))
     }
 
+    suspend fun getAccountDetails(sessionId: String): AccountDetailsDTO? {
+        return getBodyFromResponse(remoteDataSource.getAccountDetails(sessionId))
+    }
+
+
     companion object {
         private const val TAG = "MOVIE_API"
     }
 
     enum class MovieListType {
-        UPCOMING, POPULAR, TOP_RATED
+        UPCOMING, POPULAR, TOP_RATED, FAVORITE, WATCHLIST, RATED
     }
 
 }

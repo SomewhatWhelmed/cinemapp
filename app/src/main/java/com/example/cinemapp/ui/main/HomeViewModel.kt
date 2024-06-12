@@ -17,7 +17,6 @@ class HomeViewModel(
 
     data class State(
         val movies: List<MovieCard> = emptyList(),
-        val search: String = "",
         val pagesLoaded: Int = 0,
         val movieListType: MovieRepository.MovieListType = MovieRepository.MovieListType.UPCOMING
     )

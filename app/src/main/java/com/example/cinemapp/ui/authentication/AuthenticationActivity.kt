@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.databinding.ActivityAuthenticationBinding
 import com.example.cinemapp.ui.main.MainActivity
+import com.example.cinemapp.util.finishThenStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,11 +60,10 @@ class AuthenticationActivity : AppCompatActivity() {
     }
 
     private fun observeSignIn() {
-        lifecycleScope.launch() {
+        lifecycleScope.launch {
             viewModel.signInAttempt.collect { success ->
                 if (success) {
-                    finish()
-                    startActivity(Intent(this@AuthenticationActivity, MainActivity::class.java))
+                    finishThenStart(this@AuthenticationActivity, MainActivity::class.java)
                 } else {
                     val toast = Toast.makeText(
                         this@AuthenticationActivity,
