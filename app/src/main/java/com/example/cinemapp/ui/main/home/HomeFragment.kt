@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui.main
+package com.example.cinemapp.ui.main.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.databinding.FragmentHomeBinding
+import com.example.cinemapp.ui.main.shared.MovieAdapter
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.util.isEndOfScroll
 import com.example.cinemapp.util.observeFlowSafely

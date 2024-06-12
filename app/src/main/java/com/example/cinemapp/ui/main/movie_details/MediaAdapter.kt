@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui.main
+package com.example.cinemapp.ui.main.movie_details
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
