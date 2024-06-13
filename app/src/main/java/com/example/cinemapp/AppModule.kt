@@ -70,7 +70,7 @@ val appModule = module {
         HomeViewModel(get(), get())
     }
     viewModel {
-        MovieDetailsViewModel(get(), get())
+        MovieDetailsViewModel(get(), get(), get())
     }
     viewModel {
         ActorDetailsViewModel(get(), get())

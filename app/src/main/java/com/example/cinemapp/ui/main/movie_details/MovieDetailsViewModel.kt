@@ -3,6 +3,7 @@ package com.example.cinemapp.ui.main.movie_details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieDetails
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
-    private val movieDetailsMapper: MovieDetailsMapper
+    private val movieDetailsMapper: MovieDetailsMapper,
+    private val userPrefs: UserPreferences
 ) : ViewModel() {
 
     data class State(
@@ -27,6 +29,8 @@ class MovieDetailsViewModel(
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
+
+    val session = userPrefs.getSessionId()
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {

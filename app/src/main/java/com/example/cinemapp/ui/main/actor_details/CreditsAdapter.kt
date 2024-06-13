@@ -37,7 +37,7 @@ class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
     override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
         holder.bind(credits[position])
         if (position == 0)
-            (holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams).marginStart += 10
+            (holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams).leftMargin += 10
     }
 
     override fun getItemCount(): Int {

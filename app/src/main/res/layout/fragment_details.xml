@@ -149,6 +149,161 @@
                 app:layout_constraintTop_toBottomOf="@id/tvGenres" />
 
             <TextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="2dp"
+                android:gravity="center"
+                android:paddingHorizontal="30dp"
+                android:paddingVertical="10dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:text="7/10"
+                android:textColor="@color/md_theme_secondary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:drawableLeftCompat="@drawable/vic_rating"
+                app:layout_constraintBottom_toTopOf="@id/clListControls"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRuntime" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clListControls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
+                app:layout_constraintBottom_toTopOf="@id/tvOverview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRating">
+
+                <LinearLayout
+                    android:id="@+id/llUserRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@id/llFavorite"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvUserRating"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:cardBackgroundColor="@color/md_theme_primary"
+                        app:cardCornerRadius="25dp"
+                        app:strokeColor="@color/md_theme_onPrimary"
+                        app:strokeWidth="3dp">
+
+                        <ImageView
+                            android:id="@+id/ivUserRating"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/vic_rating_empty"
+                            app:tint="@color/md_theme_onPrimary" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/tvUserRating"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Rate this"
+                        android:textAlignment="center"
+                        android:textColor="@color/md_theme_onPrimary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@id/llWatchlist"
+                    app:layout_constraintStart_toEndOf="@id/llUserRating"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvFavorite"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:cardBackgroundColor="@color/md_theme_primary"
+                        app:cardCornerRadius="25dp"
+                        app:strokeColor="@color/md_theme_onPrimary"
+                        app:strokeWidth="3dp">
+
+                        <ImageView
+                            android:id="@+id/ivFavorite"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/vic_favorite_empty"
+                            app:tint="@color/md_theme_onPrimary" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/tvFavorite"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Add to Favorites"
+                        android:textAlignment="center"
+                        android:textColor="@color/md_theme_onPrimary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llWatchlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/llFavorite"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvWatchlist"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:cardBackgroundColor="@color/md_theme_onPrimary"
+                        app:cardCornerRadius="25dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:id="@+id/ivWatchlist"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/vic_watchlist"
+                            app:tint="@color/md_theme_primary" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/tvWatchlist"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Remove from Watchlist"
+                        android:textAlignment="center"
+                        android:textColor="@color/md_theme_onPrimary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
                 android:id="@+id/tvOverview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,7 +315,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvRuntime" />
+                app:layout_constraintTop_toBottomOf="@id/clListControls" />
 
             <TextView
                 android:id="@+id/tvCredits"

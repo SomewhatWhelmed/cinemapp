@@ -36,7 +36,8 @@ class MovieDetailsMapper(
             movieDetails.genres?.let { mapToGenreList(it) } ?: emptyList(),
             movieDetails.overview ?: "",
             movieDetails.runtime ?: 0,
-            movieDetails.title ?: ""
+            movieDetails.title ?: "",
+            movieDetails.voteAverage ?: 0f
         )
     }
 

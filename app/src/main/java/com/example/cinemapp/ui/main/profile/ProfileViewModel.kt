@@ -58,11 +58,8 @@ class ProfileViewModel(
     }
 
     private fun getAccountDetails() {
-        Log.i("TEST", "Entered getAccountDetails")
         viewModelScope.launch {
-            Log.i("TEST", "Entered viewModelScope")
             val sessionId = userPrefs.getSessionId().firstOrNull()
-            Log.i("TEST", "Entered session.collect")
             sessionId?.let {
                 movieRepository.getAccountDetails(it)?.let { details ->
                     _state.update { state ->
@@ -76,15 +73,15 @@ class ProfileViewModel(
         }
     }
 
-    fun getFavoriteNextPage() {
+    private fun getFavoriteNextPage() {
         getNextPage(MovieRepository.MovieListType.FAVORITE)
     }
 
-    fun getWatchlistNextPage() {
+    private fun getWatchlistNextPage() {
         getNextPage(MovieRepository.MovieListType.WATCHLIST)
     }
 
-    fun getRatedNextPage() {
+    private fun getRatedNextPage() {
         getNextPage(MovieRepository.MovieListType.RATED)
     }
 
@@ -93,19 +90,21 @@ class ProfileViewModel(
             setPagingRunning(true)
             viewModelScope.launch {
                 val sessionId = userPrefs.getSessionId().firstOrNull()
-                _state.update {
-                    it.copy(
-                        pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                        movieListType = movieListType,
-                        movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
-                            movieRepository.getMovieList(
-                                movieListType,
-                                if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                                sessionId = sessionId
-                            )
-                                ?.let { list -> profileMapper.mapToCardList(list, 400) }
-                                ?: emptyList()))
-                }
+                sessionId?.let {
+                    _state.update {
+                        it.copy(
+                            pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                            movieListType = movieListType,
+                            movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
+                                movieRepository.getMovieList(
+                                    movieListType,
+                                    if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                                    sessionId = sessionId
+                                )
+                                    ?.let { list -> profileMapper.mapToCardList(list, 400) }
+                                    ?: emptyList()))
+                    }
+                } ?: setPagingRunning(false)
             }
         }
     }

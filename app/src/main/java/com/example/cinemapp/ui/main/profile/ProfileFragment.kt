@@ -40,14 +40,14 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        setupVisibility()
         setupAdapter()
-        viewModel.getInitialData()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+        setupVisibility()
+        viewModel.getInitialData()
         setupOnClick()
         observeSignedInEvent()
         observeSignOutEvent()

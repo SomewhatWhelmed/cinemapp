@@ -6,7 +6,8 @@ data class MovieDetails(
     val genres: List<Genre> = emptyList(),
     val overview: String = "",
     val runtime: Int = 0,
-    val title: String = ""
+    val title: String = "",
+    val voteAverage: Float = 0f
 )
 
 data class Genre(

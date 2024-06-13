@@ -61,4 +61,10 @@ class MovieLocalCache {
     fun insert(credits: PersonMovieCreditsResponseDTO) {
         personCredits = credits
     }
+
+    fun clearProfileCache() {
+        favouriteCache.clear()
+        watchlistCache.clear()
+        ratedCache.clear()
+    }
 }

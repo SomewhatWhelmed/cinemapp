@@ -36,8 +36,10 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
         holder.bind(cast[position])
-        if (position == 0)
-                (holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams).marginStart += 10
+        if (position == 0) {
+            val marginParams = holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams
+            marginParams.leftMargin += 10
+        }
 
     }
 

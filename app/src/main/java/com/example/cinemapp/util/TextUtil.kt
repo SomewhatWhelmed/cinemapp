@@ -63,3 +63,7 @@ fun makeExpandableText(
 
     return spannableString
 }
+
+fun formatRating(rating: Float, maxRating: Int = 10): String {
+    return "${"%.1f".format(rating)}/$maxRating"
+}

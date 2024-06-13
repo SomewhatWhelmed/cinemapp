@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.math.MathUtils
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +18,12 @@ import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.MovieDetails
+import com.example.cinemapp.util.formatRating
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -36,7 +42,7 @@ class MovieDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        binding.clContent.visibility = View.INVISIBLE
+        setupVisibility()
         viewModel.getMovieDetails(args.movieId)
         setupAdapter()
         return binding.root
@@ -44,9 +50,11 @@ class MovieDetailsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        setupOnClickListeners()
+
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
-                setupView(details)
+                setupViews(details)
                 binding.clContent.visibility = View.VISIBLE
                 binding.cpiLoading.visibility = View.GONE
             }
@@ -55,17 +63,14 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupView(details: MovieDetails) {
+    private fun setupViews(details: MovieDetails) {
         with(binding) {
-            toolbar.setNavigationOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
-
             tvTitle.text = details.title
             tvGenres.text = details.genres.joinToString(", ") { genre -> genre.name }
             val runtime =
                 "${(details.runtime / 60)}h ${details.runtime % 60}min"
             tvRuntime.text = runtime
+            tvRating.text = formatRating(details.voteAverage)
 
 
             setExpandableTextView(
@@ -76,7 +81,14 @@ class MovieDetailsFragment : Fragment() {
             ) {
                 tvOverview.text = details.overview
             }
+        }
+    }
 
+    private fun setupOnClickListeners() {
+        with(binding) {
+            toolbar.setNavigationOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
             ivArrowLeft.setOnClickListener {
                 moveRecyclerView(-1)
             }
@@ -97,8 +109,18 @@ class MovieDetailsFragment : Fragment() {
             }
 
             rvMedia.adapter = mediaAdapter
-            rvMedia.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            rvMedia.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             PagerSnapHelper().attachToRecyclerView(rvMedia)
+        }
+    }
+
+    private fun setupVisibility() {
+        with(binding) {
+            clContent.visibility = View.INVISIBLE
+            lifecycleScope.launch {
+
+            }
         }
     }
 
@@ -120,7 +142,7 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun onCastClick(castMember: CastMember){
+    private fun onCastClick(castMember: CastMember) {
         findNavController().safeNavigateWithArgs(
             MovieDetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
         )
@@ -128,5 +150,6 @@ class MovieDetailsFragment : Fragment() {
 
     companion object {
         private const val OVERVIEW_MAX_CHARACTERS = 200
+        private val scores = listOf("Add rating", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     }
 }

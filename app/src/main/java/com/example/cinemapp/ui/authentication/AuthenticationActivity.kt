@@ -63,7 +63,9 @@ class AuthenticationActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.signInAttempt.collect { success ->
                 if (success) {
-                    finishThenStart(this@AuthenticationActivity, MainActivity::class.java)
+                    if (isTaskRoot)
+                        finishThenStart(this@AuthenticationActivity, MainActivity::class.java)
+                    else onBackPressedDispatcher.onBackPressed()
                 } else {
                     val toast = Toast.makeText(
                         this@AuthenticationActivity,

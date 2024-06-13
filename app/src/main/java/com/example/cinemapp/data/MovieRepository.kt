@@ -208,6 +208,7 @@ class MovieRepository(
 
     suspend fun deleteSession(sessionId: String): SessionDeleteResponseDTO? {
         val body = SessionDeleteBodyDTO(sessionId)
+        localCache.clearProfileCache()
         return getBodyFromResponse(remoteDataSource.deleteSession(body))
     }
 

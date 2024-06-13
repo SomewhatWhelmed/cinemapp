@@ -6,19 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardEmbeddedVideoBinding
 import com.example.cinemapp.databinding.CardImageBinding
 import com.example.cinemapp.ui.main.model.Media
+import com.example.cinemapp.util.loadImage
 
 sealed class MediaViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     class ImageViewHolder(private val binding: CardImageBinding) : MediaViewHolder(binding) {
         fun bind(image: Media.Image) {
             with(binding) {
-                Glide.with(root.context)
-                    .load(image.filePath)
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .into(binding.ivImage)
+                loadImage(image.filePath, ivImage, root.context, R.drawable.ic_placeholder_movie)
             }
         }
     }
