@@ -156,12 +156,11 @@
                 android:gravity="center"
                 android:paddingHorizontal="30dp"
                 android:paddingVertical="10dp"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
                 android:text="7/10"
                 android:textColor="@color/md_theme_secondary"
-                android:textSize="12sp"
-                android:textStyle="bold"
+                android:textSize="14sp"
                 app:drawableLeftCompat="@drawable/vic_rating"
                 app:layout_constraintBottom_toTopOf="@id/clListControls"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -200,18 +199,30 @@
                         app:strokeColor="@color/md_theme_onPrimary"
                         app:strokeWidth="3dp">
 
-                        <ImageView
-                            android:id="@+id/ivUserRating"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="10dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/vic_rating_empty"
-                            app:tint="@color/md_theme_onPrimary" />
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:id="@+id/tvUserRating"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="@color/md_theme_surface"
+                                android:textSize="30sp"/>
+                            <ImageView
+                                android:id="@+id/ivUserRating"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="10dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/vic_rating_empty"
+                                app:tint="@color/md_theme_onPrimary" />
+                        </RelativeLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:id="@+id/tvUserRating"
+                        android:id="@+id/tvUserRatingLabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -245,13 +256,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
-                            android:importantForAccessibility="no"
                             android:src="@drawable/vic_favorite_empty"
-                            app:tint="@color/md_theme_onPrimary" />
+                            android:importantForAccessibility="no" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:id="@+id/tvFavorite"
+                        android:id="@+id/tvFavoriteLabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -275,9 +285,10 @@
                         android:id="@+id/cvWatchlist"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:cardBackgroundColor="@color/md_theme_onPrimary"
+                        app:cardBackgroundColor="@color/md_theme_surface"
                         app:cardCornerRadius="25dp"
-                        app:strokeWidth="0dp">
+                        app:strokeColor="@color/md_theme_onPrimary"
+                        app:strokeWidth="3dp">
 
                         <ImageView
                             android:id="@+id/ivWatchlist"
@@ -285,12 +296,12 @@
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/vic_watchlist"
-                            app:tint="@color/md_theme_primary" />
+                            android:src="@drawable/vic_watchlist_empty"
+                            app:tint="@color/md_theme_onPrimary" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
-                        android:id="@+id/tvWatchlist"
+                        android:id="@+id/tvWatchlistLabel"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

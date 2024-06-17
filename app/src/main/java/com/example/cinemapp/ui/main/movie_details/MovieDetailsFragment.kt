@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,6 +22,7 @@ import com.example.cinemapp.util.formatRating
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
+import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,16 +55,18 @@ class MovieDetailsFragment : Fragment() {
 
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
-                setupViews(details)
+                setupDetails(details)
                 binding.clContent.visibility = View.VISIBLE
                 binding.cpiLoading.visibility = View.GONE
             }
+
+            setupUserListsViews(it.isInFavorite, it.isInWatchlist, it.userRating)
             castAdapter.setCast(it.cast)
             mediaAdapter.setMedia(it.media)
         }
     }
 
-    private fun setupViews(details: MovieDetails) {
+    private fun setupDetails(details: MovieDetails) {
         with(binding) {
             tvTitle.text = details.title
             tvGenres.text = details.genres.joinToString(", ") { genre -> genre.name }
@@ -82,6 +85,78 @@ class MovieDetailsFragment : Fragment() {
                 tvOverview.text = details.overview
             }
         }
+    }
+
+    private fun setupUserListsViews(
+        isInFavorite: Boolean,
+        isInWatchlist: Boolean,
+        userRating: Int?
+    ) {
+        setupRatingButton(userRating)
+        setupFavoriteButton(isInFavorite)
+        setupWatchlistButton(isInWatchlist)
+    }
+
+    private fun setupRatingButton(userRating: Int?) {
+        setupButtonColor(
+            binding.cvUserRating,
+            binding.ivUserRating,
+            R.color.md_theme_onPrimary,
+            R.color.md_theme_surface,
+            R.drawable.vic_rating,
+            R.drawable.vic_rating_empty,
+            userRating?.let { true } ?: false
+        )
+        userRating?.let {
+            binding.ivUserRating.visibility = View.INVISIBLE
+            binding.tvUserRating.text = it.toString()
+            binding.tvUserRatingLabel.text = "Your rating"
+        }
+    }
+
+    private fun setupFavoriteButton(isInFavorite: Boolean) {
+        setupButtonColor(
+            binding.cvFavorite,
+            binding.ivFavorite,
+            R.color.md_theme_onPrimary,
+            R.color.md_theme_surface,
+            R.drawable.vic_favorite,
+            R.drawable.vic_favorite_empty,
+            isInFavorite
+        )
+    }
+    private fun setupWatchlistButton(isInWatchlist: Boolean) {
+        setupButtonColor(
+            binding.cvWatchlist,
+            binding.ivWatchlist,
+            R.color.md_theme_onPrimary,
+            R.color.md_theme_surface,
+            R.drawable.vic_watchlist,
+            R.drawable.vic_watchlist_empty,
+            isInWatchlist
+        )
+    }
+
+    private fun setupButtonColor(
+        materialCardView: MaterialCardView,
+        imageView: ImageView,
+        contrastColorId: Int,
+        backgroundColorId: Int,
+        imageFullId: Int,
+        imageEmptyId: Int,
+        isPressed: Boolean
+    ) {
+        materialCardView.setCardBackgroundColor(
+            requireContext().getColor(
+                if (isPressed) contrastColorId else backgroundColorId
+            )
+        )
+        imageView.setImageResource(if (isPressed) imageFullId else imageEmptyId)
+        imageView.setColorFilter(
+            requireContext().getColor(
+                if (isPressed) backgroundColorId else contrastColorId
+            ), android.graphics.PorterDuff.Mode.SRC_IN
+        )
     }
 
     private fun setupOnClickListeners() {
@@ -119,7 +194,8 @@ class MovieDetailsFragment : Fragment() {
         with(binding) {
             clContent.visibility = View.INVISIBLE
             lifecycleScope.launch {
-
+                clListControls.visibility =
+                    viewModel.session.firstOrNull()?.let { View.VISIBLE } ?: View.GONE
             }
         }
     }

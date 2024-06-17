@@ -7,6 +7,7 @@ import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.util.mappers.MovieListMapper
 import com.example.cinemapp.util.mappers.ProfileMapper
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val movieRepository: MovieRepository,
     private val userPrefs: UserPreferences,
-    private val profileMapper: ProfileMapper
+    private val profileMapper: ProfileMapper,
+    private val movieListMapper: MovieListMapper
 ) : ViewModel() {
 
     data class State(
@@ -92,6 +94,15 @@ class ProfileViewModel(
                 val sessionId = userPrefs.getSessionId().firstOrNull()
                 sessionId?.let {
                     _state.update {
+                        val movieListInfo =
+                            (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
+                                movieRepository.getMovieList(
+                                    movieListType,
+                                    if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                                    sessionId = sessionId
+                                )
+                                    ?.let { list -> movieListMapper.mapToCardList(list, 400) }
+                                    ?: emptyList())
                         it.copy(
                             pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
                             movieListType = movieListType,
@@ -101,7 +112,7 @@ class ProfileViewModel(
                                     if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
                                     sessionId = sessionId
                                 )
-                                    ?.let { list -> profileMapper.mapToCardList(list, 400) }
+                                    ?.let { list -> movieListMapper.mapToCardList(list, 400) }
                                     ?: emptyList()))
                     }
                 } ?: setPagingRunning(false)

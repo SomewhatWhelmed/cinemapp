@@ -7,6 +7,7 @@ import com.example.cinemapp.data.model.ImageDTO
 import com.example.cinemapp.data.model.MovieCreditsDTO
 import com.example.cinemapp.data.model.MovieDTO
 import com.example.cinemapp.data.model.MovieDetailsDTO
+import com.example.cinemapp.data.model.MovieResponseDTO
 import com.example.cinemapp.data.model.PersonDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
@@ -55,9 +56,26 @@ class MovieRepository(
                 MovieListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
                 MovieListType.POPULAR -> remoteDataSource.getPopular(page = page)
                 MovieListType.TOP_RATED -> remoteDataSource.getTopRated(page = page)
-                MovieListType.FAVORITE -> sessionId?.let { remoteDataSource.getFavorite(page = page, sessionId = it) }
-                MovieListType.WATCHLIST -> sessionId?.let { remoteDataSource.getWatchlist(page = page, sessionId = it) }
-                MovieListType.RATED -> sessionId?.let { remoteDataSource.getRated(page = page, sessionId = it) }
+                MovieListType.FAVORITE -> sessionId?.let {
+                    remoteDataSource.getFavorite(
+                        page = page,
+                        sessionId = it
+                    )
+                }
+
+                MovieListType.WATCHLIST -> sessionId?.let {
+                    remoteDataSource.getWatchlist(
+                        page = page,
+                        sessionId = it
+                    )
+                }
+
+                MovieListType.RATED -> sessionId?.let {
+                    remoteDataSource.getRated(
+                        page = page,
+                        sessionId = it
+                    )
+                }
             }
             response?.let {
                 if (response.isSuccessful) {
@@ -74,6 +92,27 @@ class MovieRepository(
             Log.e(TAG, e.message ?: "Unknown error")
             null
         }
+    }
+
+    suspend fun getMovieListAllPages(
+        movieListType: MovieListType,
+        sessionId: String? = null
+    ): List<MovieDTO> {
+        val firstPage = when (movieListType) {
+            MovieListType.UPCOMING -> remoteDataSource.getUpcoming()
+            MovieListType.POPULAR -> remoteDataSource.getPopular()
+            MovieListType.TOP_RATED -> remoteDataSource.getTopRated()
+            MovieListType.FAVORITE -> sessionId?.let { remoteDataSource.getFavorite(sessionId = it) }
+            MovieListType.WATCHLIST -> sessionId?.let { remoteDataSource.getWatchlist(sessionId = it) }
+            MovieListType.RATED -> sessionId?.let { remoteDataSource.getRated(sessionId = it) }
+        }?.let {
+            getBodyFromResponse(it)
+        }
+        val fullList = mutableListOf<MovieDTO>()
+        for (i in 1..(firstPage?.totalPages ?: 0)) {
+            getMovieList(movieListType, i, sessionId)?.let { fullList.addAll(it) }
+        }
+        return fullList
     }
 
     suspend fun getSearchPersonList(query: String, page: Int = 1): List<PersonDTO>? {
@@ -236,6 +275,12 @@ class MovieRepository(
 
     suspend fun getAccountDetails(sessionId: String): AccountDetailsDTO? {
         return getBodyFromResponse(remoteDataSource.getAccountDetails(sessionId))
+    }
+
+    suspend fun isMovieInFavorites(sessionId: String, movieId: String): Boolean {
+        val found = false
+
+        return found
     }
 
 

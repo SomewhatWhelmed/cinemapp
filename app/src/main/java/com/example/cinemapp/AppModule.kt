@@ -11,10 +11,11 @@ import com.example.cinemapp.ui.main.home.HomeViewModel
 import com.example.cinemapp.ui.main.profile.ProfileViewModel
 import com.example.cinemapp.ui.main.search.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
+import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.ActorDetailsMapper
 import com.example.cinemapp.util.mappers.AuthenticationMapper
 import com.example.cinemapp.util.mappers.MovieDetailsMapper
-import com.example.cinemapp.util.mappers.HomeMapper
+import com.example.cinemapp.util.mappers.MovieListMapper
 import com.example.cinemapp.util.mappers.SearchMapper
 import com.example.cinemapp.util.mappers.MediaUrlMapper
 import com.example.cinemapp.util.mappers.ProfileMapper
@@ -58,11 +59,12 @@ val appModule = module {
     }
     single { MediaUrlMapper() }
     single { SearchMapper(get()) }
-    single { HomeMapper(get()) }
+    single { MovieListMapper(get()) }
     single { MovieDetailsMapper(get()) }
     single { ActorDetailsMapper(get()) }
     single { AuthenticationMapper() }
     single { ProfileMapper(get(), get()) }
+    single { UserDataUtil() }
     viewModel {
         SplashViewModel(get(), get())
     }
@@ -70,7 +72,7 @@ val appModule = module {
         HomeViewModel(get(), get())
     }
     viewModel {
-        MovieDetailsViewModel(get(), get(), get())
+        MovieDetailsViewModel(get(), get(), get(), get())
     }
     viewModel {
         ActorDetailsViewModel(get(), get())
@@ -82,6 +84,6 @@ val appModule = module {
         AuthenticationViewModel(get(), get(), get())
     }
     viewModel {
-        ProfileViewModel(get(), get(), get())
+        ProfileViewModel(get(), get(), get(), get())
     }
 }
