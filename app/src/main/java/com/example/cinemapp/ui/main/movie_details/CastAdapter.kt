@@ -1,6 +1,8 @@
 package com.example.cinemapp.ui.main.movie_details
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
+class CastAdapter(
+    private val context: Context
+) : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
 
     private var cast: List<CastMember> = emptyList()
 
@@ -37,8 +41,13 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
         holder.bind(cast[position])
         if (position == 0) {
-            val marginParams = holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams
-            marginParams.leftMargin += 10
+            val marginParams =
+                holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams
+            marginParams.leftMargin = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
+                context.resources.displayMetrics
+            ).toInt()
         }
 
     }
@@ -66,5 +75,10 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
                 )
             }
         }
+    }
+
+    companion object {
+        private const val BASE_CARD_MARGIN = 5
+        private const val FIRST_ITEM_MARGIN_MOD = 2.0f
     }
 }

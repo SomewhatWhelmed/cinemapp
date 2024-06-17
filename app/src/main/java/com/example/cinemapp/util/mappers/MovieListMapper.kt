@@ -19,8 +19,8 @@ class MovieListMapper(
         )
     }
 
-    fun mapToCardList(list: List<MovieDTO>, imageResolution: Int? = null) =
-        list.map { mapToCard(it, imageResolution) }
+    fun mapToCardList(list: List<MovieDTO>?, imageResolution: Int? = null) =
+        list?.map { mapToCard(it, imageResolution) } ?: emptyList()
 
 
     fun mapToCardListInfo(movieResponseDTO: MovieResponseDTO, imageResolution: Int? = null): MovieListInfo {

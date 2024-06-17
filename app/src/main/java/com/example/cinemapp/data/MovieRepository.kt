@@ -14,6 +14,9 @@ import com.example.cinemapp.data.model.RequestTokenResponseDTO
 import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
+import com.example.cinemapp.data.model.SetFavoriteBodyDTO
+import com.example.cinemapp.data.model.SetWatchlistBodyDTO
+import com.example.cinemapp.data.model.StatusResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
@@ -50,7 +53,7 @@ class MovieRepository(
         movieListType: MovieListType,
         page: Int = 1,
         sessionId: String? = null
-    ): List<MovieDTO>? {
+    ): MovieResponseDTO? {
         return localCache.getMovieList(movieListType, page) ?: try {
             val response = when (movieListType) {
                 MovieListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
@@ -80,8 +83,10 @@ class MovieRepository(
             response?.let {
                 if (response.isSuccessful) {
                     response.body()?.let { movieResponse ->
-                        localCache.insert(movieListType, page, movieResponse.results)
-                        movieResponse.results
+                        movieResponse.results?.let { results ->
+                            localCache.insert(movieListType, page, results, movieResponse.totalPages)
+                        }
+                        movieResponse
                     }
                 } else {
                     Log.e(TAG, response.message())
@@ -110,7 +115,7 @@ class MovieRepository(
         }
         val fullList = mutableListOf<MovieDTO>()
         for (i in 1..(firstPage?.totalPages ?: 0)) {
-            getMovieList(movieListType, i, sessionId)?.let { fullList.addAll(it) }
+            getMovieList(movieListType, i, sessionId)?.let { fullList.addAll(it.results ?: emptyList()) }
         }
         return fullList
     }
@@ -277,12 +282,29 @@ class MovieRepository(
         return getBodyFromResponse(remoteDataSource.getAccountDetails(sessionId))
     }
 
-    suspend fun isMovieInFavorites(sessionId: String, movieId: String): Boolean {
-        val found = false
-
-        return found
+    private suspend fun setFavorite(sessionId: String, mediaId: Int, setValue: Boolean, mediaType: String): StatusResponseDTO? {
+        return getBodyFromResponse(remoteDataSource.setFavorite(sessionId, SetFavoriteBodyDTO(mediaType, mediaId, setValue)))
     }
 
+    suspend fun setFavoriteMovie(sessionId: String, movieId: Int, setValue: Boolean): StatusResponseDTO? {
+        val response =  setFavorite(sessionId, movieId, setValue, "movie")
+        response?.let {
+            localCache.clearCache(MovieListType.FAVORITE)
+        }
+        return response
+    }
+
+    private suspend fun setWatchlist(sessionId: String, mediaId: Int, setValue: Boolean, mediaType: String): StatusResponseDTO? {
+        return getBodyFromResponse(remoteDataSource.setWatchlist(sessionId, SetWatchlistBodyDTO(mediaType, mediaId, setValue)))
+    }
+
+    suspend fun setWatchlistMovie(sessionId: String, movieId: Int, setValue: Boolean): StatusResponseDTO? {
+        val response =  setWatchlist(sessionId, movieId, setValue, "movie")
+        response?.let {
+            localCache.clearCache(MovieListType.WATCHLIST)
+        }
+        return response
+    }
 
     companion object {
         private const val TAG = "MOVIE_API"

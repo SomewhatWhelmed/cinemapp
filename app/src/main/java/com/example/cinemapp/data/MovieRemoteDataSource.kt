@@ -12,6 +12,9 @@ import com.example.cinemapp.data.model.SearchPersonResponseDTO
 import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
+import com.example.cinemapp.data.model.SetFavoriteBodyDTO
+import com.example.cinemapp.data.model.SetWatchlistBodyDTO
+import com.example.cinemapp.data.model.StatusResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoResponseDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
@@ -129,6 +132,18 @@ interface MovieRemoteDataSource {
         @Query("session_id") sessionId: String,
         @Query("sort_by") sortBy: String = "created_at.desc"
     ): Response<MovieResponseDTO>
+
+    @POST("$API_VERSION/account/account_id/favorite")
+    suspend fun setFavorite(
+        @Query("session_id") sessionId: String,
+        @Body body: SetFavoriteBodyDTO
+    ): Response<StatusResponseDTO>
+
+    @POST("$API_VERSION/account/account_id/watchlist")
+    suspend fun setWatchlist(
+        @Query("session_id") sessionId: String,
+        @Body body: SetWatchlistBodyDTO
+    ): Response<StatusResponseDTO>
 
     companion object {
         const val API_VERSION = 3

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
+import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.databinding.FragmentProfileBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.shared.MovieAdapter
@@ -65,7 +67,7 @@ class ProfileFragment : Fragment() {
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if (binding.rvMovieList.isEndOfScroll()) {
+                    if (binding.rvMovieList.isEndOfScroll() && !viewModel.isLastPage()) {
                         viewModel.getNextPage()
                     }
                 }
@@ -110,20 +112,26 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupVisibility() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            with(binding) {
-                btnSignIn.visibility = View.INVISIBLE
-                clContent.visibility = View.INVISIBLE
-                cpiLoading.visibility = View.VISIBLE
-            }
+        with(binding) {
+            btnSignIn.visibility = View.INVISIBLE
+            clContent.visibility = View.INVISIBLE
+            cpiLoading.visibility = View.VISIBLE
         }
-
     }
 
 
     private fun setupTabs() {
         with(binding) {
-            tlMovieLists.selectTab(tlMovieLists.getTabAt(0))
+            tlMovieLists.selectTab(
+                tlMovieLists.getTabAt(
+                    when (viewModel.state.value.movieListType) {
+                        MovieRepository.MovieListType.FAVORITE -> 0
+                        MovieRepository.MovieListType.WATCHLIST -> 1
+                        MovieRepository.MovieListType.RATED -> 2
+                        else -> 0
+                    }
+                )
+            )
             tlMovieLists.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tab?.position?.let { onTabChanged(it) }

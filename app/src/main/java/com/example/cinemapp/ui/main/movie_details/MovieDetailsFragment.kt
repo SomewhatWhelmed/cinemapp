@@ -1,5 +1,6 @@
 package com.example.cinemapp.ui.main.movie_details
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,8 +24,10 @@ import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
 import com.google.android.material.card.MaterialCardView
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -34,7 +37,7 @@ class MovieDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val viewModel by viewModel<MovieDetailsViewModel>()
-    private val castAdapter = CastAdapter()
+    private val castAdapter: CastAdapter by inject()
     private val mediaAdapter = MediaAdapter()
 
 
@@ -43,15 +46,16 @@ class MovieDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        setupVisibility()
-        viewModel.getMovieDetails(args.movieId)
         setupAdapter()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+        setupVisibility()
+        viewModel.getMovieDetails(args.movieId)
         setupOnClickListeners()
+        setupEventListeners()
 
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
@@ -124,7 +128,10 @@ class MovieDetailsFragment : Fragment() {
             R.drawable.vic_favorite_empty,
             isInFavorite
         )
+        binding.tvFavoriteLabel.text =
+            if (isInFavorite) "Remove from Favorites" else "Add to Favorites"
     }
+
     private fun setupWatchlistButton(isInWatchlist: Boolean) {
         setupButtonColor(
             binding.cvWatchlist,
@@ -135,6 +142,8 @@ class MovieDetailsFragment : Fragment() {
             R.drawable.vic_watchlist_empty,
             isInWatchlist
         )
+        binding.tvWatchlistLabel.text =
+            if (isInWatchlist) "Remove from Watchlist" else "Add to Watchlist"
     }
 
     private fun setupButtonColor(
@@ -169,6 +178,33 @@ class MovieDetailsFragment : Fragment() {
             }
             ivArrowRight.setOnClickListener {
                 moveRecyclerView(1)
+            }
+            cvFavorite.setOnClickListener {
+                viewModel.setFavorite(args.movieId)
+            }
+            cvWatchlist.setOnClickListener {
+                viewModel.setWatchlist(args.movieId)
+            }
+            cvUserRating.setOnClickListener {
+                AlertDialog.Builder(context)
+                    .setTitle("Select rating")
+                    .setPositiveButton("Confirm") { dialog, which ->
+
+                    }
+                    .setNegativeButton("Cancel") { dialog, which ->
+
+                    }
+                    .setSingleChoiceItems(scores, 0) { dialog, which ->
+
+                    }
+            }
+        }
+    }
+
+    private fun setupEventListeners() {
+        lifecycleScope.launch {
+            viewModel.setFavoriteFinished.collect { state ->
+                setupFavoriteButton(state)
             }
         }
     }
@@ -226,6 +262,6 @@ class MovieDetailsFragment : Fragment() {
 
     companion object {
         private const val OVERVIEW_MAX_CHARACTERS = 200
-        private val scores = listOf("Add rating", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        private val scores = arrayOf("No rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
     }
 }

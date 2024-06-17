@@ -10,8 +10,10 @@ import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
@@ -35,6 +37,15 @@ class MovieDetailsViewModel(
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
+
+    private val _setFavoriteFinished: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val setFavoriteFinished = _setFavoriteFinished.asSharedFlow()
+
+    private val _setWatchlistFinished: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val setWatchlistFinished = _setWatchlistFinished.asSharedFlow()
+
+    private val _setRatingFinished: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val setRatingFinished = _setRatingFinished.asSharedFlow()
 
     val session = userPrefs.getSessionId()
 
@@ -116,4 +127,36 @@ class MovieDetailsViewModel(
             video.type == "Trailer" && video.official && video.site == "YouTube"
         }
     }
+
+    fun setFavorite(movieId: Int) {
+        viewModelScope.launch {
+            session.firstOrNull()?.let { sessionId ->
+                val currentState = state.value.isInFavorite
+                movieRepository.setFavoriteMovie(sessionId, movieId, !currentState)
+                _setFavoriteFinished.emit(!currentState)
+                _state.update {
+                    it.copy(
+                        isInFavorite = !currentState
+                    )
+                }
+            }
+        }
+    }
+
+    fun setWatchlist(movieId: Int) {
+        viewModelScope.launch {
+            session.firstOrNull()?.let { sessionId ->
+                val currentState = state.value.isInWatchlist
+                movieRepository.setWatchlistMovie(sessionId, movieId, !currentState)
+                _setWatchlistFinished.emit(!currentState)
+                _state.update {
+                    it.copy(
+                        isInWatchlist = !currentState
+                    )
+                }
+            }
+        }
+    }
+
+
 }

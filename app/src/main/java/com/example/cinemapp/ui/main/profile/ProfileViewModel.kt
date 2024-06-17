@@ -7,6 +7,7 @@ import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.ui.main.model.MovieListInfo
 import com.example.cinemapp.util.mappers.MovieListMapper
 import com.example.cinemapp.util.mappers.ProfileMapper
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,7 +27,9 @@ class ProfileViewModel(
 
     data class State(
         val accountDetails: AccountDetails? = null,
+        val isLoading: Boolean = true,
         val pagesLoaded: Int = 0,
+        val totalPages: Int = 1,
         val movies: List<MovieCard> = emptyList(),
         val movieListType: MovieRepository.MovieListType = MovieRepository.MovieListType.FAVORITE
     )
@@ -56,7 +59,11 @@ class ProfileViewModel(
 
     fun getInitialData() {
         getAccountDetails()
-        getFavoriteNextPage()
+        if (state.value.pagesLoaded == 0)
+            getFavoriteNextPage()
+        else {
+            getNextPage(state.value.movieListType, true)
+        }
     }
 
     private fun getAccountDetails() {
@@ -87,33 +94,26 @@ class ProfileViewModel(
         getNextPage(MovieRepository.MovieListType.RATED)
     }
 
-    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
+    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType, resetPaging: Boolean = false) {
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
                 val sessionId = userPrefs.getSessionId().firstOrNull()
                 sessionId?.let {
                     _state.update {
-                        val movieListInfo =
-                            (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
-                                movieRepository.getMovieList(
-                                    movieListType,
-                                    if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                                    sessionId = sessionId
-                                )
-                                    ?.let { list -> movieListMapper.mapToCardList(list, 400) }
-                                    ?: emptyList())
+                        val newPage = if (resetPaging) 1 else if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1
+                        val listInfo = movieRepository.getMovieList(
+                            movieListType,
+                            newPage,
+                            sessionId = sessionId
+                        )?.let { listInfo -> movieListMapper.mapToCardListInfo(listInfo, 400) }
+                            ?: MovieListInfo()
                         it.copy(
-                            pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
+                            pagesLoaded = newPage,
                             movieListType = movieListType,
-                            movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
-                                movieRepository.getMovieList(
-                                    movieListType,
-                                    if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                                    sessionId = sessionId
-                                )
-                                    ?.let { list -> movieListMapper.mapToCardList(list, 400) }
-                                    ?: emptyList()))
+                            movies = listInfo.results,
+                            totalPages = listInfo.totalPages
+                        )
                     }
                 } ?: setPagingRunning(false)
             }
@@ -132,4 +132,7 @@ class ProfileViewModel(
         }
     }
 
+    fun isLastPage(): Boolean {
+        return state.value.pagesLoaded >= state.value.totalPages
+    }
 }
