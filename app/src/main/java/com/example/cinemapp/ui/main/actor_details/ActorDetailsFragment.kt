@@ -19,6 +19,7 @@ import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ActorDetailsFragment : Fragment() {
@@ -27,7 +28,7 @@ class ActorDetailsFragment : Fragment() {
     private var _binding: FragmentActorDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: ActorDetailsFragmentArgs by navArgs()
-    private val creditAdapter = CreditsAdapter()
+    private val creditAdapter:CreditsAdapter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

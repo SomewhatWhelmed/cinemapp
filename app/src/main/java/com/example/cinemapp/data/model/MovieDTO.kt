@@ -9,4 +9,5 @@ data class MovieDTO(
     @SerializedName("release_date") val releaseDate: String? = null,
     @SerializedName("title") val title: String? = null,
     @SerializedName("vote_average") val voteAverage: Float? = null,
+    @SerializedName("rating") val rating: Int? = null
 )

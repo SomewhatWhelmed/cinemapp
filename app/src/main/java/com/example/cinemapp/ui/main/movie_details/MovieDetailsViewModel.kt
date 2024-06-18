@@ -3,30 +3,42 @@ package com.example.cinemapp.ui.main.movie_details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
+import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieDetails
+import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
-    private val movieDetailsMapper: MovieDetailsMapper
+    private val movieDetailsMapper: MovieDetailsMapper,
+    private val userDataUtil: UserDataUtil,
+    private val userPrefs: UserPreferences
 ) : ViewModel() {
 
     data class State(
         val details: MovieDetails? = null,
         val cast: List<CastMember> = emptyList(),
-        val media: List<Media> = emptyList()
+        val media: List<Media> = emptyList(),
+        val isInFavorite: Boolean = false,
+        val isInWatchlist: Boolean = false,
+        val userRating: Int? = null,
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
+
+    val session = userPrefs.getSessionId()
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
@@ -51,6 +63,35 @@ class MovieDetailsViewModel(
                     ?.let { chooseTrailer(movieDetailsMapper.mapToVideoList(it)) }
             }
 
+            val sessionId = session.firstOrNull()
+            val userRating = sessionId?.let {
+                userDataUtil.getUserRating(
+                    movieId,
+                    movieRepository.getMovieListAllPages(
+                        MovieRepository.MovieListType.RATED,
+                        sessionId
+                    )
+                )
+            }
+            val isInFavorite = sessionId?.let {
+                userDataUtil.isMovieInList(
+                    movieId,
+                    movieRepository.getMovieListAllPages(
+                        MovieRepository.MovieListType.FAVORITE,
+                        sessionId
+                    )
+                )
+            } ?: false
+            val isInWatchlist = sessionId?.let {
+                userDataUtil.isMovieInList(
+                    movieId,
+                    movieRepository.getMovieListAllPages(
+                        MovieRepository.MovieListType.WATCHLIST,
+                        sessionId
+                    )
+                )
+            } ?: false
+
             val newDetails: MovieDetails? = detailsCall.await()
             val newCredits: List<CastMember> = creditsCall.await()
             val newImages: List<Media.Image> = imageCall.await()
@@ -63,15 +104,60 @@ class MovieDetailsViewModel(
                     media = (newDetails
                         ?.let { details -> listOf(Media.Image(details.backdropPath)) }
                         ?.plus(listOfNotNull(newTrailer)))
-                        ?.plus(newImages.filter { media -> media.filePath != "" }) ?: emptyList()
+                        ?.plus(newImages.filter { media -> media.filePath != "" }) ?: emptyList(),
+                    userRating = userRating,
+                    isInFavorite = isInFavorite,
+                    isInWatchlist = isInWatchlist
                 )
             }
         }
     }
 
     private fun chooseTrailer(videos: List<Media.Video>): Media.Video? {
-        return videos.find {
-            video -> video.type == "Trailer" && video.official && video.site == "YouTube"
+        return videos.find { video ->
+            video.type == "Trailer" && video.official && video.site == "YouTube"
+        }
+    }
+
+    fun setFavorite(movieId: Int) {
+        viewModelScope.launch {
+            session.firstOrNull()?.let { sessionId ->
+                val currentState = state.value.isInFavorite
+                movieRepository.setFavoriteMovie(sessionId, movieId, !currentState)
+                _state.update {
+                    it.copy(
+                        isInFavorite = !currentState
+                    )
+                }
+            }
+        }
+    }
+
+    fun setWatchlist(movieId: Int) {
+        viewModelScope.launch {
+            session.firstOrNull()?.let { sessionId ->
+                val currentState = state.value.isInWatchlist
+                movieRepository.setWatchlistMovie(sessionId, movieId, !currentState)
+                _state.update {
+                    it.copy(
+                        isInWatchlist = !currentState
+                    )
+                }
+            }
+        }
+    }
+
+    fun setRating(movieId: Int, rating: Int) {
+        viewModelScope.launch {
+            session.firstOrNull()?.let { sessionId ->
+                if (rating == 0) movieRepository.deleteRating(sessionId, movieId)
+                else movieRepository.addMovieRating(sessionId, movieId, rating)
+                _state.update {
+                    it.copy(
+                        userRating = if (rating == 0) null else rating
+                    )
+                }
+            }
         }
     }
 }

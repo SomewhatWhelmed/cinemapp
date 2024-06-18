@@ -62,17 +62,23 @@ class AuthenticationActivity : AppCompatActivity() {
     private fun observeSignIn() {
         lifecycleScope.launch {
             viewModel.signInAttempt.collect { success ->
-                if (success) {
-                    finishThenStart(this@AuthenticationActivity, MainActivity::class.java)
-                } else {
-                    val toast = Toast.makeText(
-                        this@AuthenticationActivity,
-                        ERROR_MESSAGE,
-                        Toast.LENGTH_LONG
-                    )
-                    toast.show()
-                }
+                handleSignIn(success)
             }
+        }
+    }
+
+    private fun handleSignIn(success: Boolean) {
+        if (success) {
+            if (isTaskRoot)
+                finishThenStart(this@AuthenticationActivity, MainActivity::class.java)
+            else onBackPressedDispatcher.onBackPressed()
+        } else {
+            val toast = Toast.makeText(
+                this@AuthenticationActivity,
+                ERROR_MESSAGE,
+                Toast.LENGTH_LONG
+            )
+            toast.show()
         }
     }
 

@@ -7,12 +7,17 @@ import com.example.cinemapp.data.model.ImageDTO
 import com.example.cinemapp.data.model.MovieCreditsDTO
 import com.example.cinemapp.data.model.MovieDTO
 import com.example.cinemapp.data.model.MovieDetailsDTO
+import com.example.cinemapp.data.model.MovieResponseDTO
 import com.example.cinemapp.data.model.PersonDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
+import com.example.cinemapp.data.model.RatingRequestBodyDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
 import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
+import com.example.cinemapp.data.model.SetFavoriteBodyDTO
+import com.example.cinemapp.data.model.SetWatchlistBodyDTO
+import com.example.cinemapp.data.model.StatusResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
@@ -49,21 +54,45 @@ class MovieRepository(
         movieListType: MovieListType,
         page: Int = 1,
         sessionId: String? = null
-    ): List<MovieDTO>? {
+    ): MovieResponseDTO? {
         return localCache.getMovieList(movieListType, page) ?: try {
             val response = when (movieListType) {
                 MovieListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
                 MovieListType.POPULAR -> remoteDataSource.getPopular(page = page)
                 MovieListType.TOP_RATED -> remoteDataSource.getTopRated(page = page)
-                MovieListType.FAVORITE -> sessionId?.let { remoteDataSource.getFavorite(page = page, sessionId = it) }
-                MovieListType.WATCHLIST -> sessionId?.let { remoteDataSource.getWatchlist(page = page, sessionId = it) }
-                MovieListType.RATED -> sessionId?.let { remoteDataSource.getRated(page = page, sessionId = it) }
+                MovieListType.FAVORITE -> sessionId?.let {
+                    remoteDataSource.getFavorite(
+                        page = page,
+                        sessionId = it
+                    )
+                }
+
+                MovieListType.WATCHLIST -> sessionId?.let {
+                    remoteDataSource.getWatchlist(
+                        page = page,
+                        sessionId = it
+                    )
+                }
+
+                MovieListType.RATED -> sessionId?.let {
+                    remoteDataSource.getRated(
+                        page = page,
+                        sessionId = it
+                    )
+                }
             }
             response?.let {
                 if (response.isSuccessful) {
                     response.body()?.let { movieResponse ->
-                        localCache.insert(movieListType, page, movieResponse.results)
-                        movieResponse.results
+                        movieResponse.results?.let { results ->
+                            localCache.insert(
+                                movieListType,
+                                page,
+                                results,
+                                movieResponse.totalPages
+                            )
+                        }
+                        movieResponse
                     }
                 } else {
                     Log.e(TAG, response.message())
@@ -74,6 +103,31 @@ class MovieRepository(
             Log.e(TAG, e.message ?: "Unknown error")
             null
         }
+    }
+
+    suspend fun getMovieListAllPages(
+        movieListType: MovieListType,
+        sessionId: String? = null
+    ): List<MovieDTO> {
+        val firstPage = when (movieListType) {
+            MovieListType.UPCOMING -> remoteDataSource.getUpcoming()
+            MovieListType.POPULAR -> remoteDataSource.getPopular()
+            MovieListType.TOP_RATED -> remoteDataSource.getTopRated()
+            MovieListType.FAVORITE -> sessionId?.let { remoteDataSource.getFavorite(sessionId = it) }
+            MovieListType.WATCHLIST -> sessionId?.let { remoteDataSource.getWatchlist(sessionId = it) }
+            MovieListType.RATED -> sessionId?.let { remoteDataSource.getRated(sessionId = it) }
+        }?.let {
+            getBodyFromResponse(it)
+        }
+        val fullList = mutableListOf<MovieDTO>()
+        for (i in 1..(firstPage?.totalPages ?: 0)) {
+            getMovieList(movieListType, i, sessionId)?.let {
+                fullList.addAll(
+                    it.results ?: emptyList()
+                )
+            }
+        }
+        return fullList
     }
 
     suspend fun getSearchPersonList(query: String, page: Int = 1): List<PersonDTO>? {
@@ -208,6 +262,7 @@ class MovieRepository(
 
     suspend fun deleteSession(sessionId: String): SessionDeleteResponseDTO? {
         val body = SessionDeleteBodyDTO(sessionId)
+        localCache.clearProfileCache()
         return getBodyFromResponse(remoteDataSource.deleteSession(body))
     }
 
@@ -237,6 +292,84 @@ class MovieRepository(
         return getBodyFromResponse(remoteDataSource.getAccountDetails(sessionId))
     }
 
+    private suspend fun setFavorite(
+        sessionId: String,
+        mediaId: Int,
+        setValue: Boolean,
+        mediaType: String
+    ): StatusResponseDTO? {
+        return getBodyFromResponse(
+            remoteDataSource.setFavorite(
+                sessionId,
+                SetFavoriteBodyDTO(mediaType, mediaId, setValue)
+            )
+        )
+    }
+
+    suspend fun setFavoriteMovie(
+        sessionId: String,
+        movieId: Int,
+        setValue: Boolean
+    ): StatusResponseDTO? {
+        val response = setFavorite(sessionId, movieId, setValue, "movie")
+        response?.let {
+            localCache.clearCache(MovieListType.FAVORITE)
+        }
+        return response
+    }
+
+    private suspend fun setWatchlist(
+        sessionId: String,
+        mediaId: Int,
+        setValue: Boolean,
+        mediaType: String
+    ): StatusResponseDTO? {
+        return getBodyFromResponse(
+            remoteDataSource.setWatchlist(
+                sessionId,
+                SetWatchlistBodyDTO(mediaType, mediaId, setValue)
+            )
+        )
+    }
+
+    suspend fun setWatchlistMovie(
+        sessionId: String,
+        movieId: Int,
+        setValue: Boolean
+    ): StatusResponseDTO? {
+        val response = setWatchlist(sessionId, movieId, setValue, "movie")
+        response?.let {
+            localCache.clearCache(MovieListType.WATCHLIST)
+        }
+        return response
+    }
+
+    suspend fun addMovieRating(sessionId: String, movieId: Int, rating: Int): StatusResponseDTO? {
+        val response = getBodyFromResponse(
+            remoteDataSource.addRating(
+                movieId,
+                sessionId,
+                RatingRequestBodyDTO(rating.toFloat())
+            )
+        )
+        response?.let {
+            localCache.clearCache(MovieListType.RATED)
+        }
+        return response
+    }
+
+    suspend fun deleteRating(sessionId: String, movieId: Int): StatusResponseDTO? {
+        val response = getBodyFromResponse(
+            remoteDataSource.deleteRating(
+                movieId,
+                sessionId
+            )
+        )
+        response?.let {
+            localCache.clearCache(MovieListType.RATED)
+        }
+        return response
+    }
 
     companion object {
         private const val TAG = "MOVIE_API"

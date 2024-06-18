@@ -7,11 +7,15 @@ import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.data.model.MovieResponseDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.data.model.PersonMovieCreditsResponseDTO
+import com.example.cinemapp.data.model.RatingRequestBodyDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
 import com.example.cinemapp.data.model.SearchPersonResponseDTO
 import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
 import com.example.cinemapp.data.model.SessionResponseDTO
+import com.example.cinemapp.data.model.SetFavoriteBodyDTO
+import com.example.cinemapp.data.model.SetWatchlistBodyDTO
+import com.example.cinemapp.data.model.StatusResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoResponseDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
@@ -20,6 +24,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -129,6 +134,35 @@ interface MovieRemoteDataSource {
         @Query("session_id") sessionId: String,
         @Query("sort_by") sortBy: String = "created_at.desc"
     ): Response<MovieResponseDTO>
+
+    @POST("$API_VERSION/account/account_id/favorite")
+    suspend fun setFavorite(
+        @Query("session_id") sessionId: String,
+        @Body body: SetFavoriteBodyDTO
+    ): Response<StatusResponseDTO>
+
+    @POST("$API_VERSION/account/account_id/watchlist")
+    suspend fun setWatchlist(
+        @Query("session_id") sessionId: String,
+        @Body body: SetWatchlistBodyDTO
+    ): Response<StatusResponseDTO>
+
+
+    @Headers("Content-Type: application/json;charset=utf-8")
+    @POST("$API_VERSION/movie/{movie_id}/rating")
+    suspend fun addRating(
+        @Path("movie_id") movieId: Int,
+        @Query("session_id") sessionId: String,
+        @Body body: RatingRequestBodyDTO
+    ): Response<StatusResponseDTO>
+
+
+    @Headers("Content-Type: application/json;charset=utf-8")
+    @DELETE("$API_VERSION/movie/{movie_id}/rating")
+    suspend fun deleteRating(
+        @Path("movie_id") movieId: Int,
+        @Query("session_id") sessionId: String,
+    ): Response<StatusResponseDTO>
 
     companion object {
         const val API_VERSION = 3

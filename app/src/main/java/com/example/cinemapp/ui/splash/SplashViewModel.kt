@@ -7,23 +7,28 @@ import com.example.cinemapp.data.UserPreferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val movieRepository: MovieRepository,
-    userPrefs: UserPreferences
+    private val userPrefs: UserPreferences
 ) : ViewModel() {
 
-    private val _gotoMainScreen: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val gotoMainScreen = _gotoMainScreen.asSharedFlow()
+    private val _goToNextScreen: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val goToNextScreen = _goToNextScreen.asSharedFlow()
 
-    val session = userPrefs.getSessionId()
+    private val session = userPrefs.getSessionId()
 
     fun handleInitialData() {
         viewModelScope.launch {
             movieRepository.getMovieList(MovieRepository.MovieListType.UPCOMING)
+            val validSession = session.firstOrNull()
+                ?.let { movieRepository.getAccountDetails(it)?.let { true } ?: false } ?: false
+            if (!validSession) userPrefs.deleteSessionId()
+
             delay(2000)
-            _gotoMainScreen.emit(Unit)
+            _goToNextScreen.emit(validSession)
         }
     }
 }

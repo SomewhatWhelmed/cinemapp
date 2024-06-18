@@ -1,6 +1,7 @@
 package com.example.cinemapp.util
 
 import android.graphics.Typeface
+import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -8,6 +9,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 
 fun setExpandableTextView(
     text: String,
@@ -62,4 +64,9 @@ fun makeExpandableText(
     )
 
     return spannableString
+}
+
+fun formatRating(rating: Float, maxRating: Int = 10): Spanned {
+    val formatString = "<b>${"%.1f".format(rating)}</b><small>/$maxRating</small>"
+    return HtmlCompat.fromHtml(formatString, HtmlCompat.FROM_HTML_MODE_LEGACY)
 }

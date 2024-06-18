@@ -1,20 +1,26 @@
 package com.example.cinemapp.ui.main.actor_details
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardPersonBinding
 import com.example.cinemapp.ui.main.model.CastMovieCredit
+import com.example.cinemapp.ui.main.movie_details.CastAdapter
+import com.example.cinemapp.util.Direction
 import com.example.cinemapp.util.loadImage
+import com.example.cinemapp.util.setMargin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
+class CreditsAdapter(private val context: Context) :
+    RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
 
     private var credits: List<CastMovieCredit> = emptyList()
 
@@ -36,8 +42,13 @@ class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
 
     override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
         holder.bind(credits[position])
-        if (position == 0)
-            (holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams).marginStart += 10
+        if (position == 0) {
+            holder.binding.cvCardPerson.layoutParams.setMargin(
+                Direction.LEFT,
+                FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
+                context
+            )
+        }
     }
 
     override fun getItemCount(): Int {
@@ -63,5 +74,10 @@ class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.CreditViewHolder>() {
                 )
             }
         }
+    }
+
+    companion object {
+        private const val BASE_CARD_MARGIN = 5
+        private const val FIRST_ITEM_MARGIN_MOD = 2.0f
     }
 }

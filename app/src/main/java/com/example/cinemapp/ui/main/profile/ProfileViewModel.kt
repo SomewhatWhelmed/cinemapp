@@ -7,6 +7,8 @@ import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
+import com.example.cinemapp.ui.main.model.MovieListInfo
+import com.example.cinemapp.util.mappers.MovieListMapper
 import com.example.cinemapp.util.mappers.ProfileMapper
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,12 +21,15 @@ import kotlinx.coroutines.launch
 class ProfileViewModel(
     private val movieRepository: MovieRepository,
     private val userPrefs: UserPreferences,
-    private val profileMapper: ProfileMapper
+    private val profileMapper: ProfileMapper,
+    private val movieListMapper: MovieListMapper
 ) : ViewModel() {
 
     data class State(
         val accountDetails: AccountDetails? = null,
+        val isLoading: Boolean = true,
         val pagesLoaded: Int = 0,
+        val totalPages: Int = 1,
         val movies: List<MovieCard> = emptyList(),
         val movieListType: MovieRepository.MovieListType = MovieRepository.MovieListType.FAVORITE
     )
@@ -54,15 +59,16 @@ class ProfileViewModel(
 
     fun getInitialData() {
         getAccountDetails()
-        getFavoriteNextPage()
+        if (state.value.pagesLoaded == 0)
+            getFavoriteNextPage()
+        else {
+            getNextPage(state.value.movieListType, true)
+        }
     }
 
     private fun getAccountDetails() {
-        Log.i("TEST", "Entered getAccountDetails")
         viewModelScope.launch {
-            Log.i("TEST", "Entered viewModelScope")
             val sessionId = userPrefs.getSessionId().firstOrNull()
-            Log.i("TEST", "Entered session.collect")
             sessionId?.let {
                 movieRepository.getAccountDetails(it)?.let { details ->
                     _state.update { state ->
@@ -76,36 +82,40 @@ class ProfileViewModel(
         }
     }
 
-    fun getFavoriteNextPage() {
+    private fun getFavoriteNextPage() {
         getNextPage(MovieRepository.MovieListType.FAVORITE)
     }
 
-    fun getWatchlistNextPage() {
+    private fun getWatchlistNextPage() {
         getNextPage(MovieRepository.MovieListType.WATCHLIST)
     }
 
-    fun getRatedNextPage() {
+    private fun getRatedNextPage() {
         getNextPage(MovieRepository.MovieListType.RATED)
     }
 
-    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
+    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType, resetPaging: Boolean = false) {
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
                 val sessionId = userPrefs.getSessionId().firstOrNull()
-                _state.update {
-                    it.copy(
-                        pagesLoaded = if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                        movieListType = movieListType,
-                        movies = (if (movieListType == it.movieListType) it.movies else emptyList()).plus(
-                            movieRepository.getMovieList(
-                                movieListType,
-                                if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1,
-                                sessionId = sessionId
-                            )
-                                ?.let { list -> profileMapper.mapToCardList(list, 400) }
-                                ?: emptyList()))
-                }
+                sessionId?.let {
+                    _state.update {
+                        val newPage = if (resetPaging) 1 else if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1
+                        val listInfo = movieRepository.getMovieList(
+                            movieListType,
+                            newPage,
+                            sessionId = sessionId
+                        )?.let { listInfo -> movieListMapper.mapToCardListInfo(listInfo, 400) }
+                            ?: MovieListInfo()
+                        it.copy(
+                            pagesLoaded = newPage,
+                            movieListType = movieListType,
+                            movies = listInfo.results,
+                            totalPages = listInfo.totalPages
+                        )
+                    }
+                } ?: setPagingRunning(false)
             }
         }
     }
@@ -122,4 +132,7 @@ class ProfileViewModel(
         }
     }
 
+    fun isLastPage(): Boolean {
+        return state.value.pagesLoaded >= state.value.totalPages
+    }
 }

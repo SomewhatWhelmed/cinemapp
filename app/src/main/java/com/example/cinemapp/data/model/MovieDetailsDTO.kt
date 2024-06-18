@@ -8,5 +8,6 @@ data class MovieDetailsDTO(
     @SerializedName("genres") val genres: List<GenreDTO>? = null,
     @SerializedName("overview") val overview: String? = null,
     @SerializedName("runtime") val runtime: Int? = null,
-    @SerializedName("title") val title: String? = null
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("vote_average") val voteAverage: Float? = null
 )
