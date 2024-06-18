@@ -1,12 +1,13 @@
 package com.example.cinemapp.ui.main.movie_details
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
 import androidx.lifecycle.lifecycleScope
@@ -55,7 +56,6 @@ class MovieDetailsFragment : Fragment() {
         setupVisibility()
         viewModel.getMovieDetails(args.movieId)
         setupOnClickListeners()
-        setupEventListeners()
 
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
@@ -102,19 +102,25 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun setupRatingButton(userRating: Int?) {
-        setupButtonColor(
-            binding.cvUserRating,
-            binding.ivUserRating,
-            R.color.md_theme_onPrimary,
-            R.color.md_theme_surface,
-            R.drawable.vic_rating,
-            R.drawable.vic_rating_empty,
-            userRating?.let { true } ?: false
-        )
-        userRating?.let {
-            binding.ivUserRating.visibility = View.INVISIBLE
-            binding.tvUserRating.text = it.toString()
-            binding.tvUserRatingLabel.text = "Your rating"
+        with (binding) {
+            setupButtonColor(
+                cvUserRating,
+                ivUserRating,
+                R.color.md_theme_onPrimary,
+                R.color.md_theme_surface,
+                R.drawable.vic_rating,
+                R.drawable.vic_rating_empty,
+                userRating?.let { true } ?: false
+            )
+            userRating?.let {
+                ivUserRating.visibility = View.INVISIBLE
+                tvUserRating.text = it.toString()
+                tvUserRatingLabel.text = "Your rating"
+            } ?: run {
+                tvUserRatingLabel.text = "Rate this"
+                ivUserRating.visibility = View.VISIBLE
+                tvUserRating.text = ""
+            }
         }
     }
 
@@ -186,25 +192,16 @@ class MovieDetailsFragment : Fragment() {
                 viewModel.setWatchlist(args.movieId)
             }
             cvUserRating.setOnClickListener {
-                AlertDialog.Builder(context)
+                AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
                     .setTitle("Select rating")
-                    .setPositiveButton("Confirm") { dialog, which ->
-
+                    .setPositiveButton("Confirm") { dialog, _ ->
+                        viewModel.setRating(
+                            args.movieId,
+                            (dialog as AlertDialog).listView.checkedItemPosition
+                        )
                     }
-                    .setNegativeButton("Cancel") { dialog, which ->
-
-                    }
-                    .setSingleChoiceItems(scores, 0) { dialog, which ->
-
-                    }
-            }
-        }
-    }
-
-    private fun setupEventListeners() {
-        lifecycleScope.launch {
-            viewModel.setFavoriteFinished.collect { state ->
-                setupFavoriteButton(state)
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .setSingleChoiceItems(scores, 0) { _, _ -> }.create().show()
             }
         }
     }

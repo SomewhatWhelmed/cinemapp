@@ -38,15 +38,6 @@ class MovieDetailsViewModel(
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
-    private val _setFavoriteFinished: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val setFavoriteFinished = _setFavoriteFinished.asSharedFlow()
-
-    private val _setWatchlistFinished: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val setWatchlistFinished = _setWatchlistFinished.asSharedFlow()
-
-    private val _setRatingFinished: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val setRatingFinished = _setRatingFinished.asSharedFlow()
-
     val session = userPrefs.getSessionId()
 
     fun getMovieDetails(movieId: Int) {
@@ -133,7 +124,6 @@ class MovieDetailsViewModel(
             session.firstOrNull()?.let { sessionId ->
                 val currentState = state.value.isInFavorite
                 movieRepository.setFavoriteMovie(sessionId, movieId, !currentState)
-                _setFavoriteFinished.emit(!currentState)
                 _state.update {
                     it.copy(
                         isInFavorite = !currentState
@@ -148,7 +138,6 @@ class MovieDetailsViewModel(
             session.firstOrNull()?.let { sessionId ->
                 val currentState = state.value.isInWatchlist
                 movieRepository.setWatchlistMovie(sessionId, movieId, !currentState)
-                _setWatchlistFinished.emit(!currentState)
                 _state.update {
                     it.copy(
                         isInWatchlist = !currentState
@@ -158,5 +147,17 @@ class MovieDetailsViewModel(
         }
     }
 
-
+    fun setRating(movieId: Int, rating: Int) {
+        viewModelScope.launch {
+            session.firstOrNull()?.let { sessionId ->
+                if (rating == 0) movieRepository.deleteRating(sessionId, movieId)
+                else movieRepository.addMovieRating(sessionId, movieId, rating)
+                _state.update {
+                    it.copy(
+                        userRating = if (rating == 0) null else rating
+                    )
+                }
+            }
+        }
+    }
 }

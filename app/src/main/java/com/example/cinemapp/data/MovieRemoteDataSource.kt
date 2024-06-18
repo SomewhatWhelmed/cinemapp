@@ -7,6 +7,7 @@ import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.data.model.MovieResponseDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
 import com.example.cinemapp.data.model.PersonMovieCreditsResponseDTO
+import com.example.cinemapp.data.model.RatingRequestBodyDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
 import com.example.cinemapp.data.model.SearchPersonResponseDTO
 import com.example.cinemapp.data.model.SessionDeleteBodyDTO
@@ -23,6 +24,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -143,6 +145,23 @@ interface MovieRemoteDataSource {
     suspend fun setWatchlist(
         @Query("session_id") sessionId: String,
         @Body body: SetWatchlistBodyDTO
+    ): Response<StatusResponseDTO>
+
+
+    @Headers("Content-Type: application/json;charset=utf-8")
+    @POST("$API_VERSION/movie/{movie_id}/rating")
+    suspend fun addRating(
+        @Path("movie_id") movieId: Int,
+        @Query("session_id") sessionId: String,
+        @Body body: RatingRequestBodyDTO
+    ): Response<StatusResponseDTO>
+
+
+    @Headers("Content-Type: application/json;charset=utf-8")
+    @DELETE("$API_VERSION/movie/{movie_id}/rating")
+    suspend fun deleteRating(
+        @Path("movie_id") movieId: Int,
+        @Query("session_id") sessionId: String,
     ): Response<StatusResponseDTO>
 
     companion object {

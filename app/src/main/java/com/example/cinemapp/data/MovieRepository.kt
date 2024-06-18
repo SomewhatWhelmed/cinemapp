@@ -10,6 +10,7 @@ import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.data.model.MovieResponseDTO
 import com.example.cinemapp.data.model.PersonDTO
 import com.example.cinemapp.data.model.PersonDetailsDTO
+import com.example.cinemapp.data.model.RatingRequestBodyDTO
 import com.example.cinemapp.data.model.RequestTokenResponseDTO
 import com.example.cinemapp.data.model.SessionDeleteBodyDTO
 import com.example.cinemapp.data.model.SessionRequestDTO
@@ -84,7 +85,12 @@ class MovieRepository(
                 if (response.isSuccessful) {
                     response.body()?.let { movieResponse ->
                         movieResponse.results?.let { results ->
-                            localCache.insert(movieListType, page, results, movieResponse.totalPages)
+                            localCache.insert(
+                                movieListType,
+                                page,
+                                results,
+                                movieResponse.totalPages
+                            )
                         }
                         movieResponse
                     }
@@ -115,7 +121,11 @@ class MovieRepository(
         }
         val fullList = mutableListOf<MovieDTO>()
         for (i in 1..(firstPage?.totalPages ?: 0)) {
-            getMovieList(movieListType, i, sessionId)?.let { fullList.addAll(it.results ?: emptyList()) }
+            getMovieList(movieListType, i, sessionId)?.let {
+                fullList.addAll(
+                    it.results ?: emptyList()
+                )
+            }
         }
         return fullList
     }
@@ -282,26 +292,81 @@ class MovieRepository(
         return getBodyFromResponse(remoteDataSource.getAccountDetails(sessionId))
     }
 
-    private suspend fun setFavorite(sessionId: String, mediaId: Int, setValue: Boolean, mediaType: String): StatusResponseDTO? {
-        return getBodyFromResponse(remoteDataSource.setFavorite(sessionId, SetFavoriteBodyDTO(mediaType, mediaId, setValue)))
+    private suspend fun setFavorite(
+        sessionId: String,
+        mediaId: Int,
+        setValue: Boolean,
+        mediaType: String
+    ): StatusResponseDTO? {
+        return getBodyFromResponse(
+            remoteDataSource.setFavorite(
+                sessionId,
+                SetFavoriteBodyDTO(mediaType, mediaId, setValue)
+            )
+        )
     }
 
-    suspend fun setFavoriteMovie(sessionId: String, movieId: Int, setValue: Boolean): StatusResponseDTO? {
-        val response =  setFavorite(sessionId, movieId, setValue, "movie")
+    suspend fun setFavoriteMovie(
+        sessionId: String,
+        movieId: Int,
+        setValue: Boolean
+    ): StatusResponseDTO? {
+        val response = setFavorite(sessionId, movieId, setValue, "movie")
         response?.let {
             localCache.clearCache(MovieListType.FAVORITE)
         }
         return response
     }
 
-    private suspend fun setWatchlist(sessionId: String, mediaId: Int, setValue: Boolean, mediaType: String): StatusResponseDTO? {
-        return getBodyFromResponse(remoteDataSource.setWatchlist(sessionId, SetWatchlistBodyDTO(mediaType, mediaId, setValue)))
+    private suspend fun setWatchlist(
+        sessionId: String,
+        mediaId: Int,
+        setValue: Boolean,
+        mediaType: String
+    ): StatusResponseDTO? {
+        return getBodyFromResponse(
+            remoteDataSource.setWatchlist(
+                sessionId,
+                SetWatchlistBodyDTO(mediaType, mediaId, setValue)
+            )
+        )
     }
 
-    suspend fun setWatchlistMovie(sessionId: String, movieId: Int, setValue: Boolean): StatusResponseDTO? {
-        val response =  setWatchlist(sessionId, movieId, setValue, "movie")
+    suspend fun setWatchlistMovie(
+        sessionId: String,
+        movieId: Int,
+        setValue: Boolean
+    ): StatusResponseDTO? {
+        val response = setWatchlist(sessionId, movieId, setValue, "movie")
         response?.let {
             localCache.clearCache(MovieListType.WATCHLIST)
+        }
+        return response
+    }
+
+    suspend fun addMovieRating(sessionId: String, movieId: Int, rating: Int): StatusResponseDTO? {
+        val response = getBodyFromResponse(
+            remoteDataSource.addRating(
+                movieId,
+                sessionId,
+                RatingRequestBodyDTO(rating.toFloat())
+            )
+        )
+        response?.let {
+            localCache.clearCache(MovieListType.RATED)
+        }
+        return response
+    }
+
+    suspend fun deleteRating(sessionId: String, movieId: Int): StatusResponseDTO? {
+        val response = getBodyFromResponse(
+            remoteDataSource.deleteRating(
+                movieId,
+                sessionId
+            )
+        )
+        response?.let {
+            localCache.clearCache(MovieListType.RATED)
         }
         return response
     }
