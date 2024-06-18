@@ -9,18 +9,18 @@ import com.example.cinemapp.data.model.PersonMovieCreditsResponseDTO
 class MovieLocalCache {
 
     private val upcomingCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
-    private var upcomingPages: Int? = 1
+    private var upcomingPagesTotal: Int? = 1
     private val popularCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
-    private var popularPages: Int? = 1
+    private var popularPagesTotal: Int? = 1
     private val topRatedCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
-    private var topRatedPages: Int? = 1
+    private var topRatedPagesTotal: Int? = 1
 
     private val favoriteCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
-    private var favoritePages: Int? = 1
+    private var favoritePagesTotal: Int? = 1
     private val watchlistCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
-    private var watchlistPages: Int? = 1
+    private var watchlistPagesTotal: Int? = 1
     private val ratedCache = mutableMapOf<Int, ArrayList<MovieDTO>>()
-    private var ratedPages: Int? = 1
+    private var ratedPagesTotal: Int? = 1
 
     private var personCredits: PersonMovieCreditsResponseDTO? = null
 
@@ -34,7 +34,7 @@ class MovieLocalCache {
                 MovieResponseDTO(
                     page = page,
                     results = it,
-                    totalPages = upcomingPages
+                    totalPages = upcomingPagesTotal
                 )
             }
 
@@ -42,7 +42,7 @@ class MovieLocalCache {
                 MovieResponseDTO(
                     page = page,
                     results = it,
-                    totalPages = popularPages
+                    totalPages = popularPagesTotal
                 )
             }
 
@@ -50,7 +50,7 @@ class MovieLocalCache {
                 MovieResponseDTO(
                     page = page,
                     results = it,
-                    totalPages = topRatedPages
+                    totalPages = topRatedPagesTotal
                 )
             }
 
@@ -58,7 +58,7 @@ class MovieLocalCache {
                 MovieResponseDTO(
                     page = page,
                     results = it,
-                    totalPages = favoritePages
+                    totalPages = favoritePagesTotal
                 )
             }
 
@@ -66,7 +66,7 @@ class MovieLocalCache {
                 MovieResponseDTO(
                     page = page,
                     results = it,
-                    totalPages = watchlistPages
+                    totalPages = watchlistPagesTotal
                 )
             }
 
@@ -74,7 +74,7 @@ class MovieLocalCache {
                 MovieResponseDTO(
                     page = page,
                     results = it,
-                    totalPages = ratedPages
+                    totalPages = ratedPagesTotal
                 )
             }
         }
@@ -90,32 +90,32 @@ class MovieLocalCache {
         when (movieListType) {
             MovieRepository.MovieListType.UPCOMING -> {
                 upcomingCache[page] = movies
-                upcomingPages = totalPages
+                upcomingPagesTotal = totalPages
             }
 
             MovieRepository.MovieListType.POPULAR -> {
                 popularCache[page] = movies
-                popularPages = totalPages
+                popularPagesTotal = totalPages
             }
 
             MovieRepository.MovieListType.TOP_RATED -> {
                 topRatedCache[page] = movies
-                topRatedPages = totalPages
+                topRatedPagesTotal = totalPages
             }
 
             MovieRepository.MovieListType.FAVORITE -> {
                 favoriteCache[page] = movies
-                favoritePages = totalPages
+                favoritePagesTotal = totalPages
             }
 
             MovieRepository.MovieListType.WATCHLIST -> {
                 watchlistCache[page] = movies
-                watchlistPages = totalPages
+                watchlistPagesTotal = totalPages
             }
 
             MovieRepository.MovieListType.RATED -> {
                 ratedCache[page] = movies
-                ratedPages = totalPages
+                ratedPagesTotal = totalPages
             }
         }
     }

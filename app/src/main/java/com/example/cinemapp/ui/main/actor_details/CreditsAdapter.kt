@@ -10,7 +10,9 @@ import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardPersonBinding
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.movie_details.CastAdapter
+import com.example.cinemapp.util.Direction
 import com.example.cinemapp.util.loadImage
+import com.example.cinemapp.util.setMargin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,13 +43,11 @@ class CreditsAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
         holder.bind(credits[position])
         if (position == 0) {
-            val marginParams =
-                holder.binding.cvCardPerson.layoutParams as ViewGroup.MarginLayoutParams
-            marginParams.leftMargin = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
+            holder.binding.cvCardPerson.layoutParams.setMargin(
+                Direction.LEFT,
                 FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
-                context.resources.displayMetrics
-            ).toInt()
+                context
+            )
         }
     }
 
