@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -26,7 +25,6 @@ import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,23 +41,23 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         setupAdapter()
+        viewModel.setupLoading()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        setupVisibility()
         viewModel.getInitialData()
         setupOnClick()
-        observeSignedInEvent()
         observeSignOutEvent()
         setupTabs()
 
         observeFlowSafely(viewModel.state) {
             it.accountDetails?.let { accountDetails ->
-                setupViews(accountDetails)
+                setupDetails(accountDetails)
             }
             adapter.setMovies(it.movies)
+            setupLoadingVisibility(it.isLoading, it.accountDetails?.let { true } ?: false)
             viewModel.setPagingRunning(false)
         }
 
@@ -68,6 +66,7 @@ class ProfileFragment : Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (binding.rvMovieList.isEndOfScroll() && !viewModel.isLastPage()) {
+                        viewModel.setupLoading()
                         viewModel.getNextPage()
                     }
                 }
@@ -75,31 +74,16 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    private fun observeSignedInEvent() {
-        lifecycleScope.launch {
-            viewModel.notSignedIn.collect {
-                binding.clContent.visibility = View.INVISIBLE
-                binding.cpiLoading.visibility = View.INVISIBLE
-                binding.btnSignIn.visibility = View.VISIBLE
-            }
-        }
-    }
-    private fun setupVisibility() {
-        with(binding) {
-            btnSignIn.visibility = View.INVISIBLE
-            clContent.visibility = View.INVISIBLE
-            cpiLoading.visibility = View.VISIBLE
-        }
-    }
     private fun setupLoadingVisibility(isLoading: Boolean, signedIn: Boolean) {
         with(binding) {
-            clContent.visibility = if (!isLoading && signedIn) View.VISIBLE else View.INVISIBLE
-            btnSignIn.visibility = if (!isLoading && !signedIn) View.VISIBLE else View.GONE
+            clContent.visibility = if (signedIn) View.VISIBLE else View.INVISIBLE
+            btnSignIn.visibility = if (!isLoading && !signedIn) View.VISIBLE else View.INVISIBLE
+            rvMovieList.visibility = if (!isLoading) View.VISIBLE else View.INVISIBLE
             cpiLoading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
         }
     }
 
-    private fun setupViews(accountDetails: AccountDetails) {
+    private fun setupDetails(accountDetails: AccountDetails) {
         with(binding) {
             tvName.text = accountDetails.name
             tvUsername.text = accountDetails.username
@@ -119,8 +103,6 @@ class ProfileFragment : Fragment() {
                     )
                 )
             }
-            cpiLoading.visibility = View.INVISIBLE
-            clContent.visibility = View.VISIBLE
         }
     }
 
@@ -162,6 +144,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onTabChanged(tabPosition: Int) {
+        viewModel.setupLoading()
         viewModel.loadPage(tabPosition)
         val smoothScroller = object : LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference(): Int {
