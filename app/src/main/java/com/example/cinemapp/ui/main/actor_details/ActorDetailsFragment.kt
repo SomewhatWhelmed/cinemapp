@@ -1,6 +1,7 @@
 package com.example.cinemapp.ui.main.actor_details
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,37 +31,37 @@ class ActorDetailsFragment : Fragment() {
     private val args: ActorDetailsFragmentArgs by navArgs()
     private val creditAdapter:CreditsAdapter by inject()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getPersonDetails(args.personId)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActorDetailsBinding.inflate(inflater, container, false)
-        binding.clContent.visibility = View.INVISIBLE
         setupAdapter()
+        viewModel.setupLoading()
+        setupLoadingVisibility(true)
+        viewModel.getPersonDetails(args.personId)
         observeOnClickEvents()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
                 setupView(details)
-                binding.clContent.visibility = View.VISIBLE
-                binding.cpiLoading.visibility = View.GONE
             }
+            setupLoadingVisibility(it.isLoading)
             val adapter = binding.spinnerYear.adapter as ArrayAdapter<String>
             adapter.clear()
             adapter.addAll(it.creditYears.map { year -> year?.toString() ?: "Unannounced" })
 
             creditAdapter.setCredits(it.credits)
         }
+    }
+
+    private fun setupLoadingVisibility(isLoading: Boolean) {
+        binding.clContent.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        binding.cpiLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun setupView(details: PersonDetails) {

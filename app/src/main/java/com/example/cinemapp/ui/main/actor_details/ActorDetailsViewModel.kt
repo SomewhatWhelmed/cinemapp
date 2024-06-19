@@ -1,5 +1,6 @@
 package com.example.cinemapp.ui.main.actor_details
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
@@ -20,16 +21,21 @@ class ActorDetailsViewModel(
     data class State(
         val details: PersonDetails? = null,
         val creditYears: List<Int?> = emptyList(),
-        val credits: List<CastMovieCredit> = emptyList()
+        val credits: List<CastMovieCredit> = emptyList(),
+        val isLoading: Boolean = true
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
+    fun setupLoading() {
+        _state.update {
+            it.copy(isLoading = true)
+        }
+    }
 
     fun getPersonDetails(personId: Int) {
         viewModelScope.launch {
-
             val newCreditsYears = movieRepository.getPersonMovieCreditsYears(personId)?.let {
                 actorDetailsMapper.mapToDescendingYears(it)
             } ?: emptyList()
@@ -52,7 +58,8 @@ class ActorDetailsViewModel(
                                     credits
                                 )
                             } ?: emptyList()
-                    else emptyList()
+                    else emptyList(),
+                    isLoading = false
                 )
             }
         }

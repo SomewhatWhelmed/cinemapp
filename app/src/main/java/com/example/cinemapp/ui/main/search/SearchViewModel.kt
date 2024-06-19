@@ -20,12 +20,20 @@ class SearchViewModel(
         val list: List<SearchCard> = emptyList(),
         val search: String = "",
         val pagesLoaded: Int = 0,
-        val searchType: SearchType = SearchType.MOVIE
+        val searchType: SearchType = SearchType.MOVIE,
+        val isLoading: Boolean = false
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
     private var isPaging = false
+
+
+    fun setupLoading(){
+        _state.update {
+            it.copy(isLoading = true)
+        }
+    }
 
 
     fun getMoviesNextPage(query: String = state.value.search) {
@@ -65,7 +73,8 @@ class SearchViewModel(
                                 )?.let { list ->
                                     searchMapper.mapToPersonCardList(list, 500)
                                 }
-                            } ?: emptyList())
+                            } ?: emptyList()),
+                        isLoading = false
                     )
                 }
             }

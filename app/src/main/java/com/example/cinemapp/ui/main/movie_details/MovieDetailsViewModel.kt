@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.internal.userAgent
 
 class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
@@ -33,12 +34,19 @@ class MovieDetailsViewModel(
         val isInFavorite: Boolean = false,
         val isInWatchlist: Boolean = false,
         val userRating: Int? = null,
+        val isLoading: Boolean = true
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
     val session = userPrefs.getSessionId()
+
+    fun setupLoading() {
+        _state.update {
+            it.copy(isLoading = true)
+        }
+    }
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch {
@@ -107,7 +115,8 @@ class MovieDetailsViewModel(
                         ?.plus(newImages.filter { media -> media.filePath != "" }) ?: emptyList(),
                     userRating = userRating,
                     isInFavorite = isInFavorite,
-                    isInWatchlist = isInWatchlist
+                    isInWatchlist = isInWatchlist,
+                    isLoading = false
                 )
             }
         }

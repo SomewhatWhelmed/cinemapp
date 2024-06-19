@@ -36,20 +36,20 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        setVisibilityLoadingEnd()
         setupAdapter()
-        observeOnClickEvents()
+        setupLoadingVisibility(false)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        setupViews()
+        setupSearchBar()
+        observeOnClickEvents()
 
         observeFlowSafely(viewModel.state) {
             adapter.setResults(it.list)
             viewModel.setPagingRunning(false)
-            setVisibilityLoadingEnd()
+            setupLoadingVisibility(it.isLoading)
         }
 
         binding.rvCardList.addOnScrollListener(
@@ -64,7 +64,7 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun setupViews() {
+    private fun setupSearchBar() {
         binding.cgCategory.setOnCheckedStateChangeListener { _, checkedId ->
             onChipChanged(checkedId[0])
         }
@@ -74,7 +74,7 @@ class SearchFragment : Fragment() {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    setVisibilityLoadingStart()
+                    viewModel.setupLoading()
                     viewModel.getNextPage(query = query)
                 }
                 hideKeyboard(requireActivity())
@@ -84,7 +84,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     if (it.length >= 3) {
-                        setVisibilityLoadingStart()
+                        viewModel.setupLoading()
                         timer.cancel()
                         timer = Timer()
                         timer.schedule(
@@ -115,11 +115,11 @@ class SearchFragment : Fragment() {
 
     private fun onChipChanged(checked: Int) {
         with(binding) {
+            viewModel.setupLoading()
             when (checked) {
                 chipActors.id -> viewModel.getActorsNextPage()
                 chipMovies.id -> viewModel.getMoviesNextPage()
             }
-            setVisibilityLoadingStart()
             val smoothScroller = object : LinearSmoothScroller(context) {
                 override fun getVerticalSnapPreference(): Int {
                     return SNAP_TO_START
@@ -139,16 +139,15 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun setVisibilityLoadingStart() {
-        binding.rvCardList.visibility = View.INVISIBLE
-        binding.tvNoResults.visibility = View.INVISIBLE
-        binding.cpiLoading.visibility = View.VISIBLE
-    }
+    private fun setupLoadingVisibility(isLoading: Boolean) {
+        with(binding) {
+            rvCardList.visibility =
+                if (isLoading || viewModel.state.value.list.isEmpty()) View.INVISIBLE else View.VISIBLE
+            cpiLoading.visibility = if (!isLoading) View.INVISIBLE else View.VISIBLE
+            tvNoResults.visibility =
+                if (isLoading || viewModel.state.value.list.isNotEmpty()) View.INVISIBLE else View.VISIBLE
 
-    private fun setVisibilityLoadingEnd() {
-        if (viewModel.state.value.list.isEmpty()) binding.tvNoResults.visibility = View.VISIBLE
-        else binding.rvCardList.visibility = View.VISIBLE
-        binding.cpiLoading.visibility = View.INVISIBLE
+        }
     }
 
     private fun hideKeyboard(activity: Activity) {

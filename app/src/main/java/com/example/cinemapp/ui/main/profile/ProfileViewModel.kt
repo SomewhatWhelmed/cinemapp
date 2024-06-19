@@ -46,6 +46,10 @@ class ProfileViewModel(
     private var isPaging = false
 
 
+    fun setupLoading() {
+        _state.update { it.copy(isLoading = true) }
+    }
+
     fun signOut() {
         viewModelScope.launch {
             val sessionId = userPrefs.getSessionId().firstOrNull()

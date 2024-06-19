@@ -75,6 +75,30 @@ class ProfileFragment : Fragment() {
         )
     }
 
+    private fun observeSignedInEvent() {
+        lifecycleScope.launch {
+            viewModel.notSignedIn.collect {
+                binding.clContent.visibility = View.INVISIBLE
+                binding.cpiLoading.visibility = View.INVISIBLE
+                binding.btnSignIn.visibility = View.VISIBLE
+            }
+        }
+    }
+    private fun setupVisibility() {
+        with(binding) {
+            btnSignIn.visibility = View.INVISIBLE
+            clContent.visibility = View.INVISIBLE
+            cpiLoading.visibility = View.VISIBLE
+        }
+    }
+    private fun setupLoadingVisibility(isLoading: Boolean, signedIn: Boolean) {
+        with(binding) {
+            clContent.visibility = if (!isLoading && signedIn) View.VISIBLE else View.INVISIBLE
+            btnSignIn.visibility = if (!isLoading && !signedIn) View.VISIBLE else View.GONE
+            cpiLoading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
     private fun setupViews(accountDetails: AccountDetails) {
         with(binding) {
             tvName.text = accountDetails.name
@@ -111,13 +135,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun setupVisibility() {
-        with(binding) {
-            btnSignIn.visibility = View.INVISIBLE
-            clContent.visibility = View.INVISIBLE
-            cpiLoading.visibility = View.VISIBLE
-        }
-    }
 
 
     private fun setupTabs() {
@@ -163,15 +180,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun observeSignedInEvent() {
-        lifecycleScope.launch {
-            viewModel.notSignedIn.collect {
-                binding.clContent.visibility = View.INVISIBLE
-                binding.cpiLoading.visibility = View.INVISIBLE
-                binding.btnSignIn.visibility = View.VISIBLE
-            }
-        }
-    }
 
     private fun setupAdapter() {
         binding.rvMovieList.adapter = adapter
