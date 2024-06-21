@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -30,32 +31,30 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        viewModel.getUpcomingNextPage()
         setupAdapter()
+        viewModel.setupLoading()
+        viewModel.getUpcomingNextPage()
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        setupViews()
+        setupChipGroup()
+        setupOnScrollListener()
 
         observeFlowSafely(viewModel.state) {
             adapter.setMovies(it.movies)
             viewModel.setPagingRunning(false)
+            setupLoadingVisibility(it.isLoading)
         }
-        binding.rvMovieList.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (binding.rvMovieList.isEndOfScroll()) {
-                        viewModel.getNextPage()
-                    }
-                }
-            }
-        )
     }
 
-    private fun setupViews() {
+    private fun setupLoadingVisibility(isLoading: Boolean) {
+        binding.rvMovieList.isVisible = !(isLoading && viewModel.getPagesLoaded() == 1)
+        binding.cpiLoading.isVisible = isLoading
+    }
+
+    private fun setupChipGroup() {
         binding.chipUpcoming.isChecked = true
         binding.cgMovieLists.setOnCheckedStateChangeListener { _, checkedId ->
             onChipChanged(checkedId[0])
@@ -70,9 +69,23 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupOnScrollListener() {
+        binding.rvMovieList.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (binding.rvMovieList.isEndOfScroll()) {
+                        viewModel.onScrolledToNext()
+                    }
+                }
+            }
+        )
+    }
+
     private fun onChipChanged(checked: Int) {
-        with(binding){
-            when(checked) {
+        with(binding) {
+            viewModel.setupLoading()
+            when (checked) {
                 chipUpcoming.id -> viewModel.getUpcomingNextPage()
                 chipPopular.id -> viewModel.getPopularNextPage()
                 chipTopRated.id -> viewModel.getTopRatedNextPage()

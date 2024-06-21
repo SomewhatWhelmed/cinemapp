@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,20 +38,20 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        setVisibilityLoadingEnd()
         setupAdapter()
-        observeOnClickEvents()
+        viewModel.setupLoading(false)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        setupViews()
+        setupSearchBar()
+        observeOnClickEvents()
 
         observeFlowSafely(viewModel.state) {
             adapter.setResults(it.list)
             viewModel.setPagingRunning(false)
-            setVisibilityLoadingEnd()
+            setupLoadingVisibility(it.isLoading)
         }
 
         binding.rvCardList.addOnScrollListener(
@@ -64,7 +66,7 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun setupViews() {
+    private fun setupSearchBar() {
         binding.cgCategory.setOnCheckedStateChangeListener { _, checkedId ->
             onChipChanged(checkedId[0])
         }
@@ -74,7 +76,7 @@ class SearchFragment : Fragment() {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    setVisibilityLoadingStart()
+                    viewModel.setupLoading(true)
                     viewModel.getNextPage(query = query)
                 }
                 hideKeyboard(requireActivity())
@@ -84,7 +86,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     if (it.length >= 3) {
-                        setVisibilityLoadingStart()
+                        viewModel.setupLoading(true)
                         timer.cancel()
                         timer = Timer()
                         timer.schedule(
@@ -115,11 +117,11 @@ class SearchFragment : Fragment() {
 
     private fun onChipChanged(checked: Int) {
         with(binding) {
+            viewModel.setupLoading(true)
             when (checked) {
                 chipActors.id -> viewModel.getActorsNextPage()
                 chipMovies.id -> viewModel.getMoviesNextPage()
             }
-            setVisibilityLoadingStart()
             val smoothScroller = object : LinearSmoothScroller(context) {
                 override fun getVerticalSnapPreference(): Int {
                     return SNAP_TO_START
@@ -139,16 +141,12 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun setVisibilityLoadingStart() {
-        binding.rvCardList.visibility = View.INVISIBLE
-        binding.tvNoResults.visibility = View.INVISIBLE
-        binding.cpiLoading.visibility = View.VISIBLE
-    }
-
-    private fun setVisibilityLoadingEnd() {
-        if (viewModel.state.value.list.isEmpty()) binding.tvNoResults.visibility = View.VISIBLE
-        else binding.rvCardList.visibility = View.VISIBLE
-        binding.cpiLoading.visibility = View.INVISIBLE
+    private fun setupLoadingVisibility(isLoading: Boolean) {
+        with(binding) {
+            rvCardList.isInvisible = isLoading || viewModel.isListEmpty()
+            cpiLoading.isVisible = isLoading
+            tvNoResults.isVisible = !isLoading && viewModel.isListEmpty()
+        }
     }
 
     private fun hideKeyboard(activity: Activity) {

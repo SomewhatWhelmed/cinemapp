@@ -10,6 +10,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -48,22 +50,19 @@ class MovieDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         setupAdapter()
+        setupOnClickListeners()
+        viewModel.setupLoading()
+        viewModel.getMovieDetails(args.movieId)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        setupVisibility()
-        viewModel.getMovieDetails(args.movieId)
-        setupOnClickListeners()
-
         observeFlowSafely(viewModel.state) {
             it.details?.let { details ->
                 setupDetails(details)
-                binding.clContent.visibility = View.VISIBLE
-                binding.cpiLoading.visibility = View.GONE
             }
-
+            setupLoadingVisibility(it.isLoading)
             setupUserListsViews(it.isInFavorite, it.isInWatchlist, it.userRating)
             castAdapter.setCast(it.cast)
             mediaAdapter.setMedia(it.media)
@@ -102,7 +101,7 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun setupRatingButton(userRating: Int?) {
-        with (binding) {
+        with(binding) {
             setupButtonColor(
                 cvUserRating,
                 ivUserRating,
@@ -223,12 +222,13 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupVisibility() {
+    private fun setupLoadingVisibility(isLoading: Boolean) {
         with(binding) {
-            clContent.visibility = View.INVISIBLE
+            clContent.isVisible = !isLoading
+            cpiLoading.isVisible = isLoading
             lifecycleScope.launch {
-                clListControls.visibility =
-                    viewModel.session.firstOrNull()?.let { View.VISIBLE } ?: View.GONE
+                clListControls.isVisible =
+                    viewModel.session.firstOrNull()?.let { !isLoading } ?: false
             }
         }
     }

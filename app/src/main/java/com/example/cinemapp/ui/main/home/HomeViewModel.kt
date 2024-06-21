@@ -18,13 +18,20 @@ class HomeViewModel(
     data class State(
         val movies: List<MovieCard> = emptyList(),
         val pagesLoaded: Int = 0,
-        val movieListType: MovieRepository.MovieListType = MovieRepository.MovieListType.UPCOMING
+        val movieListType: MovieRepository.MovieListType = MovieRepository.MovieListType.UPCOMING,
+        val isLoading: Boolean = true
     )
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
     private var isPaging = false
 
+
+    fun getPagesLoaded() = state.value.pagesLoaded
+
+    fun setupLoading() {
+        _state.update { it.copy(isLoading = true) }
+    }
 
     fun getUpcomingNextPage() {
         getNextPage(MovieRepository.MovieListType.UPCOMING)
@@ -38,7 +45,7 @@ class HomeViewModel(
         getNextPage(MovieRepository.MovieListType.TOP_RATED)
     }
 
-    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
+    private fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
@@ -52,10 +59,17 @@ class HomeViewModel(
                                 if (movieListType == it.movieListType) it.pagesLoaded + 1 else 1
                             )
                                 ?.let { list -> movieListMapper.mapToCardList(list.results, 400) }
-                                ?: emptyList()))
+                                ?: emptyList()),
+                        isLoading = false
+                    )
                 }
             }
         }
+    }
+
+    fun onScrolledToNext() {
+        setupLoading()
+        getNextPage()
     }
 
     fun setPagingRunning(isRunning: Boolean) {
