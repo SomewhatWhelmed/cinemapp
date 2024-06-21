@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +40,6 @@ class ActorDetailsFragment : Fragment() {
         _binding = FragmentActorDetailsBinding.inflate(inflater, container, false)
         setupAdapter()
         viewModel.setupLoading()
-        setupLoadingVisibility(true)
         viewModel.getPersonDetails(args.personId)
         observeOnClickEvents()
         return binding.root
@@ -60,8 +61,8 @@ class ActorDetailsFragment : Fragment() {
     }
 
     private fun setupLoadingVisibility(isLoading: Boolean) {
-        binding.clContent.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
-        binding.cpiLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.clContent.isVisible = !isLoading
+        binding.cpiLoading.isVisible = isLoading
     }
 
     private fun setupView(details: PersonDetails) {
@@ -96,7 +97,7 @@ class ActorDetailsFragment : Fragment() {
             val adapter = ArrayAdapter(
                 root.context,
                 org.koin.android.R.layout.support_simple_spinner_dropdown_item,
-                viewModel.state.value.creditYears.map { year -> year?.toString() ?: "Unannounced" })
+                viewModel.getCreditYears().map { year -> year?.toString() ?: "Unannounced" })
 
             spinnerYear.adapter = adapter
             spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -108,7 +109,7 @@ class ActorDetailsFragment : Fragment() {
                 ) {
                     viewModel.getCreditsFromYear(
                         args.personId,
-                        viewModel.state.value.creditYears[position]
+                        viewModel.getCreditYears()[position]
                     )
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}

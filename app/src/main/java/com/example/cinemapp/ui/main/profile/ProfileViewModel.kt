@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
+import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.ui.main.model.MovieListInfo
@@ -45,6 +46,8 @@ class ProfileViewModel(
     private var isPaging = false
 
 
+    fun getCurrentListType() = state.value.movieListType
+
     fun setupLoading() {
         _state.update { it.copy(isLoading = true) }
     }
@@ -64,12 +67,12 @@ class ProfileViewModel(
         viewModelScope.launch {
             val sessionId = userPrefs.getSessionId().firstOrNull()
             sessionId?.let {
-                val accountDetails = getAccountDetailsData(sessionId).firstOrNull()
+                val accountDetails = getAccountDetailsData(sessionId)
                 val pagingDetails = getNextPageData(
                     if (state.value.pagesLoaded == 0) MovieRepository.MovieListType.FAVORITE else state.value.movieListType,
                     sessionId = sessionId,
                     resetPaging = true
-                ).first()
+                )
                 _state.update {
                     pagingDetails.copy(
                         accountDetails = accountDetails
@@ -86,11 +89,9 @@ class ProfileViewModel(
         }
     }
 
-    private fun getAccountDetailsData(sessionId: String): Flow<AccountDetails> {
-        return flow {
-            movieRepository.getAccountDetails(sessionId)?.let { details ->
-                emit(profileMapper.mapToAccountDetails(details))
-            }
+    private suspend fun getAccountDetailsData(sessionId: String): AccountDetails? {
+        return movieRepository.getAccountDetails(sessionId)?.let { details ->
+            profileMapper.mapToAccountDetails(details)
         }
     }
 
@@ -116,40 +117,40 @@ class ProfileViewModel(
                 if (!isPaging) {
                     setPagingRunning(true)
                     _state.update {
-                        getNextPageData(movieListType, resetPaging, sessionId).first()
+                        getNextPageData(movieListType, resetPaging, sessionId)
                     }
                 }
             }
         }
     }
 
-    private fun getNextPageData(
+
+    private suspend fun getNextPageData(
         movieListType: MovieRepository.MovieListType = state.value.movieListType,
         resetPaging: Boolean = false,
         sessionId: String
-    ): Flow<State> {
-        return flow {
-            val newPage =
-                if (resetPaging) 1
-                else if (movieListType == state.value.movieListType) state.value.pagesLoaded + 1
-                else 1
-            val listInfo = movieRepository.getMovieList(
-                movieListType,
-                newPage,
-                sessionId = sessionId
-            )?.let { listInfo -> movieListMapper.mapToCardListInfo(listInfo, 400) }
-                ?: MovieListInfo()
-            val newValue = state.value.copy(
-                pagesLoaded = newPage,
-                movieListType = movieListType,
-                movies = listInfo.results,
-                totalPages = listInfo.totalPages,
-                isLoading = false
-            )
-            if (newValue == state.value) setPagingRunning(false)
-            emit(newValue)
-        }
+    ): State {
+        val newPage =
+            if (resetPaging) 1
+            else if (movieListType == state.value.movieListType) state.value.pagesLoaded + 1
+            else 1
+        val listInfo = movieRepository.getMovieList(
+            movieListType,
+            newPage,
+            sessionId = sessionId
+        )?.let { listInfo -> movieListMapper.mapToCardListInfo(listInfo, 400) }
+            ?: MovieListInfo()
+        val newValue = state.value.copy(
+            pagesLoaded = newPage,
+            movieListType = movieListType,
+            movies = listInfo.results,
+            totalPages = listInfo.totalPages,
+            isLoading = false
+        )
+        if (newValue == state.value) setPagingRunning(false)
+        return newValue
     }
+
 
     fun setPagingRunning(isRunning: Boolean) {
         isPaging = isRunning

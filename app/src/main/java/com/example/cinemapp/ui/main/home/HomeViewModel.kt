@@ -27,6 +27,8 @@ class HomeViewModel(
     private var isPaging = false
 
 
+    fun getPagesLoaded() = state.value.pagesLoaded
+
     fun setupLoading() {
         _state.update { it.copy(isLoading = true) }
     }
@@ -43,7 +45,7 @@ class HomeViewModel(
         getNextPage(MovieRepository.MovieListType.TOP_RATED)
     }
 
-    fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
+    private fun getNextPage(movieListType: MovieRepository.MovieListType = state.value.movieListType) {
         if (!isPaging) {
             setPagingRunning(true)
             viewModelScope.launch {
@@ -63,6 +65,11 @@ class HomeViewModel(
                 }
             }
         }
+    }
+
+    fun onScrolledToNext() {
+        setupLoading()
+        getNextPage()
     }
 
     fun setPagingRunning(isRunning: Boolean) {

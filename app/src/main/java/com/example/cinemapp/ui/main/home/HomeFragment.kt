@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -32,7 +33,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         setupAdapter()
         viewModel.setupLoading()
-        setupLoadingVisibility(true)
         viewModel.getUpcomingNextPage()
         return binding.root
     }
@@ -50,9 +50,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupLoadingVisibility(isLoading: Boolean) {
-        binding.rvMovieList.visibility =
-            if (isLoading && viewModel.state.value.pagesLoaded == 1) View.INVISIBLE else View.VISIBLE
-        binding.cpiLoading.visibility = if (!isLoading) View.INVISIBLE else View.VISIBLE
+        binding.rvMovieList.isVisible = !(isLoading && viewModel.getPagesLoaded() == 1)
+        binding.cpiLoading.isVisible = isLoading
     }
 
     private fun setupChipGroup() {
@@ -76,8 +75,7 @@ class HomeFragment : Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     if (binding.rvMovieList.isEndOfScroll()) {
-                        viewModel.setupLoading()
-                        viewModel.getNextPage()
+                        viewModel.onScrolledToNext()
                     }
                 }
             }

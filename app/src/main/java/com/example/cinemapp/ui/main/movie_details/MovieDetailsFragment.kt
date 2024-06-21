@@ -10,6 +10,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -48,10 +50,9 @@ class MovieDetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         setupAdapter()
-        viewModel.setupLoading()
-        setupLoadingVisibility(true)
-        viewModel.getMovieDetails(args.movieId)
         setupOnClickListeners()
+        viewModel.setupLoading()
+        viewModel.getMovieDetails(args.movieId)
         return binding.root
     }
 
@@ -223,12 +224,11 @@ class MovieDetailsFragment : Fragment() {
 
     private fun setupLoadingVisibility(isLoading: Boolean) {
         with(binding) {
-            clContent.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
-            cpiLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+            clContent.isVisible = !isLoading
+            cpiLoading.isVisible = isLoading
             lifecycleScope.launch {
-                clListControls.visibility =
-                    viewModel.session.firstOrNull()
-                        ?.let { if (isLoading) View.INVISIBLE else View.VISIBLE } ?: View.GONE
+                clListControls.isVisible =
+                    viewModel.session.firstOrNull()?.let { !isLoading } ?: false
             }
         }
     }

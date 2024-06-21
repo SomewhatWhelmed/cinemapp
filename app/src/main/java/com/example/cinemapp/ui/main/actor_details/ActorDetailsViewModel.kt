@@ -28,6 +28,8 @@ class ActorDetailsViewModel(
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
+    fun getCreditYears() = state.value.creditYears
+
     fun setupLoading() {
         _state.update {
             it.copy(isLoading = true)

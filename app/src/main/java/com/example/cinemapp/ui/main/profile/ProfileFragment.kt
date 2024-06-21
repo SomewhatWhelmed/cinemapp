@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -76,10 +78,10 @@ class ProfileFragment : Fragment() {
 
     private fun setupLoadingVisibility(isLoading: Boolean, signedIn: Boolean) {
         with(binding) {
-            clContent.visibility = if (signedIn) View.VISIBLE else View.INVISIBLE
-            btnSignIn.visibility = if (!isLoading && !signedIn) View.VISIBLE else View.INVISIBLE
-            rvMovieList.visibility = if (!isLoading) View.VISIBLE else View.INVISIBLE
-            cpiLoading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
+            clContent.isVisible = signedIn
+            btnSignIn.isVisible = !isLoading && !signedIn
+            rvMovieList.isInvisible = isLoading
+            cpiLoading.isVisible = isLoading
         }
     }
 
@@ -123,7 +125,7 @@ class ProfileFragment : Fragment() {
         with(binding) {
             tlMovieLists.selectTab(
                 tlMovieLists.getTabAt(
-                    when (viewModel.state.value.movieListType) {
+                    when (viewModel.getCurrentListType()) {
                         MovieRepository.MovieListType.FAVORITE -> 0
                         MovieRepository.MovieListType.WATCHLIST -> 1
                         MovieRepository.MovieListType.RATED -> 2

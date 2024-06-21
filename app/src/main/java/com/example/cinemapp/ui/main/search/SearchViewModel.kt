@@ -29,12 +29,13 @@ class SearchViewModel(
     private var isPaging = false
 
 
-    fun setupLoading(){
+    fun setupLoading(isLoading: Boolean){
         _state.update {
-            it.copy(isLoading = true)
+            it.copy(isLoading = isLoading)
         }
     }
 
+    fun isListEmpty() = state.value.list.isEmpty()
 
     fun getMoviesNextPage(query: String = state.value.search) {
         getNextPage(SearchType.MOVIE, query)

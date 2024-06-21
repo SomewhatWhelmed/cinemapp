@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,7 +39,7 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         setupAdapter()
-        setupLoadingVisibility(false)
+        viewModel.setupLoading(false)
         return binding.root
     }
 
@@ -74,7 +76,7 @@ class SearchFragment : Fragment() {
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    viewModel.setupLoading()
+                    viewModel.setupLoading(true)
                     viewModel.getNextPage(query = query)
                 }
                 hideKeyboard(requireActivity())
@@ -84,7 +86,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     if (it.length >= 3) {
-                        viewModel.setupLoading()
+                        viewModel.setupLoading(true)
                         timer.cancel()
                         timer = Timer()
                         timer.schedule(
@@ -115,7 +117,7 @@ class SearchFragment : Fragment() {
 
     private fun onChipChanged(checked: Int) {
         with(binding) {
-            viewModel.setupLoading()
+            viewModel.setupLoading(true)
             when (checked) {
                 chipActors.id -> viewModel.getActorsNextPage()
                 chipMovies.id -> viewModel.getMoviesNextPage()
@@ -141,12 +143,9 @@ class SearchFragment : Fragment() {
 
     private fun setupLoadingVisibility(isLoading: Boolean) {
         with(binding) {
-            rvCardList.visibility =
-                if (isLoading || viewModel.state.value.list.isEmpty()) View.INVISIBLE else View.VISIBLE
-            cpiLoading.visibility = if (!isLoading) View.INVISIBLE else View.VISIBLE
-            tvNoResults.visibility =
-                if (isLoading || viewModel.state.value.list.isNotEmpty()) View.INVISIBLE else View.VISIBLE
-
+            rvCardList.isInvisible = isLoading || viewModel.isListEmpty()
+            cpiLoading.isVisible = isLoading
+            tvNoResults.isVisible = !isLoading && viewModel.isListEmpty()
         }
     }
 
