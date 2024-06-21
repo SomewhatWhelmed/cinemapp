@@ -4,6 +4,7 @@ import com.example.cinemapp.data.MovieLocalCache
 import com.example.cinemapp.data.MovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
+import com.example.cinemapp.ui.MainViewModel
 import com.example.cinemapp.ui.authentication.AuthenticationViewModel
 import com.example.cinemapp.ui.main.actor_details.ActorDetailsViewModel
 import com.example.cinemapp.ui.main.actor_details.CreditsAdapter
@@ -69,6 +70,9 @@ val appModule = module {
     single { UserDataUtil() }
     single { CastAdapter(get()) }
     single { CreditsAdapter(get()) }
+    viewModel {
+        MainViewModel(get(), get(), get())
+    }
     viewModel {
         SplashViewModel(get(), get())
     }

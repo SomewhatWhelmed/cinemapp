@@ -7,29 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.home.HomeFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
+        android:id="@+id/llToolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/md_theme_primary"
-        android:padding="8dp"
-        app:contentInsetStart="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:logo="@drawable/cinemapp_logo"
-        app:navigationIconTint="@color/md_theme_onPrimary"
-        app:titleTextColor="@color/md_theme_onPrimary">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.appbar.MaterialToolbar>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/md_theme_primary"
+            android:padding="8dp"
+            app:contentInsetStart="0dp"
+            app:logo="@drawable/cinemapp_logo"
+            app:navigationIconTint="@color/md_theme_onPrimary"
+            app:titleTextColor="@color/md_theme_onPrimary">
 
-    <View
-        android:id="@+id/vSeparator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha="0.3"
-        android:background="@color/md_theme_onPrimary"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:id="@+id/vSeparator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.3"
+            android:background="@color/md_theme_onPrimary" />
+    </LinearLayout>
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/cgMovieLists"
@@ -40,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vSeparator"
+        app:layout_constraintTop_toBottomOf="@id/llToolbar"
         app:selectionRequired="true"
         app:singleSelection="true">
 
