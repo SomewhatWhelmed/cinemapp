@@ -6,35 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.collections.CollectionsFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/md_theme_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIconTint="@color/md_theme_onPrimary"
-        app:title="My Collections"
-        app:titleCentered="true"
-        app:titleTextColor="@color/md_theme_onPrimary" />
-
-
-    <View
-        android:id="@+id/vSeparator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha="0.3"
-        android:background="@color/md_theme_onPrimary"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vSeparator">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <com.google.android.material.tabs.TabLayout
@@ -127,6 +104,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
