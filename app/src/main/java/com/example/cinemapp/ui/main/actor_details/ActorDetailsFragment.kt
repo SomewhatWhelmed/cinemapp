@@ -32,7 +32,7 @@ class ActorDetailsFragment : Fragment() {
     private var _binding: FragmentActorDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: ActorDetailsFragmentArgs by navArgs()
-    private val creditAdapter:CreditsAdapter by inject()
+    private val creditAdapter: CreditsAdapter by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,11 +64,9 @@ class ActorDetailsFragment : Fragment() {
 
     private fun setupMainToolbar() {
         (activity as MainActivity).customizeTopNavigation(
-            resources.getString(R.string.title_actor_details),
-            R.drawable.vic_arrow_back,
-            false,
-            null,
-            null
+            title = resources.getString(R.string.title_actor_details),
+            navigationIconId = R.drawable.vic_arrow_back,
+            isTitleCentered = false
         )
     }
 
@@ -121,6 +119,7 @@ class ActorDetailsFragment : Fragment() {
                         viewModel.getCreditYears()[position]
                     )
                 }
+
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             rvCredits.adapter = creditAdapter

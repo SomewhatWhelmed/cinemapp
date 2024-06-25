@@ -21,8 +21,11 @@ class MainViewModel(
 ) : ViewModel() {
 
     data class State(
-        val accountDetails: AccountDetails? = null
-    )
+        val accountDetails: AccountDetails? = null,
+        val isDialogOpened: Boolean = false
+    ) {
+        val isSignedIn: Boolean = accountDetails?.let { true } ?: false
+    }
 
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
@@ -33,20 +36,39 @@ class MainViewModel(
     private val _signOutEvent: MutableSharedFlow<Unit> = MutableSharedFlow()
     val signOutEvent = _signOutEvent.asSharedFlow()
 
-    fun getAccountDetail(dialogOpened: Boolean) {
+    fun initialSetup() {
         viewModelScope.launch {
-            var newDetails: AccountDetails? = null
-            userPreferences.getSessionId().firstOrNull()?.let { sessionId ->
-                movieRepository.getAccountDetails(sessionId)?.let { details ->
-                    newDetails = profileMapper.mapToAccountDetails(details)
-                    _state.update {
-                        it.copy(
-                            accountDetails = newDetails
-                        )
-                    }
-                }
+            _state.update {
+                it.copy(
+                    accountDetails = getAccountDetail(),
+                    isDialogOpened = false
+                )
             }
-            if (dialogOpened) _openAccountDialog.emit(newDetails)
+        }
+    }
+
+    fun openAccountDialog() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    accountDetails = getAccountDetail(),
+                    isDialogOpened = true
+                )
+            }
+        }
+    }
+
+    fun closeAccountDialog() {
+        _state.update {
+            it.copy(isDialogOpened = false)
+        }
+    }
+
+    private suspend fun getAccountDetail(): AccountDetails? {
+        return userPreferences.getSessionId().firstOrNull()?.let { sessionId ->
+            movieRepository.getAccountDetails(sessionId)?.let { details ->
+                profileMapper.mapToAccountDetails(details)
+            }
         }
     }
 
@@ -60,6 +82,4 @@ class MainViewModel(
             _signOutEvent.emit(Unit)
         }
     }
-
-    fun isSignedIn(): Boolean = _state.value.accountDetails?.let { true } ?: false
 }

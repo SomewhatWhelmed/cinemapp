@@ -8,6 +8,7 @@ import com.example.cinemapp.databinding.ActivitySplashBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.util.finishThenStart
+import com.example.cinemapp.util.observeFlowSafely
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,13 +33,11 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun observeGoToMainScreenEvent() {
-        lifecycleScope.launch {
-            viewModel.goToNextScreen.collect { validSession ->
-                if (validSession) {
-                    finishThenStart(this@SplashActivity, MainActivity::class.java)
-                } else {
-                    finishThenStart(this@SplashActivity, AuthenticationActivity::class.java)
-                }
+        observeFlowSafely(viewModel.goToNextScreen) { validSession ->
+            if (validSession) {
+                finishThenStart(this@SplashActivity, MainActivity::class.java)
+            } else {
+                finishThenStart(this@SplashActivity, AuthenticationActivity::class.java)
             }
         }
     }

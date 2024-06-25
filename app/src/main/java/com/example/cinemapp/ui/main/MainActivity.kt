@@ -45,13 +45,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getAccountDetail(false)
+        viewModel.initialSetup()
         setupOnClickListeners()
         observeEvents()
 
         observeFlowSafely(viewModel.state) {
-            it.accountDetails?.let { accountDetails ->
-                setupAvatar(accountDetails, binding.tvInitial, binding.ivAvatar)
+            setupAvatar(it.accountDetails, binding.tvInitial, binding.ivAvatar)
+            if (it.isDialogOpened) {
+                createDialog(it.accountDetails)
             }
         }
 
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 ivAvatar.scaleX = 1f
                 ivAvatar.scaleY = 1f
-                ivAvatar.imageTintList = null
+                ivAvatar.colorFilter = null
             }
         } ?: run {
             tvInitial.text = ""
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnClickListeners() {
         binding.rlAvatar.setOnClickListener {
-            viewModel.getAccountDetail(true)
+            viewModel.openAccountDialog()
         }
     }
 
@@ -126,28 +127,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeDialogEvent() {
-        lifecycleScope.launch {
-            viewModel.openAccountDialog.collect { accountDetails ->
-                createDialog(accountDetails)
-            }
+        observeFlowSafely(viewModel.openAccountDialog) { accountDetails ->
+            createDialog(accountDetails)
         }
     }
 
     private fun observeSignOutEvent() {
-        lifecycleScope.launch {
-            viewModel.signOutEvent.collect {
-                this@MainActivity.finishThenStart(
-                    this@MainActivity,
-                    AuthenticationActivity::class.java
-                )
-            }
+        observeFlowSafely(viewModel.signOutEvent) {
+            this@MainActivity.finishThenStart(
+                this@MainActivity,
+                AuthenticationActivity::class.java
+            )
         }
     }
 
     private fun createDialog(accountDetails: AccountDetails?) {
         val builder = AlertDialog.Builder(this, R.style.WrapContentDialog)
         val dialogBinding = DialogAccountBinding.inflate(layoutInflater)
-        builder.setView(dialogBinding.root).create().show()
+        builder.setView(dialogBinding.root)
+            .setOnDismissListener { viewModel.closeAccountDialog() }
+            .create().show()
         with(dialogBinding) {
             accountDetails?.let {
                 setupAvatar(accountDetails, tvInitial, ivAvatar)
@@ -167,14 +166,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun isSignedIn(): Boolean = viewModel.isSignedIn()
+    fun isSignedIn(): Boolean = viewModel.state.value.isSignedIn
 
     fun customizeTopNavigation(
-        title: String?,
-        navigationIconId: Int?,
-        isTitleCentered: Boolean,
-        logoId: Int?,
-        padding: Int?,
+        title: String? = null,
+        navigationIconId: Int? = null,
+        isTitleCentered: Boolean = false,
+        logoId: Int? = null,
+        padding: Int? = null,
         ) {
         with(binding) {
             title?.let {

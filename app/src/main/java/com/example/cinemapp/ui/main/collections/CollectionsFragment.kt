@@ -51,7 +51,7 @@ class CollectionsFragment : Fragment() {
 
         observeFlowSafely(viewModel.state) {
             adapter.setMovies(it.movies)
-            setupLoadingVisibility(it.isLoading, (activity as MainActivity).isSignedIn())
+            setupLoadingVisibility(it.isLoading, (activity as? MainActivity)?.isSignedIn() ?: false)
             viewModel.setPagingRunning(false)
         }
 
@@ -92,7 +92,6 @@ class CollectionsFragment : Fragment() {
             startActivity(Intent(context, AuthenticationActivity::class.java))
         }
     }
-
 
 
     private fun setupTabs() {

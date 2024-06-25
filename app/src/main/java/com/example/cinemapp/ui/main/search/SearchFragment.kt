@@ -70,7 +70,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupMainToolbar() {
-        (activity as MainActivity).showTopNavigation(false)
+        (activity as? MainActivity)?.showTopNavigation(false)
     }
 
     private fun setupSearchBar() {
