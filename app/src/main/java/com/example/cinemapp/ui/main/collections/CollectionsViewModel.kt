@@ -1,27 +1,20 @@
-package com.example.cinemapp.ui.main.profile
+package com.example.cinemapp.ui.main.collections
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
-import com.example.cinemapp.data.model.MovieDetailsDTO
-import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.ui.main.model.MovieListInfo
 import com.example.cinemapp.util.mappers.MovieListMapper
 import com.example.cinemapp.util.mappers.ProfileMapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(
+class CollectionsViewModel(
     private val movieRepository: MovieRepository,
     private val userPrefs: UserPreferences,
     private val profileMapper: ProfileMapper,
@@ -132,9 +125,9 @@ class ProfileViewModel(
 
     fun loadPage(tabPosition: Int) {
         when (tabPosition) {
-            ProfileFragmentTabs.FAVORITES.ordinal -> getFavoriteNextPage()
-            ProfileFragmentTabs.WATCHLIST.ordinal -> getWatchlistNextPage()
-            ProfileFragmentTabs.RATED.ordinal -> getRatedNextPage()
+            CollectionsFragmentTabs.FAVORITES.ordinal -> getFavoriteNextPage()
+            CollectionsFragmentTabs.WATCHLIST.ordinal -> getWatchlistNextPage()
+            CollectionsFragmentTabs.RATED.ordinal -> getRatedNextPage()
         }
     }
 

@@ -59,13 +59,14 @@
             app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.cinemapp.ui.main.profile.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        android:id="@+id/collectionsFragment"
+        android:name="com.example.cinemapp.ui.main.collections.CollectionsFragment"
+        android:label="fragment_collections"
+        tools:layout="@layout/fragment_collections" >
         <action
             android:id="@+id/toDetailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
+
 
 </navigation>

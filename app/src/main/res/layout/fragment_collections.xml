@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.profile.ProfileFragment">
+    tools:context=".ui.main.collections.CollectionsFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIconTint="@color/md_theme_onPrimary"
-        app:title="Profile Details"
+        app:title="My Collections"
         app:titleCentered="true"
         app:titleTextColor="@color/md_theme_onPrimary" />
 

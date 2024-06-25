@@ -1,7 +1,10 @@
 package com.example.cinemapp.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -35,11 +38,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupNavigation()
-        viewModel.getAccountDetail(false)
     }
 
     override fun onStart() {
         super.onStart()
+        viewModel.getAccountDetail(false)
         setupOnClickListeners()
         observeEvents()
 

@@ -5,4 +5,8 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
     <string name="collections_unavailable">To be able to add movies into your collections you need to be signed in.</string>
+    <string name="nav_my_collections">My Collections</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_settings">Settings</string>
 </resources>

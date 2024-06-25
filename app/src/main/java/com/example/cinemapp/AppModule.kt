@@ -11,7 +11,7 @@ import com.example.cinemapp.ui.main.actor_details.CreditsAdapter
 import com.example.cinemapp.ui.main.movie_details.MovieDetailsViewModel
 import com.example.cinemapp.ui.main.home.HomeViewModel
 import com.example.cinemapp.ui.main.movie_details.CastAdapter
-import com.example.cinemapp.ui.main.profile.ProfileViewModel
+import com.example.cinemapp.ui.main.collections.CollectionsViewModel
 import com.example.cinemapp.ui.main.search.SearchViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import com.example.cinemapp.util.UserDataUtil
@@ -92,6 +92,6 @@ val appModule = module {
         AuthenticationViewModel(get(), get(), get())
     }
     viewModel {
-        ProfileViewModel(get(), get(), get(), get())
+        CollectionsViewModel(get(), get(), get(), get())
     }
 }

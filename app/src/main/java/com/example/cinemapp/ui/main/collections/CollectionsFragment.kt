@@ -1,48 +1,41 @@
-package com.example.cinemapp.ui.main.profile
+package com.example.cinemapp.ui.main.collections
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cinemapp.R
 import com.example.cinemapp.data.MovieRepository
-import com.example.cinemapp.databinding.FragmentProfileBinding
+import com.example.cinemapp.databinding.FragmentCollectionsBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.shared.MovieAdapter
-import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
-import com.example.cinemapp.util.finishThenStart
 import com.example.cinemapp.util.isEndOfScroll
-import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProfileFragment : Fragment() {
+class CollectionsFragment : Fragment() {
 
-    private val viewModel by viewModel<ProfileViewModel>()
+    private val viewModel by viewModel<CollectionsViewModel>()
     private val adapter = MovieAdapter()
-    private var _binding: FragmentProfileBinding? = null
+    private var _binding: FragmentCollectionsBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentCollectionsBinding.inflate(inflater, container, false)
         setupAdapter()
         viewModel.setupLoading()
         return binding.root
@@ -136,7 +129,7 @@ class ProfileFragment : Fragment() {
 
     private fun onMovieCardClick(movie: MovieCard) {
         findNavController().safeNavigateWithArgs(
-            ProfileFragmentDirections.toDetailsFragment(movieId = movie.id)
+            CollectionsFragmentDirections.toDetailsFragment(movieId = movie.id)
         )
     }
 
