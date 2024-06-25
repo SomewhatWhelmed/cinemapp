@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cinemapp.R
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.databinding.FragmentCollectionsBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
@@ -36,6 +37,7 @@ class CollectionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCollectionsBinding.inflate(inflater, container, false)
+        setupMainToolbar()
         setupAdapter()
         viewModel.setupLoading()
         return binding.root
@@ -63,6 +65,16 @@ class CollectionsFragment : Fragment() {
                     }
                 }
             }
+        )
+    }
+
+    private fun setupMainToolbar() {
+        (activity as MainActivity).customizeTopNavigation(
+            resources.getString(R.string.title_collections),
+            null,
+            true,
+            null,
+            8
         )
     }
 

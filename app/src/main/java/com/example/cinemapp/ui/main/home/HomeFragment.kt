@@ -10,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentHomeBinding
+import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.shared.MovieAdapter
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.util.isEndOfScroll
@@ -31,6 +33,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setupMainToolbar()
         setupAdapter()
         viewModel.setupLoading()
         viewModel.getUpcomingNextPage()
@@ -47,6 +50,16 @@ class HomeFragment : Fragment() {
             viewModel.setPagingRunning(false)
             setupLoadingVisibility(it.isLoading)
         }
+    }
+
+    private fun setupMainToolbar() {
+        (activity as MainActivity).customizeTopNavigation(
+            null,
+            null,
+            true,
+            R.drawable.cinemapp_logo,
+            8
+        )
     }
 
     private fun setupLoadingVisibility(isLoading: Boolean) {

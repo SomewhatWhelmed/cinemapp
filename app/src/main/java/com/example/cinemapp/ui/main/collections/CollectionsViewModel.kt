@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 class CollectionsViewModel(
     private val movieRepository: MovieRepository,
     private val userPrefs: UserPreferences,
-    private val profileMapper: ProfileMapper,
     private val movieListMapper: MovieListMapper
 ) : ViewModel() {
 

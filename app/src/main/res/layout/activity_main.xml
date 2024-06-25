@@ -38,11 +38,11 @@
                 <ImageView
                     android:id="@+id/ivAvatar"
                     android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@color/md_theme_primary"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
-                    android:layout_gravity="center"
-                    android:layout_height="40dp"
-                    android:background="@color/md_theme_primary"
                     android:src="@drawable/vic_profile"
                     app:tint="@color/md_theme_onPrimary"
                     tools:ignore="ContentDescription" />
@@ -69,6 +69,7 @@
             android:layout_height="50dp"
             android:background="@color/md_theme_primary"
             app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

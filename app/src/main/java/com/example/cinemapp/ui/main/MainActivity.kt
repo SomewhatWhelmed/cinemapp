@@ -9,8 +9,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -23,6 +25,7 @@ import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.util.finishThenStart
 import com.example.cinemapp.util.loadImage
+import com.example.cinemapp.util.mapDpToPixel
 import com.example.cinemapp.util.observeFlowSafely
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -165,4 +168,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun isSignedIn(): Boolean = viewModel.isSignedIn()
+
+    fun customizeTopNavigation(
+        title: String?,
+        navigationIconId: Int?,
+        isTitleCentered: Boolean,
+        logoId: Int?,
+        padding: Int?,
+        ) {
+        with(binding) {
+            title?.let {
+                toolbar.title = it
+                toolbar.isTitleCentered = isTitleCentered
+            } ?: run { toolbar.title = null }
+            navigationIconId?.let {
+                toolbar.navigationIcon = AppCompatResources.getDrawable(this@MainActivity, it)
+                toolbar.setNavigationOnClickListener {
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            } ?: run { toolbar.navigationIcon = null }
+            logoId?.let { toolbar.logo = AppCompatResources.getDrawable(this@MainActivity, it)}
+                ?: run { toolbar.logo = null }
+            padding?.let { toolbar.setPadding(mapDpToPixel(it.toFloat(), this@MainActivity)) }
+                ?: run { toolbar.setPadding(0) }
+        }
+        showTopNavigation(true)
+    }
+    fun showTopNavigation(isVisible: Boolean) {
+        binding.clToolbar.isVisible = isVisible
+    }
 }

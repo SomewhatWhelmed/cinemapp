@@ -8,11 +8,7 @@ import com.example.cinemapp.ui.main.actor_details.CreditsAdapter
 
 fun LayoutParams.setMargin(direction: Direction, dpValue: Float, context: Context) {
     val marginParams = this as ViewGroup.MarginLayoutParams
-    val pixelValue = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dpValue,
-        context.resources.displayMetrics
-    ).toInt()
+    val pixelValue = mapDpToPixel(dpValue, context)
     when (direction) {
         Direction.LEFT -> marginParams.leftMargin = pixelValue
         Direction.RIGHT -> marginParams.rightMargin = pixelValue
@@ -21,6 +17,13 @@ fun LayoutParams.setMargin(direction: Direction, dpValue: Float, context: Contex
     }
 }
 
+fun mapDpToPixel(dpValue: Float, context: Context): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dpValue,
+        context.resources.displayMetrics
+    ).toInt()
+}
 
 enum class Direction {
     LEFT, RIGHT, TOP, BOTTOM
