@@ -18,6 +18,7 @@ import com.example.cinemapp.R
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.databinding.FragmentProfileBinding
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
+import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.shared.MovieAdapter
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
@@ -51,15 +52,11 @@ class ProfileFragment : Fragment() {
         super.onStart()
         viewModel.getInitialData()
         setupOnClick()
-        observeSignOutEvent()
         setupTabs()
 
         observeFlowSafely(viewModel.state) {
-            it.accountDetails?.let { accountDetails ->
-                setupDetails(accountDetails)
-            }
             adapter.setMovies(it.movies)
-            setupLoadingVisibility(it.isLoading, it.accountDetails?.let { true } ?: false)
+            setupLoadingVisibility(it.isLoading, (activity as MainActivity).isSignedIn())
             viewModel.setPagingRunning(false)
         }
 
@@ -79,41 +76,13 @@ class ProfileFragment : Fragment() {
     private fun setupLoadingVisibility(isLoading: Boolean, signedIn: Boolean) {
         with(binding) {
             clContent.isVisible = signedIn
-            btnSignIn.isVisible = !isLoading && !signedIn
+            llNotSignedIn.isVisible = !isLoading && !signedIn
             rvMovieList.isInvisible = isLoading
             cpiLoading.isVisible = isLoading
         }
     }
 
-    private fun setupDetails(accountDetails: AccountDetails) {
-        with(binding) {
-            tvName.text = accountDetails.name
-            tvUsername.text = accountDetails.username
-            if (accountDetails.avatar.isEmpty()) {
-                tvInitial.text = accountDetails.name.substring(0, 1)
-            } else {
-                loadImage(
-                    accountDetails.avatar,
-                    ivAvatar,
-                    root.context,
-                    R.drawable.ic_placeholder_person
-                )
-                ivAvatar.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.md_theme_surface
-                    )
-                )
-            }
-        }
-    }
-
     private fun setupOnClick() {
-        binding.btnSignOut.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.signOut()
-            }
-        }
         binding.btnSignIn.setOnClickListener {
             startActivity(Intent(context, AuthenticationActivity::class.java))
         }
@@ -156,15 +125,6 @@ class ProfileFragment : Fragment() {
         smoothScroller.targetPosition = 0
         binding.rvMovieList.layoutManager?.startSmoothScroll(smoothScroller)
     }
-
-    private fun observeSignOutEvent() {
-        lifecycleScope.launch {
-            viewModel.signOut.collect {
-                activity?.finishThenStart(context, AuthenticationActivity::class.java)
-            }
-        }
-    }
-
 
     private fun setupAdapter() {
         binding.rvMovieList.adapter = adapter

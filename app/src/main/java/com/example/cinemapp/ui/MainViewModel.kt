@@ -61,4 +61,5 @@ class MainViewModel(
         }
     }
 
+    fun isSignedIn(): Boolean = _state.value.accountDetails?.let { true } ?: false
 }

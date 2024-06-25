@@ -29,7 +29,6 @@ class ProfileViewModel(
 ) : ViewModel() {
 
     data class State(
-        val accountDetails: AccountDetails? = null,
         val isLoading: Boolean = true,
         val pagesLoaded: Int = 0,
         val totalPages: Int = 1,
@@ -40,11 +39,7 @@ class ProfileViewModel(
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
 
-    private val _signOut: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val signOut = _signOut.asSharedFlow()
-
     private var isPaging = false
-
 
     fun getCurrentListType() = state.value.movieListType
 
@@ -52,46 +47,25 @@ class ProfileViewModel(
         _state.update { it.copy(isLoading = true) }
     }
 
-    fun signOut() {
-        viewModelScope.launch {
-            val sessionId = userPrefs.getSessionId().firstOrNull()
-            sessionId?.let {
-                movieRepository.deleteSession(it)
-                userPrefs.deleteSessionId()
-            }
-            _signOut.emit(Unit)
-        }
-    }
-
     fun getInitialData() {
         viewModelScope.launch {
             val sessionId = userPrefs.getSessionId().firstOrNull()
             sessionId?.let {
-                val accountDetails = getAccountDetailsData(sessionId)
                 val pagingDetails = getNextPageData(
                     if (state.value.pagesLoaded == 0) MovieRepository.MovieListType.FAVORITE else state.value.movieListType,
                     sessionId = sessionId,
                     resetPaging = true
                 )
                 _state.update {
-                    pagingDetails.copy(
-                        accountDetails = accountDetails
-                    )
+                    pagingDetails
                 }
             } ?: run {
                 _state.update {
                     it.copy(
-                        isLoading = false,
-                        accountDetails = null
+                        isLoading = false
                     )
                 }
             }
-        }
-    }
-
-    private suspend fun getAccountDetailsData(sessionId: String): AccountDetails? {
-        return movieRepository.getAccountDetails(sessionId)?.let { details ->
-            profileMapper.mapToAccountDetails(details)
         }
     }
 

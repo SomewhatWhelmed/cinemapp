@@ -160,4 +160,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun isSignedIn(): Boolean = viewModel.isSignedIn()
 }
