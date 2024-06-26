@@ -67,6 +67,11 @@
             android:id="@+id/toDetailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsMainFragment"
+        android:name="com.example.cinemapp.ui.main.settings.SettingsMainFragment"
+        android:label="fragment_settings_main"
+        tools:layout="@layout/fragment_settings_main" />
 
 
 </navigation>
