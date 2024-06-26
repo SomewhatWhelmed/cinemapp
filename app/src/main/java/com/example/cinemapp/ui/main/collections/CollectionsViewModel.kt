@@ -1,35 +1,26 @@
-package com.example.cinemapp.ui.main.profile
+package com.example.cinemapp.ui.main.collections
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
-import com.example.cinemapp.data.model.MovieDetailsDTO
-import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.ui.main.model.MovieCard
 import com.example.cinemapp.ui.main.model.MovieListInfo
 import com.example.cinemapp.util.mappers.MovieListMapper
 import com.example.cinemapp.util.mappers.ProfileMapper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(
+class CollectionsViewModel(
     private val movieRepository: MovieRepository,
     private val userPrefs: UserPreferences,
-    private val profileMapper: ProfileMapper,
     private val movieListMapper: MovieListMapper
 ) : ViewModel() {
 
     data class State(
-        val accountDetails: AccountDetails? = null,
         val isLoading: Boolean = true,
         val pagesLoaded: Int = 0,
         val totalPages: Int = 1,
@@ -40,11 +31,7 @@ class ProfileViewModel(
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state
 
-    private val _signOut: MutableSharedFlow<Unit> = MutableSharedFlow()
-    val signOut = _signOut.asSharedFlow()
-
     private var isPaging = false
-
 
     fun getCurrentListType() = state.value.movieListType
 
@@ -52,46 +39,25 @@ class ProfileViewModel(
         _state.update { it.copy(isLoading = true) }
     }
 
-    fun signOut() {
-        viewModelScope.launch {
-            val sessionId = userPrefs.getSessionId().firstOrNull()
-            sessionId?.let {
-                movieRepository.deleteSession(it)
-                userPrefs.deleteSessionId()
-            }
-            _signOut.emit(Unit)
-        }
-    }
-
     fun getInitialData() {
         viewModelScope.launch {
             val sessionId = userPrefs.getSessionId().firstOrNull()
             sessionId?.let {
-                val accountDetails = getAccountDetailsData(sessionId)
                 val pagingDetails = getNextPageData(
                     if (state.value.pagesLoaded == 0) MovieRepository.MovieListType.FAVORITE else state.value.movieListType,
                     sessionId = sessionId,
                     resetPaging = true
                 )
                 _state.update {
-                    pagingDetails.copy(
-                        accountDetails = accountDetails
-                    )
+                    pagingDetails
                 }
             } ?: run {
                 _state.update {
                     it.copy(
-                        isLoading = false,
-                        accountDetails = null
+                        isLoading = false
                     )
                 }
             }
-        }
-    }
-
-    private suspend fun getAccountDetailsData(sessionId: String): AccountDetails? {
-        return movieRepository.getAccountDetails(sessionId)?.let { details ->
-            profileMapper.mapToAccountDetails(details)
         }
     }
 
@@ -158,9 +124,9 @@ class ProfileViewModel(
 
     fun loadPage(tabPosition: Int) {
         when (tabPosition) {
-            ProfileFragmentTabs.FAVORITES.ordinal -> getFavoriteNextPage()
-            ProfileFragmentTabs.WATCHLIST.ordinal -> getWatchlistNextPage()
-            ProfileFragmentTabs.RATED.ordinal -> getRatedNextPage()
+            CollectionsFragmentTabs.FAVORITES.ordinal -> getFavoriteNextPage()
+            CollectionsFragmentTabs.WATCHLIST.ordinal -> getWatchlistNextPage()
+            CollectionsFragmentTabs.RATED.ordinal -> getRatedNextPage()
         }
     }
 

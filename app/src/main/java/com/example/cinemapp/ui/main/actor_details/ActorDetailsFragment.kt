@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentActorDetailsBinding
+import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import com.example.cinemapp.util.ageAndLifespanFormat
@@ -31,13 +32,14 @@ class ActorDetailsFragment : Fragment() {
     private var _binding: FragmentActorDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: ActorDetailsFragmentArgs by navArgs()
-    private val creditAdapter:CreditsAdapter by inject()
+    private val creditAdapter: CreditsAdapter by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActorDetailsBinding.inflate(inflater, container, false)
+        setupMainToolbar()
         setupAdapter()
         viewModel.setupLoading()
         viewModel.getPersonDetails(args.personId)
@@ -60,6 +62,14 @@ class ActorDetailsFragment : Fragment() {
         }
     }
 
+    private fun setupMainToolbar() {
+        (activity as MainActivity).customizeTopNavigation(
+            title = resources.getString(R.string.title_actor_details),
+            navigationIconId = R.drawable.vic_arrow_back,
+            isTitleCentered = false
+        )
+    }
+
     private fun setupLoadingVisibility(isLoading: Boolean) {
         binding.clContent.isVisible = !isLoading
         binding.cpiLoading.isVisible = isLoading
@@ -67,9 +77,6 @@ class ActorDetailsFragment : Fragment() {
 
     private fun setupView(details: PersonDetails) {
         with(binding) {
-            toolbar.setNavigationOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
             tvName.text = details.name
             val ageDisplay = details.birthday.ageAndLifespanFormat(details.deathday)
             tvAge.text = ageDisplay
@@ -112,6 +119,7 @@ class ActorDetailsFragment : Fragment() {
                         viewModel.getCreditYears()[position]
                     )
                 }
+
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             rvCredits.adapter = creditAdapter

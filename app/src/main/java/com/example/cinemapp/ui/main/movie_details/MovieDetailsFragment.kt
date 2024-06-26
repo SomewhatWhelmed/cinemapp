@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
 import androidx.core.view.isInvisible
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentDetailsBinding
+import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.model.CastMember
 import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.formatRating
@@ -49,6 +51,7 @@ class MovieDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        setupMainToolbar()
         setupAdapter()
         setupOnClickListeners()
         viewModel.setupLoading()
@@ -67,6 +70,16 @@ class MovieDetailsFragment : Fragment() {
             castAdapter.setCast(it.cast)
             mediaAdapter.setMedia(it.media)
         }
+    }
+
+    private fun setupMainToolbar() {
+        (activity as MainActivity).customizeTopNavigation(
+            resources.getString(R.string.title_movie_details),
+            R.drawable.vic_arrow_back,
+            false,
+            null,
+            null
+        )
     }
 
     private fun setupDetails(details: MovieDetails) {
@@ -175,9 +188,6 @@ class MovieDetailsFragment : Fragment() {
 
     private fun setupOnClickListeners() {
         with(binding) {
-            toolbar.setNavigationOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
             ivArrowLeft.setOnClickListener {
                 moveRecyclerView(-1)
             }

@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.databinding.ActivityAuthenticationBinding
 import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.util.finishThenStart
+import com.example.cinemapp.util.observeFlowSafely
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -60,10 +61,8 @@ class AuthenticationActivity : AppCompatActivity() {
     }
 
     private fun observeSignIn() {
-        lifecycleScope.launch {
-            viewModel.signInAttempt.collect { success ->
-                handleSignIn(success)
-            }
+        observeFlowSafely(viewModel.signInAttempt) { success ->
+            handleSignIn(success)
         }
     }
 

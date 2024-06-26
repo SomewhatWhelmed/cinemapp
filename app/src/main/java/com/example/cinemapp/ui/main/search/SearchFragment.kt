@@ -14,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentSearchBinding
+import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.model.SearchCard
 import com.example.cinemapp.ui.main.model.SearchType
 import com.example.cinemapp.util.isEndOfScroll
@@ -38,6 +40,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        setupMainToolbar()
         setupAdapter()
         viewModel.setupLoading(false)
         return binding.root
@@ -64,6 +67,10 @@ class SearchFragment : Fragment() {
                 }
             }
         )
+    }
+
+    private fun setupMainToolbar() {
+        (activity as? MainActivity)?.showTopNavigation(false)
     }
 
     private fun setupSearchBar() {
