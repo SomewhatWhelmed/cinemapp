@@ -69,12 +69,9 @@ class CollectionsFragment : Fragment() {
     }
 
     private fun setupMainToolbar() {
-        (activity as MainActivity).customizeTopNavigation(
+        (activity as? MainActivity)?.customizeTopNavigation(
             resources.getString(R.string.title_collections),
-            null,
-            true,
-            null,
-            8
+            isTitleCentered = true
         )
     }
 

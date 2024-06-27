@@ -14,7 +14,7 @@ import com.example.cinemapp.databinding.SettingsItemViewBinding
 import com.example.cinemapp.util.Direction
 import com.example.cinemapp.util.setMargin
 
-class SettingsItemView : LinearLayout {
+class SettingsItemView : ConstraintLayout {
 
     private lateinit var tvLabel: TextView
     private lateinit var ivIcon: ImageView

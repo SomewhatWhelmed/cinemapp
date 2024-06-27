@@ -53,12 +53,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupMainToolbar() {
-        (activity as MainActivity).customizeTopNavigation(
-            null,
-            null,
-            true,
-            R.drawable.cinemapp_logo,
-            8
+        (activity as? MainActivity)?.customizeTopNavigation(
+            isTitleCentered = true,
+            logoId = R.drawable.cinemapp_logo,
+            padding = 8
         )
     }
 

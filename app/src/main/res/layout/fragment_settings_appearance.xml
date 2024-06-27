@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/md_theme_surface"
+    tools:context=".ui.main.settings.appearance.SettingsAppearanceFragment">
+
+    <RadioGroup
+        android:id="@+id/rgThemes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_primary">
+
+        <RadioButton
+            style="@style/RadioButtonItem"
+            android:id="@+id/rbSystemDefault"
+            android:text="@string/settings_appearance_system_default"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:alpha="0.5"
+            android:background="@color/md_theme_secondary"/>
+        <RadioButton
+            android:id="@+id/rbLight"
+            style="@style/RadioButtonItem"
+            android:text="@string/settings_appearance_light"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:alpha="0.5"
+            android:background="@color/md_theme_secondary"/>
+        <RadioButton
+            android:id="@+id/rbDark"
+            style="@style/RadioButtonItem"
+            android:text="@string/settings_appearance_dark"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+    </RadioGroup>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.5"
+        android:background="@color/md_theme_secondary"/>
+
+</LinearLayout>

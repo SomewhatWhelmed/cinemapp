@@ -10,6 +10,7 @@
 
 
     <com.example.cinemapp.ui.main.settings.SettingsItemView
+        android:id="@+id/siAppearance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/vic_appearance"
@@ -17,6 +18,7 @@
         app:label="@string/settings_appearance_label" />
 
     <com.example.cinemapp.ui.main.settings.SettingsItemView
+        android:id="@+id/siLanguage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/vic_language"
@@ -24,6 +26,7 @@
         app:label="@string/settings_language_label" />
 
     <com.example.cinemapp.ui.main.settings.SettingsItemView
+        android:id="@+id/siAbout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:icon="@drawable/vic_info"

@@ -71,7 +71,34 @@
         android:id="@+id/settingsMainFragment"
         android:name="com.example.cinemapp.ui.main.settings.SettingsMainFragment"
         android:label="fragment_settings_main"
-        tools:layout="@layout/fragment_settings_main" />
+        tools:layout="@layout/fragment_settings_main" >
+        <action
+            android:id="@+id/toSettingsAppearanceFragment"
+            app:destination="@id/settingsAppearanceFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/toSettingsLanguageFragment"
+            app:destination="@id/settingsLanguageFragment" />
+        <action
+            android:id="@+id/toSettingsAboutFragment"
+            app:destination="@id/settingsAboutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsAppearanceFragment"
+        android:name="com.example.cinemapp.ui.main.settings.appearance.SettingsAppearanceFragment"
+        android:label="fragment_settings_appearance"
+        tools:layout="@layout/fragment_settings_appearance" />
+    <fragment
+        android:id="@+id/settingsLanguageFragment"
+        android:name="com.example.cinemapp.ui.main.settings.language.SettingsLanguageFragment"
+        android:label="fragment_settings_language"
+        tools:layout="@layout/fragment_settings_language" />
+    <fragment
+        android:id="@+id/settingsAboutFragment"
+        android:name="com.example.cinemapp.ui.main.settings.about.SettingsAboutFragment"
+        android:label="fragment_settings_about"
+        tools:layout="@layout/fragment_settings_about" />
 
 
 </navigation>

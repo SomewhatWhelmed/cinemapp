@@ -1,5 +1,6 @@
 package com.example.cinemapp
 
+import android.app.UiModeManager
 import com.example.cinemapp.data.MovieLocalCache
 import com.example.cinemapp.data.MovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
@@ -13,7 +14,7 @@ import com.example.cinemapp.ui.main.home.HomeViewModel
 import com.example.cinemapp.ui.main.movie_details.CastAdapter
 import com.example.cinemapp.ui.main.collections.CollectionsViewModel
 import com.example.cinemapp.ui.main.search.SearchViewModel
-import com.example.cinemapp.ui.main.settings.SettingsMainViewModel
+import com.example.cinemapp.ui.main.settings.appearance.SettingsAppearanceViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.ActorDetailsMapper
@@ -96,6 +97,6 @@ val appModule = module {
         CollectionsViewModel(get(), get(), get())
     }
     viewModel {
-        SettingsMainViewModel()
+        SettingsAppearanceViewModel(get())
     }
 }

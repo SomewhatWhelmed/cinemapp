@@ -73,12 +73,10 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun setupMainToolbar() {
-        (activity as MainActivity).customizeTopNavigation(
-            resources.getString(R.string.title_movie_details),
-            R.drawable.vic_arrow_back,
-            false,
-            null,
-            null
+        (activity as? MainActivity)?.customizeTopNavigation(
+            title = resources.getString(R.string.title_movie_details),
+            navigationIconId = R.drawable.vic_arrow_back,
+            isTitleCentered = false
         )
     }
 
