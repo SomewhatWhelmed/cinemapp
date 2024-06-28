@@ -13,15 +13,20 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.cinemapp.ui.main.model.AccountDetails
+import com.example.cinemapp.util.ENGLISH
+import com.example.cinemapp.util.getDefaultLanguage
+import com.example.cinemapp.util.getSystemDefaultValue
 import com.example.cinemapp.util.setAppTheme
+import com.example.cinemapp.util.setupLanguage
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlin.coroutines.coroutineContext
 
-class UserPreferences (val context: Context){
+class UserPreferences (val context: Context, val movieLocalCache: MovieLocalCache){
 
     private val Context.userPrefs: DataStore<Preferences> by preferencesDataStore(name = "preferences")
     private val userPrefs = context.userPrefs
@@ -38,6 +43,7 @@ class UserPreferences (val context: Context){
 
     private val sessionIdKey = stringPreferencesKey("SESSION_ID_KEY")
     private val appearanceMode = intPreferencesKey("APPEARANCE_MODE")
+    private val languageKey = stringPreferencesKey("LANGUAGE")
 
     fun getSessionId(): Flow<String?> {
         return getUserPrefs().map { pref ->
@@ -61,11 +67,31 @@ class UserPreferences (val context: Context){
         }
     }
 
-    suspend fun setTheme(mode: Int) {
+    suspend fun setTheme(mode: Int?) {
+        val newMode = mode ?: getSystemDefaultValue()
         userPrefs.edit { pref ->
-            pref[appearanceMode] = mode
+            pref[appearanceMode] = newMode
         }
-        setAppTheme(mode, context)
+        setAppTheme(newMode, context)
     }
 
+
+    fun getLanguage(): Flow<String?> {
+        return getUserPrefs().map { pref ->
+            pref[languageKey]
+        }
+    }
+
+    suspend fun getLanguageNotNull(): String {
+        return getLanguage().firstOrNull() ?: getDefaultLanguage()
+    }
+
+    suspend fun setLanguage(language: String?) {
+        val newLanguage = language ?: ENGLISH
+        userPrefs.edit { pref ->
+            pref[languageKey] = newLanguage
+        }
+        movieLocalCache.clearAllCache()
+        setupLanguage(newLanguage, context)
+    }
 }

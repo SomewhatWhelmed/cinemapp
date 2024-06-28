@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">CinemApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
@@ -21,4 +20,36 @@
     <string name="settings_appearance_dark">Dark</string>
     <string name="settings_language_english">English</string>
     <string name="settings_language_srpski">Srpski</string>
+    <string name="no_content_description">No content description</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">or</string>
+    <string name="continue_as_guest">Continue as guest</string>
+    <string name="tmdb_disclaimer">This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB.</string>
+    <string name="movie_list_upcoming">Upcoming</string>
+    <string name="movie_list_popular">Popular</string>
+    <string name="movie_list_top_rated">Top Rated</string>
+    <string name="name">Name</string>
+    <string name="description_expand_more">More</string>
+    <string name="movie_rating_label_unrated">Rate this</string>
+    <string name="movie_rating_label_rated">Your rating</string>
+    <string name="movie_rating_none">No rating</string>
+    <string name="movie_favorites_add">Add to Favorites</string>
+    <string name="movie_favorites_remove">Remove from Favorites</string>
+    <string name="movie_watchlist_add">Add to Watchlist</string>
+    <string name="movie_watchlist_remove">Remove from Watchlist</string>
+    <string name="cast">Cast</string>
+    <string name="actor_age">Age</string>
+    <string name="actor_gender">Gender</string>
+    <string name="search_hint">Search..</string>
+    <string name="list_movies">Movies</string>
+    <string name="list_actors">Actors</string>
+    <string name="search_no_results">No results</string>
+    <string name="list_favorites">Favorites</string>
+    <string name="list_watchlist">Watchlist</string>
+    <string name="list_rated">Rated</string>
+    <string name="title_settings_appearance">Select theme</string>
+    <string name="title_settings_language">Select language</string>
+    <string name="title_settings_about">About</string>
 </resources>

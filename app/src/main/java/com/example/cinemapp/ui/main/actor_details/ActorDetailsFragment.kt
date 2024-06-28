@@ -84,6 +84,7 @@ class ActorDetailsFragment : Fragment() {
 
             setExpandableTextView(
                 text = details.biography,
+                phrase = getString(R.string.description_expand_more),
                 phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
                 maxChars = BIOGRAPHY_MAX_CHARACTERS,
                 textView = tvBiography

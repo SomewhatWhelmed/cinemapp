@@ -37,10 +37,22 @@ class SplashViewModel(
         }
     }
 
-    fun setTheme() {
+    fun setupUserPrefs() {
+        setTheme()
+        setLanguage()
+    }
+
+    private fun setLanguage() {
+        viewModelScope.launch {
+            if (userPrefs.getLanguage().firstOrNull() == null) {
+                userPrefs.setLanguage(null)
+            }
+        }
+    }
+    private fun setTheme() {
         viewModelScope.launch {
             userPrefs.setTheme(
-                userPrefs.getTheme().firstOrNull() ?: getSystemDefaultValue()
+                userPrefs.getTheme().firstOrNull()
             )
         }
     }

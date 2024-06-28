@@ -7,20 +7,22 @@ import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.util.getSystemDarkValue
 import com.example.cinemapp.util.getSystemDefaultValue
 import com.example.cinemapp.util.getSystemLightValue
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingsAppearanceViewModel(private val userPreferences: UserPreferences) : ViewModel() {
 
-    private val _state = MutableStateFlow(ThemeMode.SYSTEM)
-    val state: StateFlow<ThemeMode> = _state
+    private val _currentThemeEvent: MutableSharedFlow<ThemeMode> = MutableSharedFlow()
+    val currentThemeEvent = _currentThemeEvent.asSharedFlow()
 
     fun getCurrentTheme() {
         viewModelScope.launch {
-            _state.update {
+            _currentThemeEvent.emit(
                 userPreferences.getTheme().firstOrNull()?.let {
                     when (it) {
                         getSystemDefaultValue() -> ThemeMode.SYSTEM
@@ -29,7 +31,7 @@ class SettingsAppearanceViewModel(private val userPreferences: UserPreferences) 
                         else -> ThemeMode.SYSTEM
                     }
                 } ?: ThemeMode.SYSTEM
-            }
+            )
         }
     }
 
@@ -42,9 +44,6 @@ class SettingsAppearanceViewModel(private val userPreferences: UserPreferences) 
                     ThemeMode.DARK -> getSystemDarkValue()
                 }
             )
-            _state.update {
-                themeMode
-            }
         }
     }
 

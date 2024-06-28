@@ -25,21 +25,21 @@
             style="@style/Chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upcoming" />
+            android:text="@string/movie_list_upcoming" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipPopular"
             style="@style/Chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Popular" />
+            android:text="@string/movie_list_popular" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipTopRated"
             style="@style/Chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Top Rated" />
+            android:text="@string/movie_list_top_rated" />
 
 
     </com.google.android.material.chip.ChipGroup>

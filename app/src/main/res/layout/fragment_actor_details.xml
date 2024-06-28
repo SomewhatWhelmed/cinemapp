@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingVertical="10dp"
-                    android:text="Name"
+                    android:text="@string/name"
                     android:textAlignment="center"
                     android:textColor="@color/md_theme_onPrimary"
                     android:textSize="36sp"
@@ -65,8 +65,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cvPicture"
-                    tools:ignore="HardcodedText" />
+                    app:layout_constraintTop_toBottomOf="@id/cvPicture" />
 
                 <LinearLayout
                     android:id="@+id/llAge"
@@ -81,22 +80,20 @@
                         android:id="@+id/tvAgeLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Age"
+                        android:text="@string/actor_age"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_tertiary"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvAge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Age"
+                        android:text="@string/actor_age"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_tertiary"
-                        android:textSize="14sp"
-                        tools:ignore="HardcodedText" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -113,12 +110,11 @@
                         android:id="@+id/tvGenderLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Gender"
+                        android:text="@string/actor_gender"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_tertiary"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvGender"

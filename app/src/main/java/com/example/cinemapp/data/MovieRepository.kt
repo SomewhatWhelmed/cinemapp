@@ -25,7 +25,8 @@ import retrofit2.Response
 
 class MovieRepository(
     private val localCache: MovieLocalCache,
-    private val remoteDataSource: MovieRemoteDataSource
+    private val remoteDataSource: MovieRemoteDataSource,
+    private val userPreferences: UserPreferences
 ) {
 
     private fun <T> getBodyFromResponse(response: Response<T>): T? {
@@ -43,11 +44,20 @@ class MovieRepository(
     }
 
     suspend fun getMovieCredits(movieId: Int): MovieCreditsDTO? {
-        return getBodyFromResponse(remoteDataSource.getMovieCredits(movieId = movieId))
+        return getBodyFromResponse(
+            remoteDataSource.getMovieCredits(
+                movieId = movieId,
+                userPreferences.getLanguageNotNull()
+            )
+        )
     }
 
     suspend fun getMovieDetails(movieId: Int): MovieDetailsDTO? {
-        return getBodyFromResponse(remoteDataSource.getMovieDetails(movieId = movieId))
+        return getBodyFromResponse(
+            remoteDataSource.getMovieDetails(
+                movieId = movieId
+            )
+        )
     }
 
     suspend fun getMovieList(
@@ -57,18 +67,32 @@ class MovieRepository(
     ): MovieResponseDTO? {
         return localCache.getMovieList(movieListType, page) ?: try {
             val response = when (movieListType) {
-                MovieListType.UPCOMING -> remoteDataSource.getUpcoming(page = page)
-                MovieListType.POPULAR -> remoteDataSource.getPopular(page = page)
-                MovieListType.TOP_RATED -> remoteDataSource.getTopRated(page = page)
+                MovieListType.UPCOMING -> remoteDataSource.getUpcoming(
+                    page = page,
+                    language = userPreferences.getLanguageNotNull()
+                )
+
+                MovieListType.POPULAR -> remoteDataSource.getPopular(
+                    page = page,
+                    language = userPreferences.getLanguageNotNull()
+                )
+
+                MovieListType.TOP_RATED -> remoteDataSource.getTopRated(
+                    page = page,
+                    language = userPreferences.getLanguageNotNull()
+                )
+
                 MovieListType.FAVORITE -> sessionId?.let {
                     remoteDataSource.getFavorite(
                         page = page,
-                        sessionId = it
+                        sessionId = it,
+                        language = userPreferences.getLanguageNotNull()
                     )
                 }
 
                 MovieListType.WATCHLIST -> sessionId?.let {
                     remoteDataSource.getWatchlist(
+                        language = userPreferences.getLanguageNotNull(),
                         page = page,
                         sessionId = it
                     )
@@ -76,6 +100,7 @@ class MovieRepository(
 
                 MovieListType.RATED -> sessionId?.let {
                     remoteDataSource.getRated(
+                        language = userPreferences.getLanguageNotNull(),
                         page = page,
                         sessionId = it
                     )
@@ -132,7 +157,11 @@ class MovieRepository(
 
     suspend fun getSearchPersonList(query: String, page: Int = 1): List<PersonDTO>? {
         return try {
-            val response = remoteDataSource.getSearchPersonResults(query, page = page)
+            val response = remoteDataSource.getSearchPersonResults(
+                query = query,
+                page = page,
+                language = userPreferences.getLanguageNotNull()
+            )
             if (response.isSuccessful) {
                 response.body()?.results
             } else {
@@ -147,7 +176,8 @@ class MovieRepository(
 
     suspend fun getSearchMovieList(query: String, page: Int = 1): List<MovieDTO>? {
         return try {
-            val response = remoteDataSource.getSearchMovieResults(query, page = page)
+            val response =
+                remoteDataSource.getSearchMovieResults(query, page = page, userPreferences.getLanguageNotNull())
             if (response.isSuccessful) {
                 response.body()?.results
             } else {
@@ -191,13 +221,17 @@ class MovieRepository(
     }
 
     suspend fun getPersonDetails(personId: Int): PersonDetailsDTO? {
-        return getBodyFromResponse(remoteDataSource.getPersonDetails(personId = personId))
+        return getBodyFromResponse(
+            remoteDataSource.getPersonDetails(
+                personId = personId
+            )
+        )
     }
 
     suspend fun getPersonMovieCreditsYears(personId: Int): List<String?>? {
         return localCache.getPersonMovieCreditsYears(personId)
             ?: try {
-                val response = remoteDataSource.getPersonMovieCredits(personId)
+                val response = remoteDataSource.getPersonMovieCredits(personId, userPreferences.getLanguageNotNull())
                 if (response.isSuccessful) {
                     response.body()?.let { creditsResponse ->
                         localCache.insert(creditsResponse)
@@ -216,7 +250,7 @@ class MovieRepository(
     suspend fun getPersonMovieCredits(personId: Int, year: Int?): List<CastMovieCreditDTO>? {
         return localCache.getPersonMovieCredits(personId, year)
             ?: try {
-                val response = remoteDataSource.getPersonMovieCredits(personId)
+                val response = remoteDataSource.getPersonMovieCredits(personId, userPreferences.getLanguageNotNull())
                 if (response.isSuccessful) {
                     response.body()?.let { creditsResponse ->
                         localCache.insert(creditsResponse)

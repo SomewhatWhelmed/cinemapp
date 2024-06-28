@@ -15,6 +15,7 @@ import com.example.cinemapp.ui.main.movie_details.CastAdapter
 import com.example.cinemapp.ui.main.collections.CollectionsViewModel
 import com.example.cinemapp.ui.main.search.SearchViewModel
 import com.example.cinemapp.ui.main.settings.appearance.SettingsAppearanceViewModel
+import com.example.cinemapp.ui.main.settings.language.SettingsLanguageViewModel
 import com.example.cinemapp.ui.splash.SplashViewModel
 import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.ActorDetailsMapper
@@ -38,7 +39,7 @@ val appModule = module {
         BuildConfig.URL_BASE
     }
     single { MovieLocalCache() }
-    single { UserPreferences(androidContext()) }
+    single { UserPreferences(androidContext(), get()) }
     single {
         OkHttpClient.Builder().apply {
             addInterceptor(
@@ -60,7 +61,7 @@ val appModule = module {
             .create(MovieRemoteDataSource::class.java)
     }
     single {
-        MovieRepository(get(), get())
+        MovieRepository(get(), get(), get())
     }
     single { MediaUrlMapper() }
     single { SearchMapper(get()) }
@@ -98,5 +99,8 @@ val appModule = module {
     }
     viewModel {
         SettingsAppearanceViewModel(get())
+    }
+    viewModel {
+        SettingsLanguageViewModel(get())
     }
 }
