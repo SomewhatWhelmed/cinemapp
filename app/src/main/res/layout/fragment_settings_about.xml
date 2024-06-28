@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.main.settings.about.SettingsAboutFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
+        android:id="@+id/siVersion"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        app:isLast="false"
+        app:label="@string/settings_about_version_label"
+        app:value="@string/settings_about_version_value" />
 
-</FrameLayout>
+    <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:isLast="false"
+        app:label="@string/settings_about_author_label"
+        app:value="@string/settings_about_author_value" />
+
+    <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:isLast="true"
+        app:label="@string/settings_about_purpose_label"
+        app:value="@string/settings_about_purpose_value" />
+
+</LinearLayout>

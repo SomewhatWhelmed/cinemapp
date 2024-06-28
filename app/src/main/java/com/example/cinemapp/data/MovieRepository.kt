@@ -55,7 +55,8 @@ class MovieRepository(
     suspend fun getMovieDetails(movieId: Int): MovieDetailsDTO? {
         return getBodyFromResponse(
             remoteDataSource.getMovieDetails(
-                movieId = movieId
+                movieId = movieId,
+                userPreferences.getLanguageNotNull()
             )
         )
     }
@@ -223,7 +224,8 @@ class MovieRepository(
     suspend fun getPersonDetails(personId: Int): PersonDetailsDTO? {
         return getBodyFromResponse(
             remoteDataSource.getPersonDetails(
-                personId = personId
+                personId = personId,
+                userPreferences.getLanguageNotNull()
             )
         )
     }

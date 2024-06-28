@@ -53,4 +53,10 @@
     <string name="title_settings_appearance">Изабери тему</string>
     <string name="title_settings_language">Изабери језик</string>
     <string name="title_settings_about">О апликацији</string>
+    <string name="settings_about_version_label">Верзија</string>
+    <string name="settings_about_version_value">1.0</string>
+    <string name="settings_about_author_label">Аутор</string>
+    <string name="settings_about_author_value">Милан Гигић</string>
+    <string name="settings_about_purpose_label">Сврха</string>
+    <string name="settings_about_purpose_value">Мастер рад</string>
 </resources>
