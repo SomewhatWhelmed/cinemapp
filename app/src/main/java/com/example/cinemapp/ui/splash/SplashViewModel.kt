@@ -1,9 +1,14 @@
 package com.example.cinemapp.ui.splash
 
+import android.app.UiModeManager
+import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
+import com.example.cinemapp.util.getSystemDefaultValue
+import com.example.cinemapp.util.setAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -29,6 +34,26 @@ class SplashViewModel(
 
             delay(2000)
             _goToNextScreen.emit(validSession)
+        }
+    }
+
+    fun setupUserPrefs() {
+        setTheme()
+        setLanguage()
+    }
+
+    private fun setLanguage() {
+        viewModelScope.launch {
+            if (userPrefs.getLanguage().firstOrNull() == null) {
+                userPrefs.setLanguage()
+            }
+        }
+    }
+    private fun setTheme() {
+        viewModelScope.launch {
+            userPrefs.setTheme(
+                userPrefs.getTheme().firstOrNull()
+            )
         }
     }
 }

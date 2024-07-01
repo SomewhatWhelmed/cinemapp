@@ -24,6 +24,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/no_content_description"
             android:src="@drawable/tmdb_logo_primary_full" />
 
         <TextView
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:labelFor="@id/etUsername"
-            android:text="Username"
+            android:text="@string/username"
             android:textColor="@color/md_theme_onPrimary" />
 
         <EditText
@@ -51,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:labelFor="@id/etPassword"
-            android:text="Password"
+            android:text="@string/password"
             android:textColor="@color/md_theme_onPrimary" />
 
         <EditText
@@ -73,7 +74,7 @@
             android:layout_margin="10dp"
             android:backgroundTint="@color/md_theme_onPrimary"
             android:clickable="true"
-            android:text="Sign In"
+            android:text="@string/sign_in"
             android:textColor="@color/md_theme_primary" />
 
         <TextView
@@ -82,14 +83,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="10dp"
-            android:text="Sign Up"
+            android:text="@string/sign_up"
             android:textColor="@color/md_theme_tertiary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="or"
+            android:text="@string/or"
             android:textColor="@color/md_theme_secondary" />
 
         <TextView
@@ -98,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="10dp"
-            android:text="Continue as guest"
+            android:text="@string/continue_as_guest"
             android:textColor="@color/md_theme_tertiary" />
 
     </LinearLayout>
@@ -108,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB."
+        android:text="@string/tmdb_disclaimer"
         android:textAlignment="center"
         android:textColor="@color/md_theme_secondary"
         android:textSize="11sp"

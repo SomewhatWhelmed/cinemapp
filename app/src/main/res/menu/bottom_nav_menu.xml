@@ -16,7 +16,7 @@
         android:enabled="true"
         android:icon="@drawable/vic_collections"/>
     <item
-        android:id="@+id/settingsFragment"
+        android:id="@+id/settingsMainFragment"
         android:title="@string/nav_settings"
         android:enabled="true"
         android:icon="@drawable/vic_settings"/>

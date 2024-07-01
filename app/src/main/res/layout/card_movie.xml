@@ -28,7 +28,7 @@
                 android:id="@+id/ivPoster"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:contentDescription="MoviePoster"
+                android:contentDescription="@string/no_content_description"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/llCardVertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
                         android:id="@+id/ivCardRating"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:contentDescription="Rating"
+                        android:contentDescription="@string/no_content_description"
                         android:src="@drawable/vic_rating" />
                 </LinearLayout>
 

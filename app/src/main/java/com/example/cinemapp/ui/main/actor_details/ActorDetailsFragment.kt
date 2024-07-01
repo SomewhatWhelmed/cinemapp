@@ -63,7 +63,7 @@ class ActorDetailsFragment : Fragment() {
     }
 
     private fun setupMainToolbar() {
-        (activity as MainActivity).customizeTopNavigation(
+        (activity as? MainActivity)?.customizeTopNavigation(
             title = resources.getString(R.string.title_actor_details),
             navigationIconId = R.drawable.vic_arrow_back,
             isTitleCentered = false
@@ -84,6 +84,7 @@ class ActorDetailsFragment : Fragment() {
 
             setExpandableTextView(
                 text = details.biography,
+                phrase = getString(R.string.description_expand_more),
                 phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
                 maxChars = BIOGRAPHY_MAX_CHARACTERS,
                 textView = tvBiography

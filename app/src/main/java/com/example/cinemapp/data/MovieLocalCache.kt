@@ -157,4 +157,11 @@ class MovieLocalCache {
             MovieRepository.MovieListType.RATED -> ratedCache.clear()
         }
     }
+
+    fun clearAllCache() {
+        clearProfileCache()
+        upcomingCache.clear()
+        popularCache.clear()
+        topRatedCache.clear()
+    }
 }

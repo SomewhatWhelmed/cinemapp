@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_surface"
+    android:orientation="vertical"
+    tools:context=".ui.main.settings.language.SettingsLanguageFragment">
+
+    <RadioGroup
+        android:id="@+id/rgLanguages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_primary">
+
+        <RadioButton
+            android:id="@+id/rbEnglish"
+            style="@style/RadioButtonItem"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/settings_language_english" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/md_theme_secondary" />
+
+        <RadioButton
+            android:id="@+id/rbSerbian"
+            style="@style/RadioButtonItem"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/settings_language_srpski" />
+    </RadioGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/md_theme_secondary" />
+
+</LinearLayout>

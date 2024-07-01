@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="label" format="reference|string" />
+    <attr name="isLast" format="boolean" />
+
+    <declare-styleable name="SettingsItemView">
+        <attr name="icon" format="reference" />
+        <attr name="label" />
+        <attr name="isLast" />
+    </declare-styleable>
+
+    <declare-styleable name="SettingsAboutItemView">
+        <attr name="label" />
+        <attr name="value" format="string" />
+        <attr name="isLast" />
+    </declare-styleable>
+</resources>

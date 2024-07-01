@@ -21,9 +21,9 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        viewModel.setupUserPrefs()
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         viewModel.handleInitialData()
     }
 

@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         accountDetails?.let { details ->
             if (details.avatar.isEmpty()) {
                 tvInitial.text =
-                    (if (details.name.isEmpty()) details.username else details.name)
+                    (details.name.ifEmpty { details.username })
                         .substring(0, 1)
                 ivAvatar.setBackgroundColor(
                     ContextCompat.getColor(this@MainActivity, R.color.md_theme_onPrimary)
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeSignOutEvent() {
         observeFlowSafely(viewModel.signOutEvent) {
-            this@MainActivity.finishThenStart(
+            finishThenStart(
                 this@MainActivity,
                 AuthenticationActivity::class.java
             )
@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                 setupAvatar(accountDetails, tvInitial, ivAvatar)
                 tvName.text = accountDetails.name
                 tvUsername.text = accountDetails.username
+                btnSignInOut.text = getString(R.string.sign_out)
                 btnSignInOut.setOnClickListener {
                     viewModel.signOut()
                 }
@@ -160,7 +161,7 @@ class MainActivity : AppCompatActivity() {
                 llNames.isVisible = false
                 btnSignInOut.text = getString(R.string.sign_in)
                 btnSignInOut.setOnClickListener {
-                    startActivity(Intent(this@MainActivity, AuthenticationActivity::class.java))
+                    finishThenStart(this@MainActivity, AuthenticationActivity::class.java)
                 }
             }
         }

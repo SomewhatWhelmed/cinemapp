@@ -19,6 +19,7 @@ import com.example.cinemapp.data.model.StatusResponseDTO
 import com.example.cinemapp.data.model.ValidateWithLoginRequestDTO
 import com.example.cinemapp.data.model.VideoResponseDTO
 import com.example.cinemapp.ui.main.model.SessionDeleteResponseDTO
+import com.example.cinemapp.util.ENGLISH
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -50,13 +51,22 @@ interface MovieRemoteDataSource {
     ): Response<MovieResponseDTO>
 
     @GET("$API_VERSION/movie/{movieId}")
-    suspend fun getMovieDetails(@Path("movieId") movieId: Int): Response<MovieDetailsDTO>
+    suspend fun getMovieDetails(
+        @Path("movieId") movieId: Int,
+        @Query("language") language: String = DEFAULT_LANGUAGE
+    ): Response<MovieDetailsDTO>
 
     @GET("$API_VERSION/movie/{movieId}/credits")
-    suspend fun getMovieCredits(@Path("movieId") movieId: Int): Response<MovieCreditsDTO>
+    suspend fun getMovieCredits(
+        @Path("movieId") movieId: Int,
+        @Query("language") language: String = DEFAULT_LANGUAGE
+    ): Response<MovieCreditsDTO>
 
     @GET("$API_VERSION/person/{person_id}")
-    suspend fun getPersonDetails(@Path("person_id") personId: Int): Response<PersonDetailsDTO>
+    suspend fun getPersonDetails(
+        @Path("person_id") personId: Int,
+        @Query("language") language: String = DEFAULT_LANGUAGE
+    ): Response<PersonDetailsDTO>
 
     @GET("$API_VERSION/movie/{movieId}/images")
     suspend fun getMovieImages(
@@ -72,19 +82,22 @@ interface MovieRemoteDataSource {
 
     @GET("$API_VERSION/person/{personId}/movie_credits")
     suspend fun getPersonMovieCredits(
-        @Path("personId") personId: Int
+        @Path("personId") personId: Int,
+        @Query("language") language: String = DEFAULT_LANGUAGE
     ): Response<PersonMovieCreditsResponseDTO>
 
     @GET("$API_VERSION/search/person")
     suspend fun getSearchPersonResults(
         @Query("query") query: String,
-        @Query("page") page:Int = 1
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = DEFAULT_LANGUAGE
     ): Response<SearchPersonResponseDTO>
 
     @GET("$API_VERSION/search/movie")
     suspend fun getSearchMovieResults(
         @Query("query") query: String,
-        @Query("page") page:Int = 1
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = DEFAULT_LANGUAGE
     ): Response<MovieResponseDTO>
 
     @GET("$API_VERSION/authentication/token/new")
@@ -166,6 +179,6 @@ interface MovieRemoteDataSource {
 
     companion object {
         const val API_VERSION = 3
-        const val DEFAULT_LANGUAGE = "en-US"
+        const val DEFAULT_LANGUAGE = ENGLISH
     }
 }

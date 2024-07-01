@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.example.cinemapp.R
 import com.example.cinemapp.databinding.ActivityAuthenticationBinding
 import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.util.finishThenStart
@@ -74,15 +75,10 @@ class AuthenticationActivity : AppCompatActivity() {
         } else {
             val toast = Toast.makeText(
                 this@AuthenticationActivity,
-                ERROR_MESSAGE,
+                resources.getString(R.string.tmdb_disclaimer),
                 Toast.LENGTH_LONG
             )
             toast.show()
         }
-    }
-
-    companion object {
-        private const val ERROR_MESSAGE =
-            "Invalid username and/or password: You did not provide a valid login."
     }
 }

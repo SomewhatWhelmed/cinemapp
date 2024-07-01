@@ -1,17 +1,13 @@
 package com.example.cinemapp.ui.main.movie_details
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,7 +25,6 @@ import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -51,6 +46,7 @@ class MovieDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        scores = listOf(getString(R.string.movie_rating_none), "1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
         setupMainToolbar()
         setupAdapter()
         setupOnClickListeners()
@@ -73,12 +69,10 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun setupMainToolbar() {
-        (activity as MainActivity).customizeTopNavigation(
-            resources.getString(R.string.title_movie_details),
-            R.drawable.vic_arrow_back,
-            false,
-            null,
-            null
+        (activity as? MainActivity)?.customizeTopNavigation(
+            title = resources.getString(R.string.title_movie_details),
+            navigationIconId = R.drawable.vic_arrow_back,
+            isTitleCentered = false
         )
     }
 
@@ -94,6 +88,7 @@ class MovieDetailsFragment : Fragment() {
 
             setExpandableTextView(
                 text = details.overview,
+                phrase = getString(R.string.description_expand_more),
                 phraseColor = requireContext().getColor(R.color.md_theme_tertiary),
                 maxChars = OVERVIEW_MAX_CHARACTERS,
                 textView = tvOverview
@@ -127,9 +122,9 @@ class MovieDetailsFragment : Fragment() {
             userRating?.let {
                 ivUserRating.visibility = View.INVISIBLE
                 tvUserRating.text = it.toString()
-                tvUserRatingLabel.text = "Your rating"
+                tvUserRatingLabel.text = getString(R.string.movie_rating_label_rated)
             } ?: run {
-                tvUserRatingLabel.text = "Rate this"
+                tvUserRatingLabel.text = getString(R.string.movie_rating_label_unrated)
                 ivUserRating.visibility = View.VISIBLE
                 tvUserRating.text = ""
             }
@@ -147,7 +142,7 @@ class MovieDetailsFragment : Fragment() {
             isInFavorite
         )
         binding.tvFavoriteLabel.text =
-            if (isInFavorite) "Remove from Favorites" else "Add to Favorites"
+            getString(if (isInFavorite) R.string.movie_favorites_remove else R.string.movie_favorites_add)
     }
 
     private fun setupWatchlistButton(isInWatchlist: Boolean) {
@@ -161,7 +156,7 @@ class MovieDetailsFragment : Fragment() {
             isInWatchlist
         )
         binding.tvWatchlistLabel.text =
-            if (isInWatchlist) "Remove from Watchlist" else "Add to Watchlist"
+            getString(if (isInWatchlist) R.string.movie_watchlist_remove else R.string.movie_watchlist_add)
     }
 
     private fun setupButtonColor(
@@ -210,7 +205,7 @@ class MovieDetailsFragment : Fragment() {
                         )
                     }
                     .setNegativeButton("Cancel") { _, _ -> }
-                    .setSingleChoiceItems(scores, 0) { _, _ -> }.create().show()
+                    .setSingleChoiceItems(scores.toTypedArray(), 0) { _, _ -> }.create().show()
             }
         }
     }
@@ -269,6 +264,6 @@ class MovieDetailsFragment : Fragment() {
 
     companion object {
         private const val OVERVIEW_MAX_CHARACTERS = 200
-        private val scores = arrayOf("No rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        private lateinit var scores: List<String>
     }
 }

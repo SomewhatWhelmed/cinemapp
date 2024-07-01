@@ -204,7 +204,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Rate this"
+                        android:text="@string/movie_rating_label_unrated"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_onPrimary"
                         android:textSize="11sp" />
@@ -243,7 +243,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Add to Favorites"
+                        android:text="@string/movie_favorites_add"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_onPrimary"
                         android:textSize="11sp" />
@@ -283,7 +283,7 @@
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Remove from Watchlist"
+                        android:text="@string/movie_watchlist_remove"
                         android:textAlignment="center"
                         android:textColor="@color/md_theme_onPrimary"
                         android:textSize="11sp" />
@@ -311,15 +311,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="20dp"
-                android:text="Cast"
+                android:text="@string/cast"
                 android:textColor="@color/md_theme_onPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvOverview"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toBottomOf="@id/tvOverview" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCast"

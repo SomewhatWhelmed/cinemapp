@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_surface"
+    android:orientation="vertical"
+    tools:context=".ui.main.settings.appearance.SettingsAppearanceFragment">
+
+    <RadioGroup
+        android:id="@+id/rgThemes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_primary">
+
+        <RadioButton
+            android:id="@+id/rbSystemDefault"
+            style="@style/RadioButtonItem"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/settings_appearance_system_default" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/md_theme_secondary" />
+
+        <RadioButton
+            android:id="@+id/rbLight"
+            style="@style/RadioButtonItem"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/settings_appearance_light" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/md_theme_secondary" />
+
+        <RadioButton
+            android:id="@+id/rbDark"
+            style="@style/RadioButtonItem"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/settings_appearance_dark" />
+    </RadioGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/md_theme_secondary" />
+
+</LinearLayout>
