@@ -45,7 +45,7 @@ class SplashViewModel(
     private fun setLanguage() {
         viewModelScope.launch {
             if (userPrefs.getLanguage().firstOrNull() == null) {
-                userPrefs.setLanguage(null)
+                userPrefs.setLanguage()
             }
         }
     }

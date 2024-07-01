@@ -46,7 +46,7 @@ class MovieDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        scores = arrayOf(getString(R.string.movie_rating_none), "1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+        scores = listOf(getString(R.string.movie_rating_none), "1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
         setupMainToolbar()
         setupAdapter()
         setupOnClickListeners()
@@ -205,7 +205,7 @@ class MovieDetailsFragment : Fragment() {
                         )
                     }
                     .setNegativeButton("Cancel") { _, _ -> }
-                    .setSingleChoiceItems(scores, 0) { _, _ -> }.create().show()
+                    .setSingleChoiceItems(scores.toTypedArray(), 0) { _, _ -> }.create().show()
             }
         }
     }
@@ -264,6 +264,6 @@ class MovieDetailsFragment : Fragment() {
 
     companion object {
         private const val OVERVIEW_MAX_CHARACTERS = 200
-        private lateinit var scores: Array<String>
+        private lateinit var scores: List<String>
     }
 }

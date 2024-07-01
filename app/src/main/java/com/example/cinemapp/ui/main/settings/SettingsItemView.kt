@@ -47,9 +47,7 @@ class SettingsItemView : ConstraintLayout {
         tvLabel = binding.tvLabel
         ivIcon = binding.ivIcon
         separator = binding.separator
-        if(label.isNotEmpty()) {
-            tvLabel.text = label
-        }
+        tvLabel.text = label
         if(isLast) {
             separator.layoutParams.setMargin(Direction.LEFT, 0f, context)
             separator.layoutParams.setMargin(Direction.RIGHT, 0f, context)
@@ -57,6 +55,5 @@ class SettingsItemView : ConstraintLayout {
         ivIcon.setImageDrawable(AppCompatResources.getDrawable(context, icon))
         ivIcon.contentDescription = label
 
-        refreshDrawableState()
     }
 }

@@ -86,12 +86,11 @@ class UserPreferences (val context: Context, val movieLocalCache: MovieLocalCach
         return getLanguage().firstOrNull() ?: getDefaultLanguage()
     }
 
-    suspend fun setLanguage(language: String?) {
-        val newLanguage = language ?: ENGLISH
+    suspend fun setLanguage(language: String = ENGLISH) {
         userPrefs.edit { pref ->
-            pref[languageKey] = newLanguage
+            pref[languageKey] = language
         }
         movieLocalCache.clearAllCache()
-        setupLanguage(newLanguage, context)
+        setupLanguage(language, context)
     }
 }

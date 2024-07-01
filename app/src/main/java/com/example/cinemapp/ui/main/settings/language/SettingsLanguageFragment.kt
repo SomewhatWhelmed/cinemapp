@@ -34,7 +34,7 @@ class SettingsLanguageFragment : Fragment() {
 
     private fun setupMainToolbar() {
         (activity as? MainActivity)?.customizeTopNavigation(
-            title = resources.getString(R.string.title_settings_appearance),
+            title = resources.getString(R.string.title_settings_language),
             navigationIconId = R.drawable.vic_arrow_back,
             isTitleCentered = false
         )

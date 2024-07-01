@@ -46,17 +46,12 @@ class SettingsAboutItemView : ConstraintLayout {
         tvLabel = binding.tvLabel
         tvValue = binding.tvValue
         separator = binding.separator
-        if(label.isNotEmpty()) {
-            tvLabel.text = label
-        }
-        if(value.isNotEmpty()) {
-            tvValue.text = value
-        }
+        tvLabel.text = label
+        tvValue.text = value
         if(isLast) {
             separator.layoutParams.setMargin(Direction.LEFT, 0f, context)
             separator.layoutParams.setMargin(Direction.RIGHT, 0f, context)
         }
-        refreshDrawableState()
     }
 
     fun setValue(value: String) {

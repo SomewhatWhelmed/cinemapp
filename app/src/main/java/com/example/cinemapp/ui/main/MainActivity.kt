@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeSignOutEvent() {
         observeFlowSafely(viewModel.signOutEvent) {
-            this@MainActivity.finishThenStart(
+            finishThenStart(
                 this@MainActivity,
                 AuthenticationActivity::class.java
             )
@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
                 llNames.isVisible = false
                 btnSignInOut.text = getString(R.string.sign_in)
                 btnSignInOut.setOnClickListener {
-                    startActivity(Intent(this@MainActivity, AuthenticationActivity::class.java))
+                    finishThenStart(this@MainActivity, AuthenticationActivity::class.java)
                 }
             }
         }
