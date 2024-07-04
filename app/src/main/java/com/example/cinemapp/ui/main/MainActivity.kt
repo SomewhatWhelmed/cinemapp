@@ -15,7 +15,9 @@ import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.ActivityMainBinding
@@ -27,6 +29,7 @@ import com.example.cinemapp.util.finishThenStart
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.mapDpToPixel
 import com.example.cinemapp.util.observeFlowSafely
+import com.google.android.material.navigation.NavigationBarView
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -62,7 +65,17 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(binding.navHostFragment.id) as NavHostFragment
         navController = navHostFragment.navController
-        binding.bottomNavigationView.setupWithNavController(navController)
+
+        binding.bottomNavigationView.apply {
+            NavigationUI.setupWithNavController(this, navController)
+            setOnItemSelectedListener { item ->
+                NavigationUI.onNavDestinationSelected(item, navController)
+                return@setOnItemSelectedListener true
+            }
+            setOnItemReselectedListener {
+                navController.popBackStack(destinationId = it.itemId, inclusive = false)
+            }
+        }
     }
 
     private fun setupAvatar(
