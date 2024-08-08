@@ -7,7 +7,6 @@ import com.example.cinemapp.ui.main.model.MovieCard
 import java.time.LocalDate
 
 class ProfileMapper(
-    private val urlMapper: MediaUrlMapper,
     private val mediaUrlMapper: MediaUrlMapper
 ) {
     fun mapToAccountDetails(
@@ -15,7 +14,7 @@ class ProfileMapper(
         resolution: Int? = null
     ): AccountDetails {
         return AccountDetails(
-            urlMapper.mapImageIdToBaseURL(accountDetailsDTO.avatar?.tmdb?.avatarPath, resolution),
+            mediaUrlMapper.mapImageIdToBaseURL(accountDetailsDTO.avatar?.tmdb?.avatarPath, resolution),
             accountDetailsDTO.id ?: -1,
             accountDetailsDTO.name ?: "",
             accountDetailsDTO.username ?: ""

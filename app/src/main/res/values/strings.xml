@@ -58,4 +58,5 @@
     <string name="settings_about_author_value">Milan Gigić</string>
     <string name="settings_about_purpose_label">Purpose</string>
     <string name="settings_about_purpose_value">Masters Thesis</string>
+    <string name="sign_in_failed">Incorrect sign in credentials</string>
 </resources>

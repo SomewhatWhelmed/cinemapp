@@ -2,14 +2,12 @@ package com.example.cinemapp.ui.main.actor_details
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.CardPersonBinding
 import com.example.cinemapp.ui.main.model.CastMovieCredit
-import com.example.cinemapp.ui.main.movie_details.CastAdapter
 import com.example.cinemapp.util.Direction
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.setMargin

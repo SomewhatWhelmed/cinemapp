@@ -1,11 +1,10 @@
 package com.example.cinemapp
 
-import android.app.UiModeManager
 import com.example.cinemapp.data.MovieLocalCache
-import com.example.cinemapp.data.MovieRemoteDataSource
+import com.example.cinemapp.data.IMovieRemoteDataSource
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
-import com.example.cinemapp.ui.MainViewModel
+import com.example.cinemapp.ui.main.MainViewModel
 import com.example.cinemapp.ui.authentication.AuthenticationViewModel
 import com.example.cinemapp.ui.main.actor_details.ActorDetailsViewModel
 import com.example.cinemapp.ui.main.actor_details.CreditsAdapter
@@ -58,7 +57,7 @@ val appModule = module {
             .client(get<OkHttpClient.Builder>().build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(MovieRemoteDataSource::class.java)
+            .create(IMovieRemoteDataSource::class.java)
     }
     single {
         MovieRepository(get(), get(), get())
@@ -69,7 +68,7 @@ val appModule = module {
     single { MovieDetailsMapper(get()) }
     single { ActorDetailsMapper(get()) }
     single { AuthenticationMapper() }
-    single { ProfileMapper(get(), get()) }
+    single { ProfileMapper(get()) }
     single { UserDataUtil() }
     single { CastAdapter(get()) }
     single { CreditsAdapter(get()) }

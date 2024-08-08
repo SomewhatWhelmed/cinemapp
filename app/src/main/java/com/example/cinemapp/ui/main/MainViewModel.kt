@@ -1,4 +1,4 @@
-package com.example.cinemapp.ui
+package com.example.cinemapp.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
