@@ -25,7 +25,7 @@ import retrofit2.Response
 
 class MovieRepository(
     private val localCache: MovieLocalCache,
-    private val remoteDataSource: MovieRemoteDataSource,
+    private val remoteDataSource: IMovieRemoteDataSource,
     private val userPreferences: UserPreferences
 ) {
 
@@ -46,8 +46,7 @@ class MovieRepository(
     suspend fun getMovieCredits(movieId: Int): MovieCreditsDTO? {
         return getBodyFromResponse(
             remoteDataSource.getMovieCredits(
-                movieId = movieId,
-                userPreferences.getLanguageNotNull()
+                movieId = movieId
             )
         )
     }
@@ -55,8 +54,7 @@ class MovieRepository(
     suspend fun getMovieDetails(movieId: Int): MovieDetailsDTO? {
         return getBodyFromResponse(
             remoteDataSource.getMovieDetails(
-                movieId = movieId,
-                userPreferences.getLanguageNotNull()
+                movieId = movieId
             )
         )
     }
@@ -224,8 +222,7 @@ class MovieRepository(
     suspend fun getPersonDetails(personId: Int): PersonDetailsDTO? {
         return getBodyFromResponse(
             remoteDataSource.getPersonDetails(
-                personId = personId,
-                userPreferences.getLanguageNotNull()
+                personId = personId
             )
         )
     }

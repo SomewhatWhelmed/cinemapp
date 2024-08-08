@@ -59,4 +59,5 @@
     <string name="settings_about_author_value">Милан Гигић</string>
     <string name="settings_about_purpose_label">Сврха</string>
     <string name="settings_about_purpose_value">Мастер рад</string>
+    <string name="sign_in_failed">Нетачни креденцијали за пријаву</string>
 </resources>

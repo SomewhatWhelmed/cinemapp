@@ -84,7 +84,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     viewModel.setupLoading(true)
-                    viewModel.getNextPage(query = query)
+                    viewModel.getNextPage(query = it)
                 }
                 hideKeyboard(requireActivity())
                 return true

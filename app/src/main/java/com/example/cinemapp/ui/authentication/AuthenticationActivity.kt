@@ -75,7 +75,7 @@ class AuthenticationActivity : AppCompatActivity() {
         } else {
             val toast = Toast.makeText(
                 this@AuthenticationActivity,
-                resources.getString(R.string.tmdb_disclaimer),
+                resources.getString(R.string.sign_in_failed),
                 Toast.LENGTH_LONG
             )
             toast.show()

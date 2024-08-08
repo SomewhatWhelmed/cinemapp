@@ -1,10 +1,6 @@
 package com.example.cinemapp.ui.main
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -13,24 +9,18 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.ActivityMainBinding
 import com.example.cinemapp.databinding.DialogAccountBinding
-import com.example.cinemapp.ui.MainViewModel
 import com.example.cinemapp.ui.authentication.AuthenticationActivity
 import com.example.cinemapp.ui.main.model.AccountDetails
 import com.example.cinemapp.util.finishThenStart
 import com.example.cinemapp.util.loadImage
 import com.example.cinemapp.util.mapDpToPixel
 import com.example.cinemapp.util.observeFlowSafely
-import com.google.android.material.navigation.NavigationBarView
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
