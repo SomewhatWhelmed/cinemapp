@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.initialSetup()
         setupOnClickListeners()
         observeEvents()
+        val i = 1
 
         observeFlowSafely(viewModel.state) {
             setupAvatar(it.accountDetails, binding.tvInitial, binding.ivAvatar)
