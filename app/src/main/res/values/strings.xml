@@ -59,4 +59,6 @@
     <string name="settings_about_purpose_label">Purpose</string>
     <string name="settings_about_purpose_value">Masters Thesis</string>
     <string name="sign_in_failed">Incorrect sign in credentials</string>
+    <string name="director_label">Director:</string>
+    <string name="description_label">Description:</string>
 </resources>
