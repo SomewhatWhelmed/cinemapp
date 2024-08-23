@@ -60,4 +60,6 @@
     <string name="settings_about_purpose_label">Сврха</string>
     <string name="settings_about_purpose_value">Мастер рад</string>
     <string name="sign_in_failed">Нетачни креденцијали за пријаву</string>
+    <string name="director_label">Режисер:</string>
+    <string name="description_label">Опис:</string>
 </resources>

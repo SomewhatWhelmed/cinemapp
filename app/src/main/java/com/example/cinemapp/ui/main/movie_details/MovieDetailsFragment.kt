@@ -1,7 +1,6 @@
 package com.example.cinemapp.ui.main.movie_details
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.math.MathUtils
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -61,6 +61,10 @@ class MovieDetailsFragment : Fragment() {
             it.details?.let { details ->
                 setupDetails(details)
             }
+            it.directors?.let { directors ->
+                val directorsText = directors.joinToString()
+                binding.tvDirector.text = directorsText
+            }
             setupLoadingVisibility(it.isLoading)
             setupUserListsViews(it.isInFavorite, it.isInWatchlist, it.userRating)
             castAdapter.setCast(it.cast)
@@ -84,7 +88,6 @@ class MovieDetailsFragment : Fragment() {
                 "${(details.runtime / 60)}h ${details.runtime % 60}min"
             tvRuntime.text = runtime
             tvRating.text = formatRating(details.voteAverage)
-
 
             setExpandableTextView(
                 text = details.overview,

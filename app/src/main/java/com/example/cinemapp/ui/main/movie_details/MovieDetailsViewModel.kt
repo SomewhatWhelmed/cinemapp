@@ -5,20 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
 import com.example.cinemapp.data.UserPreferences
 import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.CrewMember
 import com.example.cinemapp.ui.main.model.Media
+import com.example.cinemapp.ui.main.model.MovieCredits
 import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.internal.userAgent
 
 class MovieDetailsViewModel(
     private val movieRepository: MovieRepository,
@@ -30,6 +29,7 @@ class MovieDetailsViewModel(
     data class State(
         val details: MovieDetails? = null,
         val cast: List<CastMember> = emptyList(),
+        val directors: List<String>? = emptyList(),
         val media: List<Media> = emptyList(),
         val isInFavorite: Boolean = false,
         val isInWatchlist: Boolean = false,
@@ -58,8 +58,8 @@ class MovieDetailsViewModel(
             }
             val creditsCall = async {
                 movieRepository.getMovieCredits(movieId)
-                    ?.let { movieDetailsMapper.mapToMovieCredits(it, 500).cast }
-                    ?: emptyList()
+                    ?.let { movieDetailsMapper.mapToMovieCredits(it, 500) }
+                    ?: MovieCredits()
             }
             val imageCall = async {
                 movieRepository.getImages(movieId)
@@ -101,14 +101,17 @@ class MovieDetailsViewModel(
             } ?: false
 
             val newDetails: MovieDetails? = detailsCall.await()
-            val newCredits: List<CastMember> = creditsCall.await()
+            val newCast: List<CastMember> = creditsCall.await().cast
+            val newCrew: List<CrewMember> = creditsCall.await().crew
             val newImages: List<Media.Image> = imageCall.await()
             val newTrailer: Media.Video? = trailerCall.await()
 
             _state.update {
                 it.copy(
                     details = newDetails,
-                    cast = newCredits,
+                    cast = newCast,
+                    directors = newCrew.filter { member -> member.department == "Directing" && member.job == "Director" }
+                        .map { director -> director.name },
                     media = (newDetails
                         ?.let { details -> listOf(Media.Image(details.backdropPath)) }
                         ?.plus(listOfNotNull(newTrailer)))

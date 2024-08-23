@@ -2,7 +2,6 @@ package com.example.cinemapp.ui.main.movie_details
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +47,12 @@ class CastAdapter(
                 FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
                 context
             )
+        } else if (position == cast.size - 1) {
+            holder.binding.cvCardPerson.layoutParams.setMargin(
+                Direction.RIGHT,
+                FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
+                context
+            )
         }
 
     }
@@ -78,7 +83,7 @@ class CastAdapter(
     }
 
     companion object {
-        private const val BASE_CARD_MARGIN = 5
+        private const val BASE_CARD_MARGIN = 10
         private const val FIRST_ITEM_MARGIN_MOD = 2.0f
     }
 }

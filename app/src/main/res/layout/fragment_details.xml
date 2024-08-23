@@ -152,7 +152,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
-                app:layout_constraintBottom_toTopOf="@id/tvOverview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -180,14 +179,16 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
+
                             <TextView
                                 android:id="@+id/tvUserRating"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:textStyle="bold"
                                 android:textColor="@color/md_theme_surface"
-                                android:textSize="30sp"/>
+                                android:textSize="30sp"
+                                android:textStyle="bold" />
+
                             <ImageView
                                 android:id="@+id/ivUserRating"
                                 android:layout_width="match_parent"
@@ -234,8 +235,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
-                            android:src="@drawable/vic_favorite_empty"
-                            android:importantForAccessibility="no" />
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/vic_favorite_empty" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <TextView
@@ -293,18 +294,64 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                android:id="@+id/tvOverviewLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="10dp"
+                android:text="@string/description_label"
+                android:textAlignment="viewStart"
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/clListControls" />
+
+            <TextView
                 android:id="@+id/tvOverview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/hello_blank_fragment"
+                android:paddingHorizontal="20dp"
+                android:text=""
                 android:textAlignment="viewStart"
                 android:textColor="@color/md_theme_secondary"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/clListControls" />
+                app:layout_constraintTop_toBottomOf="@id/tvOverviewLabel" />
+
+            <TextView
+                android:id="@+id/tvDirectorLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="5dp"
+                android:text="@string/director_label"
+                android:textAlignment="viewStart"
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvOverview" />
+
+            <TextView
+                android:id="@+id/tvDirector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="5dp"
+                android:text=""
+                android:textAlignment="viewStart"
+                android:textColor="@color/md_theme_secondary"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDirectorLabel" />
 
             <TextView
                 android:id="@+id/tvCredits"
@@ -318,7 +365,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvOverview" />
+                app:layout_constraintTop_toBottomOf="@id/tvDirector" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCast"

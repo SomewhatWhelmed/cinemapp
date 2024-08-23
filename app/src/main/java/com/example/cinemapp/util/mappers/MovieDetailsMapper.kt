@@ -1,12 +1,14 @@
 package com.example.cinemapp.util.mappers
 
 import com.example.cinemapp.data.model.CastMemberDTO
+import com.example.cinemapp.data.model.CrewMemberDTO
 import com.example.cinemapp.data.model.GenreDTO
 import com.example.cinemapp.data.model.ImageDTO
 import com.example.cinemapp.data.model.MovieCreditsDTO
 import com.example.cinemapp.data.model.MovieDetailsDTO
 import com.example.cinemapp.data.model.VideoDTO
 import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.CrewMember
 import com.example.cinemapp.ui.main.model.Genre
 import com.example.cinemapp.ui.main.model.Media
 import com.example.cinemapp.ui.main.model.MovieCredits
@@ -17,8 +19,8 @@ class MovieDetailsMapper(
 ) {
     private fun mapToGenre(genre: GenreDTO): Genre {
         return Genre(
-            genre.id ?: -1,
-            genre.name ?: ""
+            id = genre.id ?: -1,
+            name = genre.name ?: ""
         )
     }
 
@@ -31,13 +33,13 @@ class MovieDetailsMapper(
         backdropResolution: Int? = null
     ): MovieDetails {
         return MovieDetails(
-            movieDetails.id ?: -1,
-            mediaUrlMapper.mapImageIdToBaseURL(movieDetails.backdropPath, backdropResolution),
-            movieDetails.genres?.let { mapToGenreList(it) } ?: emptyList(),
-            movieDetails.overview ?: "",
-            movieDetails.runtime ?: 0,
-            movieDetails.title ?: "",
-            movieDetails.voteAverage ?: 0f
+            id = movieDetails.id ?: -1,
+            backdropPath = mediaUrlMapper.mapImageIdToBaseURL(movieDetails.backdropPath, backdropResolution),
+            genres = movieDetails.genres?.let { mapToGenreList(it) } ?: emptyList(),
+            overview = movieDetails.overview ?: "",
+            runtime = movieDetails.runtime ?: 0,
+            title = movieDetails.title ?: "",
+            voteAverage = movieDetails.voteAverage ?: 0f
         )
     }
 
@@ -46,10 +48,10 @@ class MovieDetailsMapper(
         resolution: Int? = null
     ): CastMember {
         return CastMember(
-            castMember.id ?: -1,
-            castMember.name ?: "",
-            mediaUrlMapper.mapImageIdToBaseURL(castMember.profilePath, resolution),
-            castMember.character ?: ""
+            id = castMember.id ?: -1,
+            name = castMember.name ?: "",
+            profilePath = mediaUrlMapper.mapImageIdToBaseURL(castMember.profilePath, resolution),
+            character = castMember.character ?: ""
         )
     }
     private fun mapToCastMemberList(
@@ -58,16 +60,36 @@ class MovieDetailsMapper(
     ): List<CastMember> =
         cast.map { member -> mapToCastMember(member, resolution) }
 
+    private fun mapToCrewMember(
+        castMember: CrewMemberDTO
+    ): CrewMember {
+        return CrewMember(
+            id = castMember.id ?: -1,
+            name = castMember.name ?: "",
+            department = castMember.department ?: "",
+            job = castMember.job ?: ""
+        )
+    }
+    private fun mapToCrewMemberList(
+        crew: List<CrewMemberDTO>
+    ): List<CrewMember> =
+        crew.map { member -> mapToCrewMember(member) }
+
     fun mapToMovieCredits(
         creditsResponse: MovieCreditsDTO,
         resolution: Int? = null
     ): MovieCredits {
         return MovieCredits(
-            creditsResponse.id ?: -1,
-            creditsResponse.cast?.let {
+            id = creditsResponse.id ?: -1,
+            cast = creditsResponse.cast?.let {
                 mapToCastMemberList(
-                    creditsResponse.cast,
-                    resolution
+                    cast = creditsResponse.cast,
+                    resolution = resolution
+                )
+            } ?: emptyList(),
+            crew = creditsResponse.crew?.let { crew ->
+                mapToCrewMemberList(
+                    crew = crew
                 )
             } ?: emptyList()
         )

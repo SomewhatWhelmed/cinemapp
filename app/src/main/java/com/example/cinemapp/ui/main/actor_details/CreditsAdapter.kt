@@ -46,6 +46,12 @@ class CreditsAdapter(private val context: Context) :
                 FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
                 context
             )
+        } else if (position == credits.size - 1) {
+            holder.binding.cvCardPerson.layoutParams.setMargin(
+                Direction.RIGHT,
+                FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
+                context
+            )
         }
     }
 
@@ -75,7 +81,7 @@ class CreditsAdapter(private val context: Context) :
     }
 
     companion object {
-        private const val BASE_CARD_MARGIN = 5
+        private const val BASE_CARD_MARGIN = 10
         private const val FIRST_ITEM_MARGIN_MOD = 2.0f
     }
 }
