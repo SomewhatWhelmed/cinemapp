@@ -1,6 +1,5 @@
 package com.example.cinemapp.ui.main.actor_details
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinemapp.data.MovieRepository
@@ -22,6 +21,7 @@ class ActorDetailsViewModel(
         val details: PersonDetails? = null,
         val creditYears: List<Int?> = emptyList(),
         val credits: List<CastMovieCredit> = emptyList(),
+        val allCreditsShown: Boolean = true,
         val isLoading: Boolean = true
     )
 
@@ -53,30 +53,29 @@ class ActorDetailsViewModel(
                             )
                         },
                     creditYears = newCreditsYears,
-                    credits = if (newCreditsYears.isNotEmpty())
-                        movieRepository.getPersonMovieCredits(personId, newCreditsYears[0])
-                            ?.let { credits ->
-                                actorDetailsMapper.mapToCastMovieCreditList(
-                                    credits
-                                )
-                            } ?: emptyList()
-                    else emptyList(),
-                    isLoading = false
+                    credits = movieRepository.getPersonMovieCredits(personId = personId)?.let { credits ->
+                        actorDetailsMapper.mapToCastMovieCreditList(
+                            credits.sortedByDescending { credit -> credit.releaseDate }
+                        )
+                    } ?: emptyList(),
+                    isLoading = false,
+                    allCreditsShown = true
                 )
             }
         }
     }
 
-    fun getCreditsFromYear(personId: Int, year: Int?) {
+    fun getCreditsFromYear(personId: Int, year: Int?, getAll: Boolean) {
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    credits = movieRepository.getPersonMovieCredits(personId, year)
+                    credits = movieRepository.getPersonMovieCredits(personId, year, getAll)
                         ?.let { credits ->
                             actorDetailsMapper.mapToCastMovieCreditList(
-                                credits
+                                credits.sortedByDescending { credit -> credit.releaseDate }
                             )
-                        } ?: emptyList()
+                        } ?: emptyList(),
+                    allCreditsShown = getAll
                 )
             }
         }

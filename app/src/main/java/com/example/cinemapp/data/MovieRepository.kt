@@ -246,26 +246,35 @@ class MovieRepository(
             }
     }
 
-    suspend fun getPersonMovieCredits(personId: Int, year: Int?): List<CastMovieCreditDTO>? {
-        return localCache.getPersonMovieCredits(personId, year)
-            ?: try {
-                val response = remoteDataSource.getPersonMovieCredits(personId, userPreferences.getLanguageNotNull())
-                if (response.isSuccessful) {
-                    response.body()?.let { creditsResponse ->
-                        localCache.insert(creditsResponse)
-                        creditsResponse.cast?.filter { credit ->
+    suspend fun getPersonMovieCredits(
+        personId: Int,
+        year: Int? = null,
+        getAll: Boolean = false
+    ): List<CastMovieCreditDTO>? {
+        return (
+            if (getAll) localCache.getPersonMovieCreditsAll(personId)
+            else localCache.getPersonMovieCredits(personId, year)
+            ) ?: try {
+            val response = remoteDataSource.getPersonMovieCredits(personId, userPreferences.getLanguageNotNull())
+            if (response.isSuccessful) {
+                response.body()?.let { creditsResponse ->
+                    localCache.insert(creditsResponse)
+                    creditsResponse.cast?.let { cast ->
+                        if (getAll) cast
+                        else cast.filter { credit ->
                             year?.let { credit.releaseDate?.startsWith(year.toString()) ?: false }
                                 ?: credit.releaseDate.isNullOrEmpty()
                         }
                     }
-                } else {
-                    Log.e(TAG, response.message())
-                    null
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, e.message ?: "Unknown error")
+            } else {
+                Log.e(TAG, response.message())
                 null
             }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message ?: "Unknown error")
+            null
+        }
     }
 
     suspend fun getSessionId(username: String, password: String): SessionResponseDTO? {

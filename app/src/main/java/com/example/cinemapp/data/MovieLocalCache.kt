@@ -131,6 +131,11 @@ class MovieLocalCache {
         } else null
     }
 
+    fun getPersonMovieCreditsAll(personId: Int): List<CastMovieCreditDTO>? {
+        return if (personCredits?.id == personId) personCredits?.cast
+        else null
+    }
+
     fun getPersonMovieCreditsYears(personId: Int): List<String?>? {
         return if (personCredits?.id == personId) personCredits?.let {
             it.cast?.map { credit -> credit.releaseDate } ?: emptyList()
@@ -148,7 +153,7 @@ class MovieLocalCache {
     }
 
     fun clearCache(listType: MovieRepository.MovieListType) {
-        when(listType) {
+        when (listType) {
             MovieRepository.MovieListType.UPCOMING -> upcomingCache.clear()
             MovieRepository.MovieListType.POPULAR -> popularCache.clear()
             MovieRepository.MovieListType.TOP_RATED -> topRatedCache.clear()

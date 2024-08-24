@@ -61,4 +61,6 @@
     <string name="sign_in_failed">Incorrect sign in credentials</string>
     <string name="director_label">Director:</string>
     <string name="description_label">Description:</string>
+    <string name="unannounced">Unannounced</string>
+    <string name="all_movies">All movies</string>
 </resources>
