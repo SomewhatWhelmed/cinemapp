@@ -1,7 +1,6 @@
 package com.example.cinemapp.ui.main.actor_details
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
