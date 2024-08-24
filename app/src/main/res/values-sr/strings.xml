@@ -62,4 +62,6 @@
     <string name="sign_in_failed">Нетачни креденцијали за пријаву</string>
     <string name="director_label">Режисер:</string>
     <string name="description_label">Опис:</string>
+    <string name="unannounced">Ненајављени</string>
+    <string name="all_movies">Сви филмови</string>
 </resources>

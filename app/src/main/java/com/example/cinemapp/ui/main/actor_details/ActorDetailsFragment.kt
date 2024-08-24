@@ -1,18 +1,19 @@
 package com.example.cinemapp.ui.main.actor_details
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.view.isInvisible
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentActorDetailsBinding
 import com.example.cinemapp.ui.main.MainActivity
@@ -20,6 +21,7 @@ import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import com.example.cinemapp.util.ageAndLifespanFormat
 import com.example.cinemapp.util.loadImage
+import com.example.cinemapp.util.mapDpToPixel
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView
@@ -56,8 +58,10 @@ class ActorDetailsFragment : Fragment() {
             setupLoadingVisibility(it.isLoading)
             val adapter = binding.spinnerYear.adapter as ArrayAdapter<String>
             adapter.clear()
-            adapter.addAll(it.creditYears.map { year -> year?.toString() ?: "Unannounced" })
-
+            adapter.add(resources.getString(R.string.all_movies))
+            adapter.addAll(
+                it.creditYears.map { year -> year?.toString() ?: resources.getString(R.string.unannounced) }
+            )
             creditAdapter.setCredits(it.credits)
         }
     }
@@ -105,7 +109,10 @@ class ActorDetailsFragment : Fragment() {
             val adapter = ArrayAdapter(
                 root.context,
                 org.koin.android.R.layout.support_simple_spinner_dropdown_item,
-                viewModel.getCreditYears().map { year -> year?.toString() ?: "Unannounced" })
+                listOf(resources.getString(R.string.all_movies)) +
+                    viewModel.getCreditYears()
+                        .map { year -> year?.toString() ?: resources.getString(R.string.unannounced) }
+            )
 
             spinnerYear.adapter = adapter
             spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -116,8 +123,9 @@ class ActorDetailsFragment : Fragment() {
                     id: Long
                 ) {
                     viewModel.getCreditsFromYear(
-                        args.personId,
-                        viewModel.getCreditYears()[position]
+                        personId = args.personId,
+                        year = viewModel.getCreditYears()[(position - 1).coerceAtLeast(0)],
+                        getAll = (position == 0)
                     )
                 }
 
@@ -125,7 +133,7 @@ class ActorDetailsFragment : Fragment() {
             }
             rvCredits.adapter = creditAdapter
             rvCredits.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(context, 3, LinearLayoutManager.VERTICAL, false)
         }
     }
 

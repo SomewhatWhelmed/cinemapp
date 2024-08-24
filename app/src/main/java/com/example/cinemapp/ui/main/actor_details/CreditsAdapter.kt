@@ -2,11 +2,15 @@ package com.example.cinemapp.ui.main.actor_details
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
+import com.example.cinemapp.databinding.CardCreditBinding
 import com.example.cinemapp.databinding.CardPersonBinding
+import com.example.cinemapp.databinding.CardSearchBinding
 import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.util.Direction
 import com.example.cinemapp.util.loadImage
@@ -33,33 +37,20 @@ class CreditsAdapter(private val context: Context) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditViewHolder {
-        val binding = CardPersonBinding
+        val binding = CardCreditBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         return CreditViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CreditViewHolder, position: Int) {
         holder.bind(credits[position])
-        if (position == 0) {
-            holder.binding.cvCardPerson.layoutParams.setMargin(
-                Direction.LEFT,
-                FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
-                context
-            )
-        } else if (position == credits.size - 1) {
-            holder.binding.cvCardPerson.layoutParams.setMargin(
-                Direction.RIGHT,
-                FIRST_ITEM_MARGIN_MOD * BASE_CARD_MARGIN,
-                context
-            )
-        }
     }
 
     override fun getItemCount(): Int {
         return credits.size
     }
 
-    inner class CreditViewHolder(val binding: CardPersonBinding) :
+    inner class CreditViewHolder(val binding: CardCreditBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movieCredit: CastMovieCredit) {
             with(binding) {
@@ -68,8 +59,10 @@ class CreditsAdapter(private val context: Context) :
                         _onCardClick.emit(movieCredit)
                     }
                 }
-                tvName.text = movieCredit.title
-                tvCharacter.text = movieCredit.character
+                if (movieCredit.title.isEmpty()) tvName.isVisible = false
+                else tvName.text = movieCredit.title
+                if (movieCredit.character.isEmpty()) tvCharacter.isVisible = false
+                else tvCharacter.text = movieCredit.character
                 loadImage(
                     movieCredit.posterPath,
                     ivPicture,
@@ -78,10 +71,5 @@ class CreditsAdapter(private val context: Context) :
                 )
             }
         }
-    }
-
-    companion object {
-        private const val BASE_CARD_MARGIN = 10
-        private const val FIRST_ITEM_MARGIN_MOD = 2.0f
     }
 }
