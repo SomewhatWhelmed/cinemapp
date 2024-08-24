@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.FragmentActorDetailsBinding
 import com.example.cinemapp.ui.main.MainActivity
@@ -21,7 +19,6 @@ import com.example.cinemapp.ui.main.model.CastMovieCredit
 import com.example.cinemapp.ui.main.model.PersonDetails
 import com.example.cinemapp.util.ageAndLifespanFormat
 import com.example.cinemapp.util.loadImage
-import com.example.cinemapp.util.mapDpToPixel
 import com.example.cinemapp.util.observeFlowSafely
 import com.example.cinemapp.util.safeNavigateWithArgs
 import com.example.cinemapp.util.setExpandableTextView

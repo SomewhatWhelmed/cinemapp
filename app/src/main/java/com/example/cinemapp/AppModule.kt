@@ -71,7 +71,7 @@ val appModule = module {
     single { ProfileMapper(get()) }
     single { UserDataUtil() }
     single { CastAdapter(get()) }
-    single { CreditsAdapter(get()) }
+    single { CreditsAdapter() }
     viewModel {
         MainViewModel(get(), get(), get())
     }
