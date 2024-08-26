@@ -68,4 +68,5 @@
     <string name="settings_about_description_value">Cinemapp is an app created for the Android platform meant to be used for seaching up information about movies and actors, as well as interacting with them via a TMDB account.</string>
     <string name="settings_about_mentor_label">Mentor</string>
     <string name="settings_about_mentor_value">prof. dr Igor Tartalja</string>
+    <string name="user_manual">User Manual</string>
 </resources>
