@@ -64,4 +64,10 @@
     <string name="description_label">Опис:</string>
     <string name="unannounced">Ненајављени</string>
     <string name="all_movies">Сви филмови</string>
+    <string name="university">Универзитет у Београду - Електротехнички факултет, 2024</string>
+    <string name="settings_about_description_label">Опис</string>
+    <string name="settings_about_description_value">Cinemapp је апликација за Андроид платформу намењена за претраживање информација о филмовима и глумцима, као и интераговање са њима коришћењем TMDB налога.</string>
+    <string name="settings_about_mentor_label">Ментор</string>
+    <string name="settings_about_mentor_value">проф. др Игор Тартаља</string>
+    <string name="user_manual">Упутство за употребу</string>
 </resources>

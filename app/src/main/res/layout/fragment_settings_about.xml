@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".ui.main.settings.about.SettingsAboutFragment">
 
     <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
@@ -22,11 +23,49 @@
         app:label="@string/settings_about_author_label"
         app:value="@string/settings_about_author_value" />
 
+
+    <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:isLast="false"
+        app:label="@string/settings_about_mentor_label"
+        app:value="@string/settings_about_mentor_value" />
+
     <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:isLast="true"
-        app:label="@string/settings_about_purpose_label"
-        app:value="@string/settings_about_purpose_value" />
+        app:label="@string/settings_about_description_label"
+        app:value="@string/settings_about_description_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/university"
+        android:textColor="@color/md_theme_secondary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:paddingHorizontal="10dp"
+        android:text="@string/settings_about_purpose_value"
+        android:textColor="@color/md_theme_secondary"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnUserManual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user_manual"
+        android:textSize="16sp"
+        android:layout_margin="10dp"
+        android:textColor="@color/md_theme_primary"
+        android:backgroundTint="@color/md_theme_onPrimary"
+        />
 
 </LinearLayout>
