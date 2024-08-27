@@ -70,4 +70,5 @@
     <string name="settings_about_mentor_label">Ментор</string>
     <string name="settings_about_mentor_value">проф. др Игор Тартаља</string>
     <string name="user_manual">Упутство за употребу</string>
+    <string name="permission_denied_download">Дозвола није дата! Не може се скинути жељени документ.</string>
 </resources>

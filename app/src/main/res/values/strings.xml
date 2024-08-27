@@ -69,4 +69,5 @@
     <string name="settings_about_mentor_label">Mentor</string>
     <string name="settings_about_mentor_value">prof. dr Igor Tartalja</string>
     <string name="user_manual">User Manual</string>
+    <string name="permission_denied_download">Permission Denied! Cannot download file.</string>
 </resources>
