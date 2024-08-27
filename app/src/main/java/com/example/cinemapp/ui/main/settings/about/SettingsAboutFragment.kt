@@ -1,7 +1,6 @@
 package com.example.cinemapp.ui.main.settings.about
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -41,7 +40,7 @@ class SettingsAboutFragment : Fragment(){
                     activity as MainActivity,
                     getString(R.string.permission_denied_download),
                     Toast.LENGTH_LONG
-                ).show();
+                ).show()
             }
         }
 
@@ -86,7 +85,7 @@ class SettingsAboutFragment : Fragment(){
             }
         }
         val assetManager: AssetManager = context.assets
-        var files: List<String>? = null
+        val files: List<String>?
         var outputDir: File? = null
         try {
             files = assetManager.list("")?.filter { path -> path.contains(USER_MANUAL, false) }
