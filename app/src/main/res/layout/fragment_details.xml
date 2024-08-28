@@ -354,6 +354,22 @@
                 app:layout_constraintTop_toBottomOf="@id/tvDirectorLabel" />
 
             <TextView
+                android:id="@+id/tvViewCrew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="5dp"
+                android:text="@string/view_crew_label"
+                android:textAlignment="viewStart"
+                android:textColor="@color/md_theme_tertiary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDirector" />
+
+            <TextView
                 android:id="@+id/tvCredits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -365,7 +381,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDirector" />
+                app:layout_constraintTop_toBottomOf="@id/tvViewCrew" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCast"

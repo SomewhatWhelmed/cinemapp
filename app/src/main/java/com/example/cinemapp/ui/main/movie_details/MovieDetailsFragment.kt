@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.example.cinemapp.R
+import com.example.cinemapp.databinding.DialogCrewBinding
 import com.example.cinemapp.databinding.FragmentDetailsBinding
 import com.example.cinemapp.ui.main.MainActivity
 import com.example.cinemapp.ui.main.model.CastMember
+import com.example.cinemapp.ui.main.model.CrewMember
 import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.formatRating
 import com.example.cinemapp.util.observeFlowSafely
@@ -70,6 +72,7 @@ class MovieDetailsFragment : Fragment() {
             castAdapter.setCast(it.cast)
             mediaAdapter.setMedia(it.media)
         }
+        observeViewCrewEvent()
     }
 
     private fun setupMainToolbar() {
@@ -210,7 +213,28 @@ class MovieDetailsFragment : Fragment() {
                     .setNegativeButton("Cancel") { _, _ -> }
                     .setSingleChoiceItems(scores.toTypedArray(), 0) { _, _ -> }.create().show()
             }
+            tvViewCrew.setOnClickListener{
+                viewModel.getCrewMembers(args.movieId)
+            }
         }
+    }
+
+    private fun createDialog(crew: List<CrewMember>) {
+        val builder = AlertDialog.Builder(activity as MainActivity, R.style.WrapContentDialog)
+        val dialogBinding = DialogCrewBinding.inflate(layoutInflater)
+        val dialog = builder.setView(dialogBinding.root).create()
+        val crewAdapter = CrewAdapter(requireContext())
+        with(dialogBinding) {
+            rvCrew.adapter = crewAdapter
+            rvCrew.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            crewAdapter.setCrew(crew)
+
+            btnReturn.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun setupAdapter() {
@@ -263,6 +287,12 @@ class MovieDetailsFragment : Fragment() {
         findNavController().safeNavigateWithArgs(
             MovieDetailsFragmentDirections.toActorDetailsFragment(personId = castMember.id)
         )
+    }
+
+    private fun observeViewCrewEvent() {
+        observeFlowSafely(viewModel.showCrewEvent) { crew ->
+            createDialog(crew)
+        }
     }
 
     companion object {

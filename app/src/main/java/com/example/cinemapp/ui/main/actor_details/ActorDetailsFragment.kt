@@ -119,11 +119,13 @@ class ActorDetailsFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    viewModel.getCreditsFromYear(
-                        personId = args.personId,
-                        year = viewModel.getCreditYears()[(position - 1).coerceAtLeast(0)],
-                        getAll = (position == 0)
-                    )
+                    if(viewModel.getCreditYears().isNotEmpty()){
+                        viewModel.getCreditsFromYear(
+                            personId = args.personId,
+                            year = viewModel.getCreditYears()[(position - 1).coerceAtLeast(0)],
+                            getAll = (position == 0)
+                        )
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}

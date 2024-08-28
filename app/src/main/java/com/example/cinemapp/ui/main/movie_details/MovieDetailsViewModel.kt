@@ -12,8 +12,10 @@ import com.example.cinemapp.ui.main.model.MovieDetails
 import com.example.cinemapp.util.UserDataUtil
 import com.example.cinemapp.util.mappers.MovieDetailsMapper
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
@@ -40,11 +42,24 @@ class MovieDetailsViewModel(
     private val _state = MutableStateFlow(State())
     val state: StateFlow<State> = _state.asStateFlow()
 
+    private val _showCrewEvent: MutableSharedFlow<List<CrewMember>> = MutableSharedFlow()
+    val showCrewEvent = _showCrewEvent.asSharedFlow()
+
     val session = userPrefs.getSessionId()
 
     fun setupLoading() {
         _state.update {
             it.copy(isLoading = true)
+        }
+    }
+
+    fun getCrewMembers(movieId: Int) {
+        viewModelScope.launch {
+            val crew = movieRepository.getMovieCredits(movieId)
+                ?.let { movieDetailsMapper.mapToMovieCredits(it).crew } ?: emptyList()
+            val crewMap = crew.groupBy { it.job }
+            _showCrewEvent
+                .emit(crewMap.map { listOf(CrewMember(name = it.key, job = it.key)).plus(it.value) }.flatten())
         }
     }
 

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".ui.main.settings.about.SettingsAboutFragment">
 
     <com.example.cinemapp.ui.main.settings.about.SettingsAboutItemView
@@ -61,11 +61,10 @@
         android:id="@+id/btnUserManual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/user_manual"
-        android:textSize="16sp"
         android:layout_margin="10dp"
-        android:textColor="@color/md_theme_primary"
         android:backgroundTint="@color/md_theme_onPrimary"
-        />
+        android:text="@string/user_manual"
+        android:textColor="@color/md_theme_primary"
+        android:textSize="16sp" />
 
 </LinearLayout>
