@@ -71,4 +71,5 @@
     <string name="user_manual">User Manual</string>
     <string name="permission_denied_download">Permission Denied! Cannot download file.</string>
     <string name="view_crew_label">View entire crew ></string>
+    <string name="exclude_self">Only Movies</string>
 </resources>

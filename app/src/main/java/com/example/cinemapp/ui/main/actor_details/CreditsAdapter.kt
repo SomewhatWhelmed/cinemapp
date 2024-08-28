@@ -54,9 +54,15 @@ class CreditsAdapter :
                     }
                 }
                 if (movieCredit.title.isEmpty()) tvName.isVisible = false
-                else tvName.text = movieCredit.title
+                else {
+                    tvName.text = movieCredit.title
+                    tvName.isVisible = true
+                }
                 if (movieCredit.character.isEmpty()) tvCharacter.isVisible = false
-                else tvCharacter.text = movieCredit.character
+                else {
+                    tvCharacter.text = movieCredit.character
+                    tvCharacter.isVisible = true
+                }
                 loadImage(
                     movieCredit.posterPath,
                     ivPicture,

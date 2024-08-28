@@ -65,16 +65,19 @@ class ActorDetailsViewModel(
         }
     }
 
-    fun getCreditsFromYear(personId: Int, year: Int?, getAll: Boolean) {
+    fun getCreditsFromYear(personId: Int, year: Int?, getAll: Boolean, moviesOnly: Boolean) {
         viewModelScope.launch {
+            val credits = movieRepository.getPersonMovieCredits(personId, year, getAll)
+                ?.let { credits ->
+                    actorDetailsMapper.mapToCastMovieCreditList(
+                        credits.sortedByDescending { credit -> credit.releaseDate }
+                    )
+                } ?: emptyList()
             _state.update {
                 it.copy(
-                    credits = movieRepository.getPersonMovieCredits(personId, year, getAll)
-                        ?.let { credits ->
-                            actorDetailsMapper.mapToCastMovieCreditList(
-                                credits.sortedByDescending { credit -> credit.releaseDate }
-                            )
-                        } ?: emptyList(),
+                    credits = if (moviesOnly) credits.filter { credit ->
+                        credit.character.contains("Self", false).not()
+                    } else credits,
                     allCreditsShown = getAll
                 )
             }

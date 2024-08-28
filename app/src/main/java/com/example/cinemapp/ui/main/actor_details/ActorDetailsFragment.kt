@@ -40,6 +40,7 @@ class ActorDetailsFragment : Fragment() {
         _binding = FragmentActorDetailsBinding.inflate(inflater, container, false)
         setupMainToolbar()
         setupAdapter()
+        setupChipGroup()
         viewModel.setupLoading()
         viewModel.getPersonDetails(args.personId)
         observeOnClickEvents()
@@ -119,13 +120,7 @@ class ActorDetailsFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    if(viewModel.getCreditYears().isNotEmpty()){
-                        viewModel.getCreditsFromYear(
-                            personId = args.personId,
-                            year = viewModel.getCreditYears()[(position - 1).coerceAtLeast(0)],
-                            getAll = (position == 0)
-                        )
-                    }
+                    getCredits(position, chipSelf.isChecked)
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -133,6 +128,26 @@ class ActorDetailsFragment : Fragment() {
             rvCredits.adapter = creditAdapter
             rvCredits.layoutManager =
                 GridLayoutManager(context, 3, LinearLayoutManager.VERTICAL, false)
+        }
+    }
+
+    private fun setupChipGroup() {
+        with(binding){
+            chipSelf.isChecked = false
+            chipSelf.setOnCheckedChangeListener { _, isChecked ->
+                getCredits(spinnerYear.selectedItemPosition, isChecked)
+            }
+        }
+    }
+
+    private fun getCredits(position: Int, moviesOnly: Boolean) {
+        if(viewModel.getCreditYears().isNotEmpty()){
+            viewModel.getCreditsFromYear(
+                personId = args.personId,
+                year = viewModel.getCreditYears()[(position - 1).coerceAtLeast(0)],
+                getAll = (position == 0),
+                moviesOnly
+            )
         }
     }
 

@@ -139,11 +139,13 @@
                     app:layout_constraintTop_toBottomOf="@id/llAge" />
 
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
+                    android:id="@+id/cvSpinner"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/md_theme_primary"
                     android:layout_marginTop="10dp"
+                    android:background="@color/md_theme_primary"
                     app:cardCornerRadius="5dp"
+                    app:layout_constraintEnd_toStartOf="@id/cgFilter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvBiography"
                     app:strokeColor="@color/md_theme_onPrimary"
@@ -155,6 +157,23 @@
                         android:layout_height="30dp"
                         android:backgroundTint="@color/md_theme_onPrimary" />
                 </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cgFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cvSpinner"
+                    app:layout_constraintTop_toBottomOf="@id/tvBiography">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSelf"
+                        style="@style/Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/exclude_self" />
+                </com.google.android.material.chip.ChipGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
