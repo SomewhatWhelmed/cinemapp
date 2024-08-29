@@ -71,5 +71,6 @@
     <string name="settings_about_mentor_value">проф. др Игор Тартаља</string>
     <string name="user_manual">Упутство за употребу</string>
     <string name="permission_denied_download">Дозвола није дата! Не може се скинути жељени документ.</string>
-    <string name="view_crew_label">Прикажи читаву екипу ></string>
+    <string name="view_crew_label">Прикажи целу екипу ></string>
+    <string name="exclude_self">Само Филмови</string>
 </resources>

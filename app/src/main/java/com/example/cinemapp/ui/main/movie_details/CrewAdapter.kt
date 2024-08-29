@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemapp.R
 import com.example.cinemapp.databinding.DialogCrewItemBinding
 import com.example.cinemapp.ui.main.model.CrewMember
+import com.example.cinemapp.util.mapDpToPixel
 
 class CrewAdapter(val context: Context) : RecyclerView.Adapter<CrewAdapter.CrewViewHolder>() {
 
@@ -39,14 +40,28 @@ class CrewAdapter(val context: Context) : RecyclerView.Adapter<CrewAdapter.CrewV
         fun bind(crewMember: CrewMember) {
             with(binding) {
                 tvName.text = crewMember.name
+                val hPadding = mapDpToPixel(20f, context)
+                val vPadding = mapDpToPixel(5f, context)
                 if (crewMember.name == crewMember.job) {
-                    tvName.setTypeface(tvName.typeface, Typeface.BOLD)
+                    tvName.setTypeface(Typeface.DEFAULT_BOLD)
                     binding.divider.isVisible = true
                     tvName.setTextColor(ContextCompat.getColor(context, R.color.md_theme_tertiary))
+                    tvName.setPadding(
+                        hPadding,
+                        2 * vPadding,
+                        hPadding,
+                        vPadding
+                    )
                 } else {
-                    tvName.setTypeface(tvName.typeface, Typeface.NORMAL)
+                    tvName.setTypeface(Typeface.DEFAULT)
                     binding.divider.isVisible = false
                     tvName.setTextColor(ContextCompat.getColor(context, R.color.md_theme_secondary))
+                    tvName.setPadding(
+                        hPadding,
+                        vPadding / 2,
+                        hPadding,
+                        0
+                    )
                 }
             }
         }
