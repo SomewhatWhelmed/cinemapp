@@ -6,9 +6,11 @@ The focus of this thesis is to showcase the process of development that Android 
 The app features displaying information about movies and actors, showcasing lists of new and popular movies as well as integration with <i>TMDB</i> accounts, which allows rating of movies and changing selected user movie lists.
 
 Screenshots:</br>
+<p align=center>
 <img src="https://github.com/SomewhatWhelmed/cinemapp/blob/main/Screenshots/Authentication_Screen_SR.png" width=40%/>
 <img src="https://github.com/SomewhatWhelmed/cinemapp/blob/main/Screenshots/Home-Screen.png" width=40%/>
 <img src="https://github.com/SomewhatWhelmed/cinemapp/blob/main/Screenshots/Search-Movie.png" width=40%/>
 <img src="https://github.com/SomewhatWhelmed/cinemapp/blob/main/Screenshots/My-Collection.png" width=40%/>
 <img src="https://github.com/SomewhatWhelmed/cinemapp/blob/main/Screenshots/Movie-Details-Signed-In.png" width=40%/>
 <img src="https://github.com/SomewhatWhelmed/cinemapp/blob/main/Screenshots/Actor-Details.png" width=40%/>
+</p>
